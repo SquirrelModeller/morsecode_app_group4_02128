@@ -28,15 +28,26 @@ class Morsetranslator {
       }
     }
     return equal;
+  } 
+
+  calculateTimeUnit(List<MorseSignal> morseCodeInput){
+    num timeUnit = 0; 
+
+    for (int i = 0; i < morseCodeInput.length-1; i++){
+      num deltaTime = morseCodeInput[i+1].time - morseCodeInput[i].time;
+      if (timeUnit == 0 || timeUnit > deltaTime){
+        timeUnit = deltaTime;
+      }
+    }
+    return timeUnit;
   }
 
-  String morseToText(List<MorseState> input){
+  morseToText(List<MorseState> input){
     return morseCode.keys.firstWhere((k) => compareEnum(morseCode[k]!, input), orElse: () => throw Exception("Value has no key"));
   }
 
-  String timeframeToText(List<MorseSignal> morseCodeInput) {
-    const num timeUnit = 1;
-    const num timePadding = 0.05;
+  timeframeToText(List<MorseSignal> morseCodeInput, num timeUnit) {
+    num timePadding = 0.1; //Not a valid value for miliseconds
     String text = "";
     List<MorseState> character = [];
     for (int i = 0; i < morseCodeInput.length-1; i++){
@@ -70,6 +81,8 @@ class Morsetranslator {
 void main() {
   Morsetranslator translator = Morsetranslator();
   // var dataToTest = garbageData();
-  var testData = [MorseSignal(true, 0),MorseSignal(false, 1),MorseSignal(true, 2),MorseSignal(false, 5),MorseSignal(true, 6),MorseSignal(false, 9)];
-  dev.log(translator.timeframeToText(testData));
+
+  var testData = [MorseSignal(false, 0),MorseSignal(true, 1*2),MorseSignal(false, 2*2),MorseSignal(true, 3*2),MorseSignal(false, 6*2),MorseSignal(true, 7*2),MorseSignal(false, 10*2)];
+  num time = translator.calculateTimeUnit(testData);
+  print(translator.timeframeToText(testData,time));
 }
