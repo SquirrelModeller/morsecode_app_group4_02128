@@ -30,10 +30,13 @@ class Morsetranslator {
     return equal;
   }
 
-  morseToText(List<MorseSignal> morseCodeInput) {
+  String morseToText(List<MorseState> input){
+    return morseCode.keys.firstWhere((k) => compareEnum(morseCode[k]!, input), orElse: () => throw Exception("Value has no key"));
+  }
+
+  String timeframeToText(List<MorseSignal> morseCodeInput) {
     const num timeUnit = 1;
     const num timePadding = 0.05;
-
     String text = "";
     List<MorseState> character = [];
     for (int i = 0; i < morseCodeInput.length-1; i++){
@@ -44,37 +47,29 @@ class Morsetranslator {
         } else if (morseCodeInput[i].isOn == true && (deltaTime < 3*timeUnit+timePadding && deltaTime > 3*timeUnit-timePadding)){
           character.add(MorseState.Dash);
         } else if (morseCodeInput[i].isOn == false && (deltaTime < 3*timeUnit+timePadding && deltaTime > 3*timeUnit-timePadding)){
-          text += morseCode.keys.firstWhere((k) => compareEnum(morseCode[k]!, character), orElse: () => throw Exception("Value has no key"));
+          text += morseToText(character);
           character = [];
         } else if (morseCodeInput[i].isOn == false && (deltaTime < 7*timeUnit+timePadding && deltaTime > 7*timeUnit-timePadding)){
-          text += "${morseCode.keys.firstWhere((k) => compareEnum(morseCode[k]!, character), orElse: () => throw Exception("Value has no key"))} ";
+          text += "${morseToText(character)} ";
           character = [];
         } else if ((morseCodeInput[i].isOn == false && (deltaTime < 1*timeUnit+timePadding && deltaTime > 1*timeUnit-timePadding))== false){
          throw Exception("Invalid Time frame. Position:$i DeltaTime:$deltaTime"); 
 
         } if(i == morseCodeInput.length-2){
-          text += morseCode.keys.firstWhere((k) => compareEnum(morseCode[k]!, character), orElse: () => throw Exception("Value has no key"));
+          text += morseToText(character);
         }
       }
       catch (e){
-        print("$e");
+        dev.log("$e");
       }
     }
     return text;
   }
 }
 
-List<MorseSignal> garbageData() {
-  List<MorseSignal> randomData = [];
-  for (int i = 0; i < 40; i++) {
-    randomData.add(MorseSignal(i%2 == 0 ? true : false, Random.secure().nextInt(3+i)+i));
-  }
-  return randomData;
-}
-
 void main() {
   Morsetranslator translator = Morsetranslator();
   // var dataToTest = garbageData();
-  var testData = [MorseSignal(true, 0),MorseSignal(false, 1),MorseSignal(true, 2),MorseSignal(false, 5),MorseSignal(true, 6),MorseSignal(false, 9),MorseSignal(true, 10),MorseSignal(false, 11),MorseSignal(true, 12),MorseSignal(false, 15)];
-  dev.log(translator.morseToText(testData));
+  var testData = [MorseSignal(true, 0),MorseSignal(false, 1),MorseSignal(true, 2),MorseSignal(false, 5),MorseSignal(true, 6),MorseSignal(false, 9)];
+  dev.log(translator.timeframeToText(testData));
 }
