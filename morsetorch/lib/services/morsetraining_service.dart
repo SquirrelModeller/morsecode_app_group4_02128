@@ -1,33 +1,36 @@
 import 'dart:async';
+import 'dart:developer';
 import 'package:english_words/english_words.dart';
 import 'package:morsetorch/models/morse_state.dart';
 import 'package:morsetorch/services/morse_translator.dart';
+import 'package:flutter/material.dart';
 
 class MorseTraining {
-  int lastTime = 0;
-  String wordToType = "";
-  String builder = "";
-  List<MorseState> builderMorseState = [];
   Stopwatch stopwatch = Stopwatch();
   Timer? inputTimeout;
-
   Morsetranslator translator = Morsetranslator();
+
+  ValueNotifier<String> wordToType = ValueNotifier("");
+  ValueNotifier<String> builder = ValueNotifier("");
+
+  List<MorseState> builderMorseState = [];
 
   MorseTraining() {
     stopwatch.start();
+    beginTraining();
+  }
+
+  void beginTraining() {
+    wordToType.value = randomWordGen();
+    resetBuilder();
   }
 
   String randomWordGen() {
     return WordPair.random().toString().toUpperCase();
   }
 
-  void beginTraining() {
-    wordToType = randomWordGen();
-    resetBuilder();
-  }
-
   void resetBuilder() {
-    builder = "";
+    builder.value = "";
     builderMorseState.clear();
     resetInputTimeout();
   }
@@ -35,7 +38,7 @@ class MorseTraining {
   void resetInputTimeout() {
     inputTimeout?.cancel();
     inputTimeout = Timer(Duration(seconds: 5), () {
-      print("Input timeout - resetting builder");
+      log("Input timeout - resetting builder");
       resetBuilder();
     });
   }
@@ -45,14 +48,14 @@ class MorseTraining {
   }
 
   void startedPress() {
-    lastTime = stopwatch.elapsedMilliseconds;
+    stopwatch.start();
   }
 
   void checkInput() {
     int currentTime = stopwatch.elapsedMilliseconds;
-    int duration = currentTime - lastTime;
+    int duration = currentTime - stopwatch.elapsedMilliseconds;
     if (duration > 200) {
-      print("Took too long between presses");
+      log("Took too long between presses");
       resetBuilder();
       return;
     }
@@ -64,7 +67,7 @@ class MorseTraining {
     try {
       return translator.morseToText(builderMorseState);
     } on Exception catch (e) {
-      print("Translation error: ${e}");
+      log("Translation error: ${e}");
       return "";
     }
   }
@@ -72,14 +75,14 @@ class MorseTraining {
   void release() {
     checkInput();
     String localAttempt = getText();
-    if (isCorrect(builder + localAttempt)) {
-      builder += localAttempt;
-      print("Current builder state: $builder");
+    if (isCorrect(builder.value + localAttempt)) {
+      builder.value += localAttempt;
+      log("Current builder state: ${builder.value}");
     }
   }
 
   bool isCorrect(String sentenceToCheck) {
-    return wordToType.startsWith(sentenceToCheck);
+    return wordToType.value.startsWith(sentenceToCheck);
   }
 
   void dispose() {

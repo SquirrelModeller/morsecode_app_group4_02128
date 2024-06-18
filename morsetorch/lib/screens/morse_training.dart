@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:morsetorch/services/morsetraining_service.dart';
 
-
 class MorseTrainingPage extends StatefulWidget {
   const MorseTrainingPage({super.key});
 
@@ -29,13 +28,6 @@ class _MorseTrainingPageState extends State<MorseTrainingPage> {
       _morseTraining.startedPress();
     } else {
       _morseTraining.release();
-      updateUI();
-    }
-  }
-
-  void updateUI() {
-    if (mounted) {
-      setState(() {});
     }
   }
 
@@ -49,12 +41,18 @@ class _MorseTrainingPageState extends State<MorseTrainingPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Text('Word to type: ${_morseTraining.wordToType}',
-                style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+            ValueListenableBuilder<String>(
+              valueListenable: _morseTraining.wordToType,
+              builder: (_, word, __) => Text('Word to type: $word',
+                  style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+            ),
             Padding(
               padding: const EdgeInsets.all(20.0),
-              child: Text('Current Input: ${_morseTraining.builder}',
-                  style: const TextStyle(fontSize: 20, color: Colors.blue)),
+              child: ValueListenableBuilder<String>(
+                valueListenable: _morseTraining.builder,
+                builder: (_, input, __) => Text('Current Input: $input',
+                    style: const TextStyle(fontSize: 20, color: Colors.blue)),
+              ),
             ),
             GestureDetector(
               onTapDown: (_) => handlePress(true),
@@ -79,7 +77,6 @@ class _MorseTrainingPageState extends State<MorseTrainingPage> {
             FloatingActionButton(
               onPressed: () {
                 _morseTraining.resetBuilder();
-                updateUI();
               },
               tooltip: 'Reset',
               child: const Icon(Icons.refresh),
