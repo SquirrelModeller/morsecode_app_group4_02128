@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 
 class ExpandableTextField extends StatefulWidget {
-  TextEditingController controller;
-  double textFieldHeight;
-  Color color;
-  String text;
-  Color textColor;
-  double maxHeight;
-  bool canWrite;
+  final TextEditingController controller;
+  final double textFieldHeight;
+  final Color color;
+  final String text;
+  final Color textColor;
+  final double maxHeight;
+  final bool canWrite;
 
-  ExpandableTextField(
+  const ExpandableTextField(
       {super.key,
       required this.controller,
       required this.textFieldHeight,
@@ -24,12 +24,14 @@ class ExpandableTextField extends StatefulWidget {
 }
 
 class _ExpandableTextFieldState extends State<ExpandableTextField> {
+  double textFieldHeight = 200;
+  
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
         Container(
-          height: widget.textFieldHeight,
+          height: textFieldHeight,
           decoration: BoxDecoration(
             color: widget.color,
             borderRadius: BorderRadius.circular(10.0),
@@ -51,12 +53,12 @@ class _ExpandableTextFieldState extends State<ExpandableTextField> {
         GestureDetector(
           onPanUpdate: (details) {
             setState(() {
-              widget.textFieldHeight += details.delta.dy;
-              if (widget.textFieldHeight < 50) {
-                widget.textFieldHeight = 50;
+              textFieldHeight += details.delta.dy;
+              if (textFieldHeight < 50) {
+                textFieldHeight = 50;
               }
-              if (widget.textFieldHeight > widget.maxHeight) {
-                widget.textFieldHeight = widget.maxHeight;
+              if (textFieldHeight > widget.maxHeight) {
+                textFieldHeight = widget.maxHeight;
               }
             });
           },

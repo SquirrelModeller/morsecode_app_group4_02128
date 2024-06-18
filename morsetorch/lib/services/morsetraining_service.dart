@@ -37,7 +37,7 @@ class MorseTraining {
 
   void resetInputTimeout() {
     inputTimeout?.cancel();
-    inputTimeout = Timer(Duration(seconds: 5), () {
+    inputTimeout = Timer(const Duration(seconds: 5), () {
       log("Input timeout - resetting builder");
       resetBuilder();
     });
@@ -67,7 +67,7 @@ class MorseTraining {
     try {
       return translator.morseToText(builderMorseState);
     } on Exception catch (e) {
-      log("Translation error: ${e}");
+      log("Translation error: $e");
       return "";
     }
   }

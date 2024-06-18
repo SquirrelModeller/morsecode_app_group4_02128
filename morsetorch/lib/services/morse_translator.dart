@@ -1,4 +1,3 @@
-import 'dart:math';
 import 'dart:developer' as dev;
 import 'package:morsetorch/models/morse_signal.dart';
 import 'package:morsetorch/models/morse_state.dart';

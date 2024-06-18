@@ -24,6 +24,7 @@ class _MyAppState extends State<MyApp> {
       _isDarkMode = !_isDarkMode;
     });
   }
+
   @override
   Widget build(BuildContext context) {
     SystemChrome.setPreferredOrientations([
@@ -42,10 +43,8 @@ class _MyAppState extends State<MyApp> {
   }
 }
 
-
-
 class Navigation extends StatefulWidget {
-  const Navigation({super.key, required this.title,required this.toggleTheme});
+  const Navigation({super.key, required this.title, required this.toggleTheme});
 
   final String title;
   final VoidCallback toggleTheme;
@@ -65,12 +64,21 @@ class _NavigationState extends State<Navigation> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        actions: [
-          IconButton(onPressed: widget.toggleTheme, 
-          icon: Icon(Icons.brightness_6))
-        ],),
-      body: screens[_currentIndex],
+      body: Stack(
+        children: [
+          screens[_currentIndex],
+          Positioned(
+            top: 20,
+            right: 20,
+            child: FloatingActionButton(
+              onPressed: () {
+                widget.toggleTheme();
+              },
+              child: Icon(Icons.brightness_6),
+            ),
+          ),
+        ],
+      ),
       bottomNavigationBar: BottomNavigationBar(
         //showSelectedLabels: false,
         showUnselectedLabels: false,

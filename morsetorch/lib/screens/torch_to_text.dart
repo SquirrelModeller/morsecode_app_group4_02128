@@ -49,15 +49,17 @@ class _CameraScreenState extends State<CameraScreen> {
       body: Center(
         child: Stack(
           children: [
-            FutureBuilder<void>(
-              future: _initializeControllerFuture,
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.done) {
-                  return CameraPreview(_controller);
-                } else {
-                  return const Center(child: CircularProgressIndicator());
-                }
-              },
+            SizedBox.expand(
+              child: FutureBuilder<void>(
+                future: _initializeControllerFuture,
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.done) {
+                    return CameraPreview(_controller);
+                  } else {
+                    return const Center(child: CircularProgressIndicator());
+                  }
+                },
+              ),
             ),
             Column(
               children: [
@@ -102,7 +104,6 @@ class _CameraScreenState extends State<CameraScreen> {
         onPressed: () {
           log('--> OpenCV version: ${nativeOpencv.cvVersion()}');
           nativeOpencv.initLightTracker(100);
-          // print('--> OpenCV version: ${nativeOpencv.cvVersion()}');
         },
         child: Icon(Icons.camera_alt),
       ),
