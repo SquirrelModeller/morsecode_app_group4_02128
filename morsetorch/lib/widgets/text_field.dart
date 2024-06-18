@@ -3,8 +3,21 @@ import 'package:flutter/material.dart';
 class ExpandableTextField extends StatefulWidget {
   TextEditingController controller;
   double textFieldHeight;
+  Color color;
+  String text;
+  Color textColor;
+  double maxHeight;
+  bool canWrite;
+
   ExpandableTextField(
-      {super.key, required this.controller, required this.textFieldHeight});
+      {super.key,
+      required this.controller,
+      required this.textFieldHeight,
+      this.color = Colors.white,
+      this.text = '',
+      this.textColor = Colors.black,
+      this.maxHeight = 300,
+      this.canWrite = true});
 
   @override
   State<ExpandableTextField> createState() => _ExpandableTextFieldState();
@@ -16,18 +29,20 @@ class _ExpandableTextFieldState extends State<ExpandableTextField> {
     return Column(
       children: [
         Container(
-          constraints: const BoxConstraints(maxHeight: 300),
           height: widget.textFieldHeight,
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: widget.color,
             borderRadius: BorderRadius.circular(10.0),
           ),
           child: TextField(
+            readOnly: !widget.canWrite,
+            enabled: widget.canWrite,
             controller: widget.controller,
-            decoration: const InputDecoration(
-              hintText: 'Enter text to convert to morse',
+            decoration: InputDecoration(
+              hintText: widget.text,
               border: InputBorder.none,
-              contentPadding: EdgeInsets.all(10),
+              contentPadding: const EdgeInsets.all(10),
+              hintStyle: TextStyle(color: widget.textColor),
             ),
             maxLines: null,
             expands: true,
@@ -40,8 +55,8 @@ class _ExpandableTextFieldState extends State<ExpandableTextField> {
               if (widget.textFieldHeight < 50) {
                 widget.textFieldHeight = 50;
               }
-              if (widget.textFieldHeight > 300) {
-                widget.textFieldHeight = 300;
+              if (widget.textFieldHeight > widget.maxHeight) {
+                widget.textFieldHeight = widget.maxHeight;
               }
             });
           },
@@ -57,7 +72,7 @@ class _ExpandableTextFieldState extends State<ExpandableTextField> {
                     width: 50,
                     height: 10,
                     decoration: BoxDecoration(
-                      color: Colors.white,
+                      color: widget.color,
                       borderRadius: BorderRadius.circular(10.0),
                     ),
                   ),
@@ -68,7 +83,7 @@ class _ExpandableTextFieldState extends State<ExpandableTextField> {
                     width: 30,
                     height: 10,
                     decoration: BoxDecoration(
-                      color: Colors.white,
+                      color: widget.color,
                       borderRadius: BorderRadius.circular(10.0),
                     ),
                   )
