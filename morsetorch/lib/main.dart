@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:morsetorch/screens/practice.dart';
 import 'package:morsetorch/screens/text_to_torch.dart';
 import 'package:morsetorch/screens/torch_to_text.dart';
 
@@ -15,46 +16,64 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'MorseTorch',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        scaffoldBackgroundColor: const Color.fromARGB(255, 196, 223, 230),
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: const Color.fromARGB(255, 196, 223, 230),
+        ),
       ),
-      home: const HomeScreen(),
+      home: const Navigation(
+        title: 'Morse Torch',
+      ),
     );
   }
 }
 
-class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key});
+class Navigation extends StatefulWidget {
+  const Navigation({super.key, required this.title});
+
+  final String title;
+
+  @override
+  State<Navigation> createState() => _NavigationState();
+}
+
+class _NavigationState extends State<Navigation> {
+  int _currentIndex = 1;
+  final screens = [
+    const Practice(),
+    TextToTorch(),
+    const CameraScreen(),
+  ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Home'),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            ElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => TextToTorch()),
-                );
-              },
-              child: const Text('Go to Morse to Torch'),
+      body: screens[_currentIndex],
+      bottomNavigationBar: BottomNavigationBar(
+        //showSelectedLabels: false,
+        showUnselectedLabels: false,
+        items: [
+          BottomNavigationBarItem(
+            icon: Image.asset(
+              'icons/Button3.png',
             ),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => CameraScreen()),
-                );
-              },
-              child: const Text('Go to Torch to Morse'),
-            ),
-          ],
-        ),
+            label: 'Practice morse',
+          ),
+          BottomNavigationBarItem(
+            icon: Image.asset('icons/Flashlight2.png'),
+            label: 'Text to Morse',
+          ),
+          BottomNavigationBarItem(
+            icon: Image.asset('icons/Flashlight.png'),
+            label: 'Morse to Text',
+          ),
+        ],
+        currentIndex: _currentIndex,
+        onTap: (int newIndex) {
+          setState(() {
+            _currentIndex = newIndex;
+          });
+        },
       ),
     );
   }
