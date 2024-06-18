@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:morsetorch/screens/practice.dart';
+import 'package:morsetorch/screens/morse_training.dart';
 import 'package:morsetorch/screens/text_to_torch.dart';
 import 'package:morsetorch/screens/torch_to_text.dart';
 import 'package:morsetorch/theme/color_theme.dart';
@@ -57,7 +57,7 @@ class Navigation extends StatefulWidget {
 class _NavigationState extends State<Navigation> {
   int _currentIndex = 1;
   final screens = [
-    const Practice(),
+    MorseTrainingPage(),
     TextToTorch(),
     const CameraScreen(),
   ];
