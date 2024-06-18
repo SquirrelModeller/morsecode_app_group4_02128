@@ -32,6 +32,7 @@ class _CameraScreenState extends State<CameraScreen> {
     _controller = CameraController(
       firstCamera,
       ResolutionPreset.high,
+      enableAudio: false,
     );
     return _controller.initialize();
   }
@@ -72,17 +73,26 @@ class _CameraScreenState extends State<CameraScreen> {
                 ),
                 Container(
                   width: double.infinity,
-                  height: 300,
-                  margin: const EdgeInsets.fromLTRB(40, 30, 40, 0),
+                  height: MediaQuery.of(context).size.height / 3,
+                  margin: const EdgeInsets.fromLTRB(25, 20, 25, 0),
                   decoration: BoxDecoration(
                     color: Colors.transparent,
                     border: Border.all(width: 4, color: Colors.white),
                     borderRadius: BorderRadius.circular(10.0),
                   ),
                 ),
-                ExpandableTextField(
+                Padding(
+                  padding: const EdgeInsets.all(25),
+                  child: ExpandableTextField(
                     controller: _textController,
-                    textFieldHeight: textFieldHeight)
+                    textFieldHeight: textFieldHeight,
+                    color: const Color.fromARGB(150, 43, 42, 42),
+                    text: 'Searching for morse signal...',
+                    textColor: Colors.white,
+                    maxHeight: MediaQuery.of(context).size.height / 3.5,
+                    canWrite: false,
+                  ),
+                )
               ],
             ),
           ],

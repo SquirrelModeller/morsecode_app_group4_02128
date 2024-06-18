@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:morsetorch/screens/practice.dart';
 import 'package:morsetorch/screens/text_to_torch.dart';
 import 'package:morsetorch/screens/torch_to_text.dart';
@@ -25,6 +26,10 @@ class _MyAppState extends State<MyApp> {
   }
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'MorseTorch',
