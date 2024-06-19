@@ -15,6 +15,22 @@ class _TextToTorchState extends State<TextToTorch> {
   final TextEditingController _controller = TextEditingController();
   double textFieldHeight = 200;
   final TorchService _torchService = TorchService();
+  bool _isButtonEnabled = false;
+
+  void _sendMorseCode() async {
+    setState(() {
+      _isButtonEnabled = true;
+    });
+    
+    String textToSend = _controller.text;
+    textToSend = textToSend.replaceAll('\n', ' '); 
+
+    await _torchService.sendMorseCode(textToSend, 100);
+  
+    setState(() {
+      _isButtonEnabled = false;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -55,9 +71,7 @@ class _TextToTorchState extends State<TextToTorch> {
                           shape: const CircleBorder(eccentricity: 0.0),
                           elevation: 10,
                           backgroundColor: Colors.transparent,
-                          onPressed: () {
-                            _torchService.sendMorseCode(_controller.text, 100);
-                          },
+                          onPressed: _isButtonEnabled ? null : _sendMorseCode,
                           child: ColorFiltered(
                             colorFilter: ColorFilter.mode(
                               widget.isDarkMode
@@ -67,7 +81,9 @@ class _TextToTorchState extends State<TextToTorch> {
                                       .withOpacity(0.0),
                               BlendMode.srcATop,
                             ),
-                            child: SvgPicture.asset('icons/button.svg'),
+                            child: _isButtonEnabled
+                                ? SvgPicture.asset('icons/button2.svg')
+                                : SvgPicture.asset('icons/button.svg'),
                           ),
                         ),
                       ],
