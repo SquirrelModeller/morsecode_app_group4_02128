@@ -4,7 +4,8 @@ import 'package:morsetorch/widgets/text_field.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class TextToTorch extends StatefulWidget {
-  const TextToTorch({super.key});
+  TextToTorch({super.key, required this.isDarkMode});
+  bool isDarkMode;
 
   @override
   State<TextToTorch> createState() => _TextToTorchState();
@@ -36,7 +37,12 @@ class _TextToTorchState extends State<TextToTorch> {
                       textFieldHeight: 150,
                       maxHeight: MediaQuery.of(context).size.height / 2,
                       text: 'Enter text to convert to morse',
-                      textColor: const Color.fromARGB(255, 118, 118, 118),
+                      textColor: widget.isDarkMode
+                          ? const Color.fromARGB(255, 202, 202, 202)
+                          : const Color.fromARGB(255, 118, 118, 118),
+                      color: widget.isDarkMode
+                          ? const Color.fromARGB(255, 118, 118, 118)
+                          : Colors.white,
                     ),
                   ),
                   Center(
@@ -52,7 +58,17 @@ class _TextToTorchState extends State<TextToTorch> {
                           onPressed: () {
                             _torchService.sendMorseCode(_controller.text, 100);
                           },
-                          child: SvgPicture.asset('icons/button.svg'),
+                          child: ColorFiltered(
+                            colorFilter: ColorFilter.mode(
+                              widget.isDarkMode
+                                  ? const Color.fromARGB(255, 10, 10, 10)
+                                      .withOpacity(0.5)
+                                  : const Color.fromARGB(255, 10, 10, 10)
+                                      .withOpacity(0.0),
+                              BlendMode.srcATop,
+                            ),
+                            child: SvgPicture.asset('icons/button.svg'),
+                          ),
                         ),
                       ],
                     ),

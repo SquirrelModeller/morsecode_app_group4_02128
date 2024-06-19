@@ -4,11 +4,10 @@ import 'package:morsetorch/services/morse_translator.dart';
 import 'dart:async';
 import 'package:english_words/english_words.dart';
 
-
-
 class Practice extends StatefulWidget {
-  const Practice({super.key,});
-
+  const Practice({
+    super.key,
+  });
 
   @override
   State<Practice> createState() => _PracticeState();
@@ -114,7 +113,8 @@ class _PracticeState extends State<Practice> {
                 skipWord();
               },
               tooltip: 'Skip word', // Tooltip message
-              child: Icon(Icons.arrow_back), // Icon for the FloatingActionButton
+              child:
+                  Icon(Icons.arrow_back), // Icon for the FloatingActionButton
             ),
           ],
         ),
@@ -184,7 +184,7 @@ class _PressDurationButtonState extends State<PressDurationButton> {
             ? MorseState.Dot
             : MorseState.Dash);
         widget
-            .updateMorseText(getMorseText());// Update morsText using callback
+            .updateMorseText(getMorseText()); // Update morsText using callback
         print(
             'Button pressed for: ${pressDuration.inMilliseconds} milliseconds, morseCode: ${widget.morseCode}');
 

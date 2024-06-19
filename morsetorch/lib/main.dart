@@ -38,16 +38,22 @@ class _MyAppState extends State<MyApp> {
       home: Navigation(
         title: 'Morse Torch',
         toggleTheme: _toggleTheme,
+        isDark: _isDarkMode,
       ),
     );
   }
 }
 
 class Navigation extends StatefulWidget {
-  const Navigation({super.key, required this.title, required this.toggleTheme});
+  Navigation(
+      {super.key,
+      required this.title,
+      required this.toggleTheme,
+      required this.isDark});
 
   final String title;
   final VoidCallback toggleTheme;
+  bool isDark;
 
   @override
   State<Navigation> createState() => _NavigationState();
@@ -55,26 +61,36 @@ class Navigation extends StatefulWidget {
 
 class _NavigationState extends State<Navigation> {
   int _currentIndex = 1;
-  final screens = [
-    MorseTrainingPage(),
-    TextToTorch(),
-    const CameraScreen(),
-  ];
+  List<Widget> getScreens() {
+    return [
+      MorseTrainingPage(),
+      TextToTorch(
+        isDarkMode: widget.isDark,
+      ),
+      const CameraScreen(),
+    ];
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Stack(
         children: [
-          screens[_currentIndex],
+          getScreens()[_currentIndex],
           Positioned(
-            top: 20,
+            top: 35,
             right: 20,
             child: FloatingActionButton(
               onPressed: () {
                 widget.toggleTheme();
               },
-              child: Icon(Icons.brightness_6),
+              backgroundColor: widget.isDark
+                  ? const Color.fromARGB(255, 5, 20, 36)
+                  : Colors.white,
+              child: const Icon(
+                Icons.brightness_6,
+                color: Color.fromARGB(255, 118, 118, 118),
+              ),
             ),
           ),
         ],
