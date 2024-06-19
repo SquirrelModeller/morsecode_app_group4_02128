@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class ExpandableTextField extends StatefulWidget {
   final TextEditingController controller;
@@ -46,6 +47,9 @@ class _ExpandableTextFieldState extends State<ExpandableTextField> {
               contentPadding: const EdgeInsets.all(10),
               hintStyle: TextStyle(color: widget.textColor),
             ),
+            inputFormatters: [
+              FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z0-9 ]'))
+            ],
             maxLines: null,
             expands: true,
             keyboardType: TextInputType.multiline,
