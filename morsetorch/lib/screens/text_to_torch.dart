@@ -17,16 +17,26 @@ class _TextToTorchState extends State<TextToTorch> {
   final TorchService _torchService = TorchService();
   bool _isButtonEnabled = false;
   double _currentSliderValue = 5;
-  void _sendMorseCode() async {
-    setState(() {
-      _isButtonEnabled = true;
-    });
-    
-    String textToSend = _controller.text;
-    textToSend = textToSend.replaceAll('\n', ' '); 
 
-    await _torchService.sendMorseCode(textToSend, 325-(_currentSliderValue.toInt())*25);
-  
+  void _toggleMorseCodeSending() async {
+    setState(() {
+      _isButtonEnabled = !_isButtonEnabled;
+    });
+
+    if (_isButtonEnabled) {
+      _sendMorseCode();
+    } else {
+      _torchService.stopMorseCodeSending();
+    }
+  }
+
+  Future<void> _sendMorseCode() async {
+    String textToSend = _controller.text;
+    textToSend = textToSend.replaceAll('\n', ' ');
+
+    await _torchService.sendMorseCode(
+        textToSend, 325 - (_currentSliderValue.toInt()) * 25);
+
     setState(() {
       _isButtonEnabled = false;
     });
@@ -71,7 +81,7 @@ class _TextToTorchState extends State<TextToTorch> {
                           shape: const CircleBorder(eccentricity: 0.0),
                           elevation: 10,
                           backgroundColor: Colors.transparent,
-                          onPressed: _isButtonEnabled ? null : _sendMorseCode,
+                          onPressed: _toggleMorseCodeSending,
                           child: ColorFiltered(
                             colorFilter: ColorFilter.mode(
                               widget.isDarkMode
@@ -87,12 +97,12 @@ class _TextToTorchState extends State<TextToTorch> {
                           ),
                         ),
                         Slider(
-                          activeColor: widget.isDarkMode 
-                          ? const Color.fromRGBO(5, 94, 132,1)
-                          : const Color.fromRGBO(0, 178, 255, 1),
-                          inactiveColor: widget.isDarkMode  
-                          ? const Color.fromARGB(255, 118, 118, 118)
-                          : const Color.fromARGB(255, 255, 255, 255),
+                          activeColor: widget.isDarkMode
+                              ? const Color.fromRGBO(5, 94, 132, 1)
+                              : const Color.fromRGBO(0, 178, 255, 1),
+                          inactiveColor: widget.isDarkMode
+                              ? const Color.fromARGB(255, 118, 118, 118)
+                              : const Color.fromARGB(255, 255, 255, 255),
                           value: _currentSliderValue,
                           min: 1,
                           max: 9,
@@ -103,7 +113,7 @@ class _TextToTorchState extends State<TextToTorch> {
                               _currentSliderValue = value;
                             });
                           },
-                        ), 
+                        ),
                       ],
                     ),
                   )

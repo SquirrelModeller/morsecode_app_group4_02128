@@ -5,8 +5,11 @@ import 'package:morsetorch/services/morse_translator.dart';
 
 class TorchService {
   final Morsetranslator _translator = Morsetranslator();
+  bool _isSendingMorse = false;
 
   Future<void> sendMorseCode(String text, int delay) async {
+    _isSendingMorse = true;
+
     int dotDuration = 1 * delay;
     int dashDuration = 3 * delay;
     int elementGap = 1 * delay;
@@ -16,6 +19,7 @@ class TorchService {
     var morseCode = _translator.textToMorse(text);
     if (morseCode.isEmpty) {
       print("No Morse code generated from the input.");
+      _isSendingMorse = false;
       return;
     }
 
@@ -23,6 +27,8 @@ class TorchService {
     for (var sentence in morseCode) {
       for (var word in sentence) {
         for (var symbol in word) {
+          if (!_isSendingMorse) return;
+
           TorchLight.enableTorch();
           int startTime = stopwatch.elapsedMilliseconds;
           await Future.delayed(Duration(
@@ -38,5 +44,10 @@ class TorchService {
       await Future.delayed(Duration(milliseconds: wordGap - letterGap));
     }
     stopwatch.stop();
+    _isSendingMorse = false;
+  }
+
+  void stopMorseCodeSending() {
+    _isSendingMorse = false;
   }
 }
