@@ -2,7 +2,9 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
 import 'package:mc_native_opencv/mc_native_opencv.dart';
+import 'package:morsetorch/models/language_map.dart';
 import 'package:morsetorch/widgets/text_field.dart';
+
 
 class CameraScreen extends StatefulWidget {
   const CameraScreen({super.key});
@@ -15,10 +17,11 @@ class _CameraScreenState extends State<CameraScreen> {
   late CameraController _controller;
   late Future<void> _initializeControllerFuture;
   final TextEditingController _textController = TextEditingController();
-  double textFieldHeight = 200;
-
+  double textFieldHeight = 100;
+  String? _selectedLanguage;
+  final List<String> _dropdownItems = languages.keys.toList();
   final nativeOpencv = McNativeOpencv();
-
+  String? languageID = "none";
   @override
   void initState() {
     super.initState();
@@ -91,10 +94,26 @@ class _CameraScreenState extends State<CameraScreen> {
                     color: const Color.fromARGB(150, 43, 42, 42),
                     text: 'Searching for morse signal...',
                     textColor: Colors.white,
-                    maxHeight: MediaQuery.of(context).size.height / 3.5,
+                    maxHeight: MediaQuery.of(context).size.height / 4,
                     canWrite: false,
                   ),
-                )
+                ),
+                DropdownButton<String>(
+                  value: _selectedLanguage,
+                  hint: Text('Select a Language'),
+                  items: _dropdownItems.map((String item) {
+                    return DropdownMenuItem<String>(
+                      value: item,
+                      child: Text(item),
+                    );
+                  }).toList(),
+                  onChanged: (String? newValue) {
+                    setState(() {
+                      _selectedLanguage = newValue;
+                      languageID = languages[_selectedLanguage];
+                    });
+                  },
+                ),
               ],
             ),
           ],

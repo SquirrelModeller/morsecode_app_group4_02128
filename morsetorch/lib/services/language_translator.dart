@@ -10,6 +10,9 @@ void main() async {
 }
 
 translateText(String text, String language) async {
+  if (language == "none") {
+    return text;
+  }
   final translator = GoogleTranslator();
   var translation = translator.translate(text, to: language);
   return translation;  
