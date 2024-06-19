@@ -80,16 +80,21 @@ class _NavigationState extends State<Navigation> {
           Positioned(
             top: 35,
             right: 20,
-            child: FloatingActionButton(
-              onPressed: () {
-                widget.toggleTheme();
-              },
-              backgroundColor: widget.isDark
-                  ? const Color.fromARGB(255, 5, 20, 36)
-                  : Colors.white,
-              child: const Icon(
-                Icons.brightness_6,
-                color: Color.fromARGB(255, 118, 118, 118),
+            child: SizedBox(
+              width: 50,
+              height: 50,
+              child: FloatingActionButton(
+                onPressed: () {
+                  widget.toggleTheme();
+                },
+                backgroundColor: widget.isDark
+                    ? const Color.fromARGB(255, 5, 20, 36)
+                    : Colors.white,
+                child: const Icon(
+                  Icons.brightness_6,
+                  color: Color.fromARGB(255, 118, 118, 118),
+                ),
+                
               ),
             ),
           ),
