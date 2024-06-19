@@ -48,6 +48,7 @@ class _ExpandableTextFieldState extends State<ExpandableTextField> {
             ),
             maxLines: null,
             expands: true,
+            keyboardType: TextInputType.multiline,
           ),
         ),
         GestureDetector(

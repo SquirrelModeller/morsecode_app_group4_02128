@@ -21,9 +21,12 @@ class _TextToTorchState extends State<TextToTorch> {
     setState(() {
       _isButtonEnabled = true;
     });
+    
+    String textToSend = _controller.text;
+    textToSend = textToSend.replaceAll('\n', ' '); 
 
-    await _torchService.sendMorseCode(_controller.text, 100);
-
+    await _torchService.sendMorseCode(textToSend, 100);
+  
     setState(() {
       _isButtonEnabled = false;
     });
