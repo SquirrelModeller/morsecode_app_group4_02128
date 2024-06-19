@@ -78,7 +78,9 @@ class _TextToTorchState extends State<TextToTorch> {
                                       .withOpacity(0.0),
                               BlendMode.srcATop,
                             ),
-                            child: SvgPicture.asset('icons/button.svg'),
+                            child: _isButtonEnabled
+                                ? SvgPicture.asset('icons/button2.svg')
+                                : SvgPicture.asset('icons/button.svg'),
                           ),
                         ),
                       ],
