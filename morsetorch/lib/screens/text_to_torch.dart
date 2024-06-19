@@ -16,7 +16,7 @@ class _TextToTorchState extends State<TextToTorch> {
   double textFieldHeight = 200;
   final TorchService _torchService = TorchService();
   bool _isButtonEnabled = false;
-
+  double _currentSliderValue = 5;
   void _sendMorseCode() async {
     setState(() {
       _isButtonEnabled = true;
@@ -25,7 +25,7 @@ class _TextToTorchState extends State<TextToTorch> {
     String textToSend = _controller.text;
     textToSend = textToSend.replaceAll('\n', ' '); 
 
-    await _torchService.sendMorseCode(textToSend, 100);
+    await _torchService.sendMorseCode(textToSend, 325-(_currentSliderValue.toInt())*25);
   
     setState(() {
       _isButtonEnabled = false;
@@ -86,6 +86,19 @@ class _TextToTorchState extends State<TextToTorch> {
                                 : SvgPicture.asset('icons/button.svg'),
                           ),
                         ),
+                        Slider(
+                          activeColor: Color.fromRGBO(0, 178, 255, 1),
+                          value: _currentSliderValue,
+                          min: 1,
+                          max: 9,
+                          divisions: 8,
+                          label: _currentSliderValue.round().toString(),
+                          onChanged: (double value) {
+                            setState(() {
+                              _currentSliderValue = value;
+                            });
+                          },
+                        ), 
                       ],
                     ),
                   )
