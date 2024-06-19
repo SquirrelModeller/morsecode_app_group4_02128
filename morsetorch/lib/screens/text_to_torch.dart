@@ -87,7 +87,12 @@ class _TextToTorchState extends State<TextToTorch> {
                           ),
                         ),
                         Slider(
-                          activeColor: Color.fromRGBO(0, 178, 255, 1),
+                          activeColor: widget.isDarkMode 
+                          ? const Color.fromRGBO(5, 94, 132,1)
+                          : const Color.fromRGBO(0, 178, 255, 1),
+                          inactiveColor: widget.isDarkMode  
+                          ? const Color.fromARGB(255, 118, 118, 118)
+                          : const Color.fromARGB(255, 255, 255, 255),
                           value: _currentSliderValue,
                           min: 1,
                           max: 9,
