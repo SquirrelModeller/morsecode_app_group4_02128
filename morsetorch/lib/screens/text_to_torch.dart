@@ -17,6 +17,12 @@ class _TextToTorchState extends State<TextToTorch> {
   final TorchService _torchService = TorchService();
   bool _isButtonEnabled = false;
   double _currentSliderValue = 5;
+  int _currentIndex = -1;
+
+  @override
+  void initState() {
+    super.initState();
+  }
 
   void _toggleMorseCodeSending() async {
     setState(() {
@@ -35,11 +41,23 @@ class _TextToTorchState extends State<TextToTorch> {
     textToSend = textToSend.replaceAll('\n', ' ');
 
     await _torchService.sendMorseCode(
-        textToSend, 325 - (_currentSliderValue.toInt()) * 25);
+        textToSend, 325 - (_currentSliderValue.toInt()) * 25, _updateIndex);
 
     setState(() {
       _isButtonEnabled = false;
+      _currentIndex = -1;
     });
+  }
+
+  void _updateIndex(int index) {
+    setState(() {
+      _currentIndex = index;
+    });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 
   @override
@@ -120,9 +138,49 @@ class _TextToTorchState extends State<TextToTorch> {
                 ],
               ),
             ),
+            Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: Stack(
+                children: [
+                  Wrap(
+                    children: List.generate(_controller.text.length, (index) {
+                      return Text(
+                        _controller.text[index],
+                        style: TextStyle(
+                          fontSize: 24,
+                          color: widget.isDarkMode ? Colors.white : Colors.black,
+                        ),
+                      );
+                    }),
+                  ),
+                  if (_currentIndex >= 0)
+                    Positioned(
+                      left: _calculatePosition(_controller.text, _currentIndex),
+                      top: 0,
+                      child: Container(
+                        width: 10,
+                        height: 10,
+                        color: Colors.black,
+                      ),
+                    ),
+                ],
+              ),
+            ),
           ],
         ),
       ),
     );
+  }
+
+  double _calculatePosition(String text, int index) {
+    TextPainter textPainter = TextPainter(
+      text: TextSpan(
+        text: text.substring(0, index),
+        style: TextStyle(fontSize: 24),
+      ),
+      textDirection: TextDirection.ltr,
+    );
+    textPainter.layout();
+    return textPainter.width;
   }
 }

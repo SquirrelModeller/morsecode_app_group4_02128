@@ -7,7 +7,7 @@ class TorchService {
   final Morsetranslator _translator = Morsetranslator();
   bool _isSendingMorse = false;
 
-  Future<void> sendMorseCode(String text, int delay) async {
+  Future<void> sendMorseCode(String text, int delay, Function updateIndex) async {
     _isSendingMorse = true;
 
     int dotDuration = 1 * delay;
@@ -24,8 +24,11 @@ class TorchService {
     }
 
     Stopwatch stopwatch = Stopwatch()..start();
+    int currentIndex = 0;
     for (var sentence in morseCode) {
       for (var word in sentence) {
+          updateIndex(currentIndex);
+          currentIndex++;
         for (var symbol in word) {
           if (!_isSendingMorse) return;
 
