@@ -5,7 +5,6 @@ import 'package:morsetorch/screens/morse_training_selector.dart';
 import 'package:morsetorch/screens/text_to_torch.dart';
 import 'package:morsetorch/screens/torch_to_text.dart';
 import 'package:morsetorch/theme/color_theme.dart';
-import 'package:confetti/confetti.dart';
 
 void main() {
   runApp(const MyApp());
