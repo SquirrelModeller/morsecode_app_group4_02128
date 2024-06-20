@@ -13,7 +13,7 @@ class MorseTrainingPage extends StatefulWidget {
 class _MorseTrainingPageState extends State<MorseTrainingPage> {
   final MorseTraining _morseTraining = MorseTraining();
 
-  Color color1 = Colors.blue;
+  Color color1 = Color.fromARGB(255, 0, 178, 255);
 
   @override
   void initState() {
@@ -36,7 +36,7 @@ class _MorseTrainingPageState extends State<MorseTrainingPage> {
     } else {
       _morseTraining.release();
       setState(() {
-        color1 = Colors.blue;
+        color1 = Color.fromARGB(255, 0, 178, 255);
       });
     }
   }
@@ -83,7 +83,7 @@ class _MorseTrainingPageState extends State<MorseTrainingPage> {
                         builder: (_, typedString, __) => Text(
                             'Current Input: $typedString $typed',
                             style: const TextStyle(
-                                fontSize: 20, color: Colors.blue)),
+                                fontSize: 20, color: Color.fromARGB(255, 0, 178, 255))),
                       );
                     }),
               ),
@@ -94,7 +94,7 @@ class _MorseTrainingPageState extends State<MorseTrainingPage> {
                   builder: (_, typed, __) => Text(
                       '${_morseTraining.convertMorseStateEnumToString()}',
                       style:
-                          const TextStyle(fontSize: 100, color: Colors.blue)),
+                          const TextStyle(fontSize: 100, color: Color.fromARGB(255, 0, 178, 255))),
                 ),
               ),
               GestureDetector(
@@ -122,7 +122,9 @@ class _MorseTrainingPageState extends State<MorseTrainingPage> {
                   _morseTraining.beginTraining();
                 },
                 tooltip: 'Reset',
-                child: const Icon(Icons.refresh),
+                child: const Icon(Icons.skip_next_rounded,
+                color: Color.fromARGB(255, 118, 118, 118)),
+                backgroundColor: Colors.white,
               ),
             ],
           ),
