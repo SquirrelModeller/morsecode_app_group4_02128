@@ -30,7 +30,20 @@ class _BeginnerMorseTrainingPageState extends State<BeginnerMorseTrainingPage> {
             ),
           ),
         ),
+        Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: <Widget>[
+              SizedBox(height: MediaQuery.of(context).size.height / 9), // Space at the top
+              Text(
+                'Choose the correct one',
+                style: TextStyle(fontSize: MediaQuery.of(context).size.width / 20),
+              ),
+            ],
+          ),
+        ),
       ],
+      
     );
   }
 }
