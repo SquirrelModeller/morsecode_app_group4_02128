@@ -4,6 +4,7 @@ import 'package:morsetorch/screens/morse_training.dart';
 import 'package:morsetorch/screens/text_to_torch.dart';
 import 'package:morsetorch/screens/torch_to_text.dart';
 import 'package:morsetorch/theme/color_theme.dart';
+import 'package:confetti/confetti.dart';
 
 void main() {
   runApp(const MyApp());
@@ -94,28 +95,39 @@ class _NavigationState extends State<Navigation> {
                   Icons.brightness_6,
                   color: Color.fromARGB(255, 118, 118, 118),
                 ),
-                
               ),
             ),
           ),
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
-        //showSelectedLabels: false,
         showUnselectedLabels: false,
         items: [
           BottomNavigationBarItem(
             icon: Image.asset(
               'icons/Button3.png',
+              color: _currentIndex == 0
+                  ? const Color.fromARGB(250, 118, 118, 118)
+                  : const Color.fromARGB(130, 118, 118, 118),
             ),
             label: 'Practice morse',
           ),
           BottomNavigationBarItem(
-            icon: Image.asset('icons/Flashlight2.png'),
+            icon: Image.asset(
+              'icons/Flashlight2.png',
+              color: _currentIndex == 1
+                  ? const Color.fromARGB(250, 118, 118, 118)
+                  : const Color.fromARGB(130, 118, 118, 118),
+            ),
             label: 'Text to Morse',
           ),
           BottomNavigationBarItem(
-            icon: Image.asset('icons/Flashlight.png'),
+            icon: Image.asset(
+              'icons/Flashlight.png',
+              color: _currentIndex == 2
+                  ? const Color.fromARGB(250, 118, 118, 118)
+                  : const Color.fromARGB(130, 118, 118, 118),
+            ),
             label: 'Morse to Text',
           ),
         ],
