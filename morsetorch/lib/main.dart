@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:morsetorch/screens/morse_training.dart';
+import 'package:morsetorch/screens/morse_training_selector.dart';
 import 'package:morsetorch/screens/text_to_torch.dart';
 import 'package:morsetorch/screens/torch_to_text.dart';
 import 'package:morsetorch/theme/color_theme.dart';
@@ -63,7 +64,7 @@ class _NavigationState extends State<Navigation> {
   int _currentIndex = 1;
   List<Widget> getScreens() {
     return [
-      MorseTrainingPage(),
+      MorseTrainingSelectorPage(), //Skift denne her
       TextToTorch(
         isDarkMode: widget.isDark,
       ),
@@ -94,28 +95,39 @@ class _NavigationState extends State<Navigation> {
                   Icons.brightness_6,
                   color: Color.fromARGB(255, 118, 118, 118),
                 ),
-                
               ),
             ),
           ),
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
-        //showSelectedLabels: false,
         showUnselectedLabels: false,
         items: [
           BottomNavigationBarItem(
             icon: Image.asset(
               'icons/Button3.png',
+              color: _currentIndex == 0
+                  ? const Color.fromARGB(250, 118, 118, 118)
+                  : const Color.fromARGB(130, 118, 118, 118),
             ),
             label: 'Practice morse',
           ),
           BottomNavigationBarItem(
-            icon: Image.asset('icons/Flashlight2.png'),
+            icon: Image.asset(
+              'icons/Flashlight2.png',
+              color: _currentIndex == 1
+                  ? const Color.fromARGB(250, 118, 118, 118)
+                  : const Color.fromARGB(130, 118, 118, 118),
+            ),
             label: 'Text to Morse',
           ),
           BottomNavigationBarItem(
-            icon: Image.asset('icons/Flashlight.png'),
+            icon: Image.asset(
+              'icons/Flashlight.png',
+              color: _currentIndex == 2
+                  ? const Color.fromARGB(250, 118, 118, 118)
+                  : const Color.fromARGB(130, 118, 118, 118),
+            ),
             label: 'Morse to Text',
           ),
         ],

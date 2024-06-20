@@ -5,7 +5,6 @@ import 'package:mc_native_opencv/mc_native_opencv.dart';
 import 'package:morsetorch/models/language_map.dart';
 import 'package:morsetorch/widgets/text_field.dart';
 
-
 class CameraScreen extends StatefulWidget {
   const CameraScreen({super.key});
 
@@ -94,17 +93,28 @@ class _CameraScreenState extends State<CameraScreen> {
                     color: const Color.fromARGB(150, 43, 42, 42),
                     text: 'Searching for morse signal...',
                     textColor: Colors.white,
-                    maxHeight: MediaQuery.of(context).size.height / 4,
+                    maxHeight: MediaQuery.of(context).size.height / 4.5,
                     canWrite: false,
                   ),
                 ),
                 DropdownButton<String>(
+                  dropdownColor: const Color.fromARGB(150, 43, 42, 42),
+                  icon: const Icon(
+                    Icons.translate,
+                    color: Colors.white,
+                  ),
                   value: _selectedLanguage,
-                  hint: Text('Select a Language'),
+                  hint: const Text(
+                    'Select a Language',
+                    style: TextStyle(color: Colors.white),
+                  ),
                   items: _dropdownItems.map((String item) {
                     return DropdownMenuItem<String>(
                       value: item,
-                      child: Text(item),
+                      child: Text(
+                        item,
+                        style: const TextStyle(color: Colors.white),
+                      ),
                     );
                   }).toList(),
                   onChanged: (String? newValue) {
