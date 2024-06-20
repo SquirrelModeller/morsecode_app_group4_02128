@@ -62,7 +62,7 @@ class MorseTraining {
     }
     return tempReturn;
   }
-  
+
   MorseState handleMorseState(int duration) {
     return duration <= 125 ? MorseState.Dot : MorseState.Dash;
   }

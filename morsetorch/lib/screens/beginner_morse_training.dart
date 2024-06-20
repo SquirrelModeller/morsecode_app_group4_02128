@@ -83,7 +83,8 @@ class _BeginnerMorseTrainingPageState extends State<BeginnerMorseTrainingPage> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    MultipleChoiceButton(text: "Option 1", correctAnswer: false),
+                    MultipleChoiceButton(
+                        text: "Option 1", correctAnswer: false),
                     MultipleChoiceButton(text: "Option 2", correctAnswer: true),
                   ],
                 ),
@@ -93,8 +94,10 @@ class _BeginnerMorseTrainingPageState extends State<BeginnerMorseTrainingPage> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    MultipleChoiceButton(text: "Option 3", correctAnswer: false),
-                    MultipleChoiceButton(text: "Option 4", correctAnswer: false),
+                    MultipleChoiceButton(
+                        text: "Option 3", correctAnswer: false),
+                    MultipleChoiceButton(
+                        text: "Option 4", correctAnswer: false),
                   ],
                 )
               ],

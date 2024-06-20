@@ -83,7 +83,8 @@ class _MorseTrainingPageState extends State<MorseTrainingPage> {
                         builder: (_, typedString, __) => Text(
                             'Current Input: $typedString $typed',
                             style: const TextStyle(
-                                fontSize: 20, color: Color.fromARGB(255, 0, 178, 255))),
+                                fontSize: 20,
+                                color: Color.fromARGB(255, 0, 178, 255))),
                       );
                     }),
               ),
@@ -93,8 +94,9 @@ class _MorseTrainingPageState extends State<MorseTrainingPage> {
                   valueListenable: _morseTraining.characterTyped,
                   builder: (_, typed, __) => Text(
                       '${_morseTraining.convertMorseStateEnumToString()}',
-                      style:
-                          const TextStyle(fontSize: 100, color: Color.fromARGB(255, 0, 178, 255))),
+                      style: const TextStyle(
+                          fontSize: 100,
+                          color: Color.fromARGB(255, 0, 178, 255))),
                 ),
               ),
               GestureDetector(
@@ -123,7 +125,7 @@ class _MorseTrainingPageState extends State<MorseTrainingPage> {
                 },
                 tooltip: 'Reset',
                 child: const Icon(Icons.skip_next_rounded,
-                color: Color.fromARGB(255, 118, 118, 118)),
+                    color: Color.fromARGB(255, 118, 118, 118)),
                 backgroundColor: Colors.white,
               ),
             ],

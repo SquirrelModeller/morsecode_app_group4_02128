@@ -21,31 +21,32 @@ class BeginnerTrainingService {
     List<String> allLetters = [];
     for (List<MorseState> i in enums) {
       String letter = "";
-      for (MorseState j in i){
-          if(j == MorseState.Dot){
-          letter +="·";
-        } else if (j == MorseState.Dash){
-          letter +="−";
-        } 
+      for (MorseState j in i) {
+        if (j == MorseState.Dot) {
+          letter += "·";
+        } else if (j == MorseState.Dash) {
+          letter += "−";
+        }
       }
       allLetters.add(letter);
     }
-    
+
     Random random = Random();
     int randomNumber = random.nextInt(4);
     Map<String, bool> morseResult = {};
 
-    for (int i = 0; i < 4; i++){
-        if(i == randomNumber){
-          morseResult[allLetters[i]] = true;
-        } else {
-          morseResult[allLetters[i]] = false;
-        }
+    for (int i = 0; i < 4; i++) {
+      if (i == randomNumber) {
+        morseResult[allLetters[i]] = true;
+      } else {
+        morseResult[allLetters[i]] = false;
+      }
     }
     correctLetter = characters[randomNumber];
     return morseResult;
   }
-  String getCorrectLetter(){
+
+  String getCorrectLetter() {
     return correctLetter;
   }
 }
