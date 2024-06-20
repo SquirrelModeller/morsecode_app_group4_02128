@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:morsetorch/screens/beginner_morse_training.dart';
 import 'package:morsetorch/screens/morse_training.dart';
 
 class MorseTrainingSelectorPage extends StatefulWidget {
@@ -10,13 +11,25 @@ class MorseTrainingSelectorPage extends StatefulWidget {
 }
 
 class MorseTrainingSelectorPageState extends State<MorseTrainingSelectorPage> {
-  bool advanced = false;
+  int _currentScreen = 0;
 
   @override
+
   Widget build(BuildContext context) {
-    return advanced
-        ? MorseTrainingPage()
-        : Scaffold(
+    setCurrentScreen(int newScreen){
+      setState(() {
+        _currentScreen = newScreen;
+      });
+    }
+
+    if (_currentScreen == 1){
+      return BeginnerMorseTrainingPage(setScreen: setCurrentScreen);
+    } else if (_currentScreen == 2) {
+      return MorseTrainingPage(setScreen: setCurrentScreen);
+    }
+    else{
+      return 
+        Scaffold(
             body: Center(
               child: Row(
                 children: [
@@ -27,11 +40,15 @@ class MorseTrainingSelectorPageState extends State<MorseTrainingSelectorPage> {
                       width: MediaQuery.of(context).size.width / 3,
                       height: MediaQuery.of(context).size.width / 3,
                       child: ElevatedButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          setState(() {
+                            _currentScreen = 1;
+                          });
+                        },
                         child: Text(
                           'Beginner',
                           style: TextStyle(
-                              fontSize: MediaQuery.of(context).size.width / 21),
+                              fontSize: MediaQuery.of(context).size.width / 25),
                         ),
                       ),
                     ),
@@ -46,13 +63,13 @@ class MorseTrainingSelectorPageState extends State<MorseTrainingSelectorPage> {
                       child: ElevatedButton(
                         onPressed: () {
                           setState(() {
-                            advanced = true;
+                            _currentScreen = 2;
                           });
                         },
                         child: Text(
                           'Advanced',
                           style: TextStyle(
-                              fontSize: MediaQuery.of(context).size.width / 21),
+                              fontSize: MediaQuery.of(context).size.width / 25),
                         ),
                       ),
                     ),
@@ -61,5 +78,6 @@ class MorseTrainingSelectorPageState extends State<MorseTrainingSelectorPage> {
               ),
             ),
           );
+    }
   }
 }
