@@ -34,7 +34,7 @@ class MorseTraining {
   String convertMorseStateEnumToString() {
     String tempReturn = "";
     for (var signal in builderMorseState) {
-      tempReturn += signal == MorseState.Dot ? "." : "-";
+      tempReturn += signal == MorseState.Dot ? "·" : "−";
     }
     return tempReturn;
   }
