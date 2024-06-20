@@ -26,32 +26,20 @@ class MorseTraining {
     beginTraining();
   }
 
-  void clearBuilder() {
-    characterTyped.value = "";
-    builderMorseState.clear();
-  }
-
-  String convertMorseStateEnumToString() {
-    String tempReturn = "";
-    for (var signal in builderMorseState) {
-      tempReturn += signal == MorseState.Dot ? "·" : "−";
-    }
-    return tempReturn;
-  }
-
   void beginTraining() {
     wordToType.value = randomWordGen();
     resetBuilder();
-  }
-
-  String randomWordGen() {
-    return WordPair.random().toString().toUpperCase();
   }
 
   void resetBuilder() {
     builder.value = "";
     builderMorseState.clear();
     resetInputTimeout();
+  }
+
+  void clearBuilder() {
+    characterTyped.value = "";
+    builderMorseState.clear();
   }
 
   void resetInputTimeout() {
@@ -63,13 +51,20 @@ class MorseTraining {
     });
   }
 
-  MorseState handleMorseState(int duration) {
-    return duration <= 125 ? MorseState.Dot : MorseState.Dash;
+  String randomWordGen() {
+    return WordPair.random().toString().toUpperCase();
   }
 
-  void startedPress() {
-    timePressed = stopwatch.elapsedMilliseconds;
-    stopwatch.start();
+  String convertMorseStateEnumToString() {
+    String tempReturn = "";
+    for (var signal in builderMorseState) {
+      tempReturn += signal == MorseState.Dot ? "·" : "−";
+    }
+    return tempReturn;
+  }
+  
+  MorseState handleMorseState(int duration) {
+    return duration <= 125 ? MorseState.Dot : MorseState.Dash;
   }
 
   void checkInput() {
@@ -83,6 +78,10 @@ class MorseTraining {
     }
   }
 
+  bool isCorrect(String sentenceToCheck) {
+    return wordToType.value.startsWith(sentenceToCheck);
+  }
+
   String getText() {
     try {
       log(translator.morseToText(builderMorseState));
@@ -92,6 +91,11 @@ class MorseTraining {
       clearBuilder();
       return "";
     }
+  }
+
+  void startedPress() {
+    timePressed = stopwatch.elapsedMilliseconds;
+    stopwatch.start();
   }
 
   void release() {
@@ -114,10 +118,6 @@ class MorseTraining {
         }
       }
     });
-  }
-
-  bool isCorrect(String sentenceToCheck) {
-    return wordToType.value.startsWith(sentenceToCheck);
   }
 
   bool won() {
