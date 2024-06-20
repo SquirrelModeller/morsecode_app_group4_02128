@@ -4,6 +4,7 @@ import 'package:morsetorch/models/morse_state.dart';
 
 class BeginnerTrainingService {
   String correctLetter = "";
+  
   Map get4RandomMorseCodes() {
     List<String> validCharacters = List.generate(
             26, (index) => String.fromCharCode('A'.codeUnitAt(0) + index)) +

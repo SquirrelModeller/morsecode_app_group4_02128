@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:morsetorch/services/beginner_training_service.dart';
 
 class BeginnerMorseTrainingPage extends StatefulWidget {
   final Function(int) setScreen;
 
-  BeginnerMorseTrainingPage({super.key, required this.setScreen});
+  const BeginnerMorseTrainingPage({super.key, required this.setScreen});
 
   @override
   State<BeginnerMorseTrainingPage> createState() =>
@@ -48,7 +49,7 @@ class _MultipleChoiceButtonState extends State<MultipleChoiceButton> {
         },
         child: Text(
           widget.text,
-          style: TextStyle(fontSize: 16, color: Colors.white),
+          style: TextStyle(fontSize: 40, color: Colors.white),
         ),
       ),
     );
@@ -56,6 +57,34 @@ class _MultipleChoiceButtonState extends State<MultipleChoiceButton> {
 }
 
 class _BeginnerMorseTrainingPageState extends State<BeginnerMorseTrainingPage> {
+  BeginnerTrainingService beginnerTrainingService = BeginnerTrainingService();
+  Map<dynamic, dynamic> morseCodes = {};
+  String correctLetter = '';
+
+  List<String> choiceList = [];
+  List<bool> answerList = [];
+
+  @override
+  void initState() {
+    super.initState();
+    morseCodes = beginnerTrainingService.get4RandomMorseCodes();
+    correctLetter = beginnerTrainingService.getCorrectLetter();
+    print(correctLetter);
+    setAnswers();
+  }
+
+  void setAnswers() {
+    setState(() {
+      morseCodes.forEach((key, value) {
+        choiceList.add(key);
+        answerList.add(value);
+        print('Key: $key, Value: $value');
+      });
+    });
+    print(choiceList);
+    print(answerList);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -83,8 +112,9 @@ class _BeginnerMorseTrainingPageState extends State<BeginnerMorseTrainingPage> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    MultipleChoiceButton(text: "Option 1", correctAnswer: false),
-                    MultipleChoiceButton(text: "Option 2", correctAnswer: true),
+                    MultipleChoiceButton(
+                        text: choiceList[0], correctAnswer: answerList[0]),
+                    MultipleChoiceButton(text: choiceList[1], correctAnswer: answerList[1]),
                   ],
                 ),
                 SizedBox(
@@ -93,8 +123,10 @@ class _BeginnerMorseTrainingPageState extends State<BeginnerMorseTrainingPage> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    MultipleChoiceButton(text: "Option 3", correctAnswer: false),
-                    MultipleChoiceButton(text: "Option 4", correctAnswer: false),
+                    MultipleChoiceButton(
+                        text: choiceList[2], correctAnswer: answerList[2]),
+                    MultipleChoiceButton(
+                        text: choiceList[3], correctAnswer: answerList[3]),
                   ],
                 )
               ],
