@@ -44,21 +44,29 @@ class _MorseTrainingPageState extends State<MorseTrainingPage> {
             ValueListenableBuilder<String>(
               valueListenable: _morseTraining.wordToType,
               builder: (_, word, __) => Text('Word to type: $word',
-                  style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+                  style: const TextStyle(
+                      fontSize: 24, fontWeight: FontWeight.bold)),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: ValueListenableBuilder<String>(
+                  valueListenable: _morseTraining.characterTyped,
+                  builder: (_, typed, __) {
+                    return ValueListenableBuilder<String>(
+                      valueListenable: _morseTraining.builder,
+                      builder: (_, typedString, __) => Text(
+                          'Current Input: $typedString $typed',
+                          style: const TextStyle(
+                              fontSize: 20, color: Colors.blue)),
+                    );
+                  }),
             ),
             Padding(
               padding: const EdgeInsets.all(20.0),
               child: ValueListenableBuilder<String>(
                 valueListenable: _morseTraining.characterTyped,
-                builder: (_, typed, __) => Text('Current Input: ${_morseTraining.builder.value}$typed',
-                    style: const TextStyle(fontSize: 20, color: Colors.blue)),
-              ),
-            ),
-              Padding(
-              padding: const EdgeInsets.all(20.0),
-              child: ValueListenableBuilder<String>(
-                valueListenable: _morseTraining.characterTyped,
-                builder: (_, typed, __) => Text('Morse being typed: ${_morseTraining.convertMorseStateEnumToString()}',
+                builder: (_, typed, __) => Text(
+                    'Morse being typed: ${_morseTraining.convertMorseStateEnumToString()}',
                     style: const TextStyle(fontSize: 20, color: Colors.blue)),
               ),
             ),
@@ -84,7 +92,7 @@ class _MorseTrainingPageState extends State<MorseTrainingPage> {
             const SizedBox(height: 20),
             FloatingActionButton(
               onPressed: () {
-                _morseTraining.resetBuilder();
+                _morseTraining.beginTraining();
               },
               tooltip: 'Reset',
               child: const Icon(Icons.refresh),

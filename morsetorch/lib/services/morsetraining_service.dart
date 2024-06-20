@@ -18,6 +18,8 @@ class MorseTraining {
 
   int timePressed = 0;
 
+  Timer? _timer; // Declare a Timer variable
+
   MorseTraining() {
     stopwatch.start();
     beginTraining();
@@ -53,7 +55,7 @@ class MorseTraining {
 
   void resetInputTimeout() {
     inputTimeout?.cancel();
-    inputTimeout = Timer(const Duration(seconds: 5), () {
+    inputTimeout = Timer(const Duration(seconds: 2), () {
       log("Input timeout - resetting builder");
       resetInputTimeout();
       clearBuilder();
@@ -61,7 +63,7 @@ class MorseTraining {
   }
 
   MorseState handleMorseState(int duration) {
-    return duration <= 150 ? MorseState.Dot : MorseState.Dash;
+    return duration <= 125 ? MorseState.Dot : MorseState.Dash;
   }
 
   void startedPress() {
@@ -84,7 +86,6 @@ class MorseTraining {
     try {
       log(translator.morseToText(builderMorseState));
       return translator.morseToText(builderMorseState);
-      
     } on Exception catch (e) {
       log("Translation error: $e");
       clearBuilder();
@@ -96,18 +97,21 @@ class MorseTraining {
     log("Released");
     checkInput();
     String localAttempt = getText();
+    _timer?.cancel();
     characterTyped.value = localAttempt;
-    if (isCorrect(builder.value + localAttempt)) {
-      builder.value += localAttempt;
-      log("Current builder state: ${builder.value}");
-      clearBuilder();
-      if (won()) {
-        // Win condition
+    _timer = Timer(Duration(seconds: 2), () {
+      if (isCorrect(builder.value + localAttempt)) {
+        builder.value += localAttempt;
+        log("Current builder state: ${builder.value}");
         clearBuilder();
-        resetBuilder();
-        wordToType.value = randomWordGen();
+        if (won()) {
+          // Win condition
+          clearBuilder();
+          resetBuilder();
+          wordToType.value = randomWordGen();
+        }
       }
-    }
+    });
   }
 
   bool isCorrect(String sentenceToCheck) {
