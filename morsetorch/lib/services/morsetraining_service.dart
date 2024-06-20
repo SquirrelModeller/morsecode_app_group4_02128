@@ -15,6 +15,8 @@ class MorseTraining {
 
   List<MorseState> builderMorseState = [];
 
+  int timePressed = 0;
+
   MorseTraining() {
     stopwatch.start();
     beginTraining();
@@ -39,7 +41,7 @@ class MorseTraining {
     inputTimeout?.cancel();
     inputTimeout = Timer(const Duration(seconds: 5), () {
       log("Input timeout - resetting builder");
-      resetBuilder();
+      resetInputTimeout();
     });
   }
 
@@ -48,36 +50,41 @@ class MorseTraining {
   }
 
   void startedPress() {
+    timePressed = stopwatch.elapsedMilliseconds;
     stopwatch.start();
   }
 
   void checkInput() {
-    int currentTime = stopwatch.elapsedMilliseconds;
-    int duration = currentTime - stopwatch.elapsedMilliseconds;
-    if (duration > 200) {
-      log("Took too long between presses");
-      resetBuilder();
-      return;
-    }
+    int duration = stopwatch.elapsedMilliseconds - timePressed;
+    log(timePressed.toString());
+    log(duration.toString());
     builderMorseState.add(handleMorseState(duration));
     resetInputTimeout();
+    if (builderMorseState.isNotEmpty) {
+      log(builderMorseState.last.toString());
+    }
   }
 
   String getText() {
     try {
+      log(translator.morseToText(builderMorseState));
       return translator.morseToText(builderMorseState);
+      
     } on Exception catch (e) {
       log("Translation error: $e");
+      builderMorseState.clear();
       return "";
     }
   }
 
   void release() {
+    log("Released");
     checkInput();
     String localAttempt = getText();
     if (isCorrect(builder.value + localAttempt)) {
       builder.value += localAttempt;
       log("Current builder state: ${builder.value}");
+      builderMorseState.clear();
     }
   }
 

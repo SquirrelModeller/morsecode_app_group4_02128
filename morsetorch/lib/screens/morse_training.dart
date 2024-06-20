@@ -61,7 +61,7 @@ class _MorseTrainingPageState extends State<MorseTrainingPage> {
               child: Container(
                 width: 150,
                 height: 150,
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                   shape: BoxShape.circle,
                   color: Colors.blue,
                 ),
@@ -73,7 +73,7 @@ class _MorseTrainingPageState extends State<MorseTrainingPage> {
                 ),
               ),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             FloatingActionButton(
               onPressed: () {
                 _morseTraining.resetBuilder();

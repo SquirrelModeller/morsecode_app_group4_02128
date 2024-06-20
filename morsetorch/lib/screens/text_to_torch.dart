@@ -61,7 +61,7 @@ class _TextToTorchState extends State<TextToTorch> {
                     child: ExpandableTextField(
                       controller: _controller,
                       textFieldHeight: 150,
-                      maxHeight: MediaQuery.of(context).size.height / 2,
+                      maxHeight: MediaQuery.of(context).size.height / 2.2,
                       text: 'Enter text to convert to morse',
                       textColor: widget.isDarkMode
                           ? const Color.fromARGB(255, 202, 202, 202)
