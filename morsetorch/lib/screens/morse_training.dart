@@ -49,8 +49,16 @@ class _MorseTrainingPageState extends State<MorseTrainingPage> {
             Padding(
               padding: const EdgeInsets.all(20.0),
               child: ValueListenableBuilder<String>(
-                valueListenable: _morseTraining.builder,
-                builder: (_, input, __) => Text('Current Input: $input',
+                valueListenable: _morseTraining.characterTyped,
+                builder: (_, typed, __) => Text('Current Input: ${_morseTraining.builder.value}$typed',
+                    style: const TextStyle(fontSize: 20, color: Colors.blue)),
+              ),
+            ),
+              Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: ValueListenableBuilder<String>(
+                valueListenable: _morseTraining.characterTyped,
+                builder: (_, typed, __) => Text('Morse being typed: ${_morseTraining.convertMorseStateEnumToString()}',
                     style: const TextStyle(fontSize: 20, color: Colors.blue)),
               ),
             ),
