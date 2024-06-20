@@ -11,6 +11,8 @@ class MorseTrainingPage extends StatefulWidget {
 class _MorseTrainingPageState extends State<MorseTrainingPage> {
   final MorseTraining _morseTraining = MorseTraining();
 
+  Color color1 = Colors.blue;
+
   @override
   void initState() {
     super.initState();
@@ -26,8 +28,16 @@ class _MorseTrainingPageState extends State<MorseTrainingPage> {
   void handlePress(bool isPressed) {
     if (isPressed) {
       _morseTraining.startedPress();
+      setState(() {
+        color1 = Colors.black;
+      });
+      
     } else {
       _morseTraining.release();
+      setState(() {
+        color1 = Colors.blue;
+      });
+      
     }
   }
 
@@ -62,24 +72,24 @@ class _MorseTrainingPageState extends State<MorseTrainingPage> {
                   }),
             ),
             Padding(
-              padding: const EdgeInsets.all(20.0),
+              padding: const EdgeInsets.all(10.0),
               child: ValueListenableBuilder<String>(
                 valueListenable: _morseTraining.characterTyped,
                 builder: (_, typed, __) => Text(
-                    'Morse being typed: ${_morseTraining.convertMorseStateEnumToString()}',
-                    style: const TextStyle(fontSize: 20, color: Colors.blue)),
+                    '${_morseTraining.convertMorseStateEnumToString()}',
+                    style: const TextStyle(fontSize: 100, color: Colors.blue)),
               ),
             ),
             GestureDetector(
-              onTapDown: (_) => handlePress(true),
+              onTapDown: (_) => {handlePress(true), }, 
               onTapUp: (_) => handlePress(false),
               onTapCancel: () => handlePress(false),
               child: Container(
                 width: 150,
                 height: 150,
-                decoration: const BoxDecoration(
+                decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: Colors.blue,
+                  color: color1,
                 ),
                 child: const Center(
                   child: Text(
@@ -89,7 +99,7 @@ class _MorseTrainingPageState extends State<MorseTrainingPage> {
                 ),
               ),
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 40),
             FloatingActionButton(
               onPressed: () {
                 _morseTraining.beginTraining();

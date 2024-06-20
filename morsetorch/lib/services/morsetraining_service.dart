@@ -17,6 +17,7 @@ class MorseTraining {
   List<MorseState> builderMorseState = [];
 
   int timePressed = 0;
+  bool isPressed = false;
 
   Timer? _timer; // Declare a Timer variable
 
@@ -55,7 +56,7 @@ class MorseTraining {
 
   void resetInputTimeout() {
     inputTimeout?.cancel();
-    inputTimeout = Timer(const Duration(seconds: 2), () {
+    inputTimeout = Timer(const Duration(seconds: 1), () {
       log("Input timeout - resetting builder");
       resetInputTimeout();
       clearBuilder();
@@ -95,11 +96,12 @@ class MorseTraining {
 
   void release() {
     log("Released");
+    isPressed = false;
     checkInput();
     String localAttempt = getText();
     _timer?.cancel();
     characterTyped.value = localAttempt;
-    _timer = Timer(Duration(seconds: 2), () {
+    _timer = Timer(Duration(seconds: 1), () {
       if (isCorrect(builder.value + localAttempt)) {
         builder.value += localAttempt;
         log("Current builder state: ${builder.value}");
