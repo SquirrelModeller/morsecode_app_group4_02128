@@ -73,7 +73,6 @@ class _TextToTorchState extends State<TextToTorch> {
                   SafeArea(
                     child: ExpandableTextField(
                       controller: _controller,
-                      textFieldHeight: 150,
                       maxHeight: MediaQuery.of(context).size.height / 2,
                       text: 'Enter text to convert to morse',
                       textColor: widget.isDarkMode
