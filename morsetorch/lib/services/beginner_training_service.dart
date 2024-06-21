@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:morsetorch/models/morse_state.dart';
 
 class BeginnerTrainingService {
-  String correctLetter = "";
+  //String correctLetter = "";
+  ValueNotifier<String> correctLetter = ValueNotifier("");
   
   Map get4RandomMorseCodes() {
     List<String> validCharacters = List.generate(
@@ -43,11 +44,11 @@ class BeginnerTrainingService {
         morseResult[allLetters[i]] = false;
       }
     }
-    correctLetter = characters[randomNumber];
+    correctLetter.value = characters[randomNumber];
     return morseResult;
   }
 
   String getCorrectLetter() {
-    return correctLetter;
+    return correctLetter.value;
   }
 }
