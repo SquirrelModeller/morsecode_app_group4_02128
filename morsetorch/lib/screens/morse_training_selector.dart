@@ -4,7 +4,9 @@ import 'package:morsetorch/screens/intermediate_training.dart';
 import 'package:morsetorch/screens/morse_training.dart';
 
 class MorseTrainingSelectorPage extends StatefulWidget {
-  const MorseTrainingSelectorPage({super.key});
+  bool isDarkMode;
+
+  MorseTrainingSelectorPage({super.key, required this.isDarkMode});
 
   @override
   MorseTrainingSelectorPageState createState() =>
@@ -23,11 +25,17 @@ class MorseTrainingSelectorPageState extends State<MorseTrainingSelectorPage> {
     }
 
     if (_currentScreen == 1) {
-      return BeginnerMorseTrainingPage(setScreen: setCurrentScreen);
+      return BeginnerMorseTrainingPage(setScreen: setCurrentScreen, isDarkMode: widget.isDarkMode,);
     } else if (_currentScreen == 2) {
-      return IntermediateTraining(setScreen: setCurrentScreen);
+      return IntermediateTraining(
+        setScreen: setCurrentScreen,
+        isDarkMode: widget.isDarkMode,
+      );
     } else if (_currentScreen == 3) {
-      return MorseTrainingPage(setScreen: setCurrentScreen);
+      return MorseTrainingPage(
+        setScreen: setCurrentScreen,
+        isDarkMode: widget.isDarkMode,
+      );
     } else {
       return Scaffold(
         body: Center(

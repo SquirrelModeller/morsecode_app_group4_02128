@@ -6,8 +6,10 @@ import 'package:vibration/vibration.dart';
 
 class IntermediateTraining extends StatefulWidget {
   final Function(int) setScreen;
+  bool isDarkMode;
 
-  const IntermediateTraining({super.key, required this.setScreen});
+  IntermediateTraining(
+      {super.key, required this.setScreen, required this.isDarkMode});
 
   @override
   State<IntermediateTraining> createState() => _IntermediateTrainingState();
@@ -70,11 +72,16 @@ class _IntermediateTrainingState extends State<IntermediateTraining> {
               width: 50,
               height: 50,
               child: FloatingActionButton(
-                backgroundColor: Colors.white,
+                backgroundColor: widget.isDarkMode
+                    ? const Color.fromARGB(255, 5, 20, 36)
+                    : Colors.white,
                 onPressed: () {
                   widget.setScreen(0);
                 },
-                child: const Icon(Icons.arrow_back),
+                child: const Icon(
+                  Icons.arrow_back,
+                  color: Color.fromARGB(255, 118, 118, 118),
+                ),
               ),
             ),
           ),
@@ -129,7 +136,13 @@ class _IntermediateTrainingState extends State<IntermediateTraining> {
                   onPressed: () {
                     vibrate();
                   },
-                  child: const Icon(Icons.play_arrow),
+                  backgroundColor: widget.isDarkMode
+                    ? const Color.fromARGB(255, 5, 20, 36)
+                    : Colors.white,
+                  child: const Icon(
+                    Icons.play_arrow,
+                    color: Color.fromARGB(255, 118, 118, 118),
+                  ),
                 ),
                 const SizedBox(
                   height: 20,
@@ -138,7 +151,13 @@ class _IntermediateTrainingState extends State<IntermediateTraining> {
                   onPressed: () {
                     skip();
                   },
-                  child: const Icon(Icons.skip_next),
+                  backgroundColor: widget.isDarkMode
+                    ? const Color.fromARGB(255, 5, 20, 36)
+                    : Colors.white,
+                  child: const Icon(
+                    Icons.skip_next,
+                    color: Color.fromARGB(255, 118, 118, 118),
+                  ),
                 ),
               ],
             ),

@@ -145,7 +145,7 @@ class _TextToTorchState extends State<TextToTorch> {
                         style: TextStyle(
                           fontSize: 24,
                           color: index <= _currentIndex
-                              ? (widget.isDarkMode ? Colors.blue : Colors.red)
+                              ? (widget.isDarkMode ? Colors.blue : Colors.blue)
                               : (widget.isDarkMode
                                   ? Colors.grey
                                   : Colors.black),

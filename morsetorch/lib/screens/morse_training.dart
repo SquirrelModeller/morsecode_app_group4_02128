@@ -4,7 +4,10 @@ import 'package:morsetorch/services/morsetraining_service.dart';
 class MorseTrainingPage extends StatefulWidget {
   var setScreen;
 
-  MorseTrainingPage({super.key, required this.setScreen});
+  bool isDarkMode;
+
+  MorseTrainingPage(
+      {super.key, required this.setScreen, required this.isDarkMode});
 
   @override
   _MorseTrainingPageState createState() => _MorseTrainingPageState();
@@ -52,11 +55,16 @@ class _MorseTrainingPageState extends State<MorseTrainingPage> {
             width: 50,
             height: 50,
             child: FloatingActionButton(
-              backgroundColor: Colors.white,
+              backgroundColor: widget.isDarkMode
+                  ? Color.fromARGB(255, 5, 20, 36)
+                  : Colors.white,
               onPressed: () {
                 widget.setScreen(0);
               },
-              child: const Icon(Icons.arrow_back),
+              child: const Icon(
+                Icons.arrow_back,
+                color: Color.fromARGB(255, 118, 118, 118),
+              ),
             ),
           ),
         ),
@@ -69,9 +77,14 @@ class _MorseTrainingPageState extends State<MorseTrainingPage> {
               ),
               ValueListenableBuilder<String>(
                 valueListenable: _morseTraining.wordToType,
-                builder: (_, word, __) => Text('Word to type: $word',
-                    style: const TextStyle(
-                        fontSize: 24, fontWeight: FontWeight.bold)),
+                builder: (_, word, __) => Text(
+                  'Word to type: $word',
+                  style: const TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                    color: Color.fromARGB(255, 118, 118, 118),
+                  ),
+                ),
               ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
@@ -93,10 +106,12 @@ class _MorseTrainingPageState extends State<MorseTrainingPage> {
                 child: ValueListenableBuilder<String>(
                   valueListenable: _morseTraining.characterTyped,
                   builder: (_, typed, __) => Text(
-                      '${_morseTraining.convertMorseStateEnumToString()}',
-                      style: const TextStyle(
-                          fontSize: 100,
-                          color: Color.fromARGB(255, 0, 178, 255))),
+                    '${_morseTraining.convertMorseStateEnumToString()}',
+                    style: const TextStyle(
+                      fontSize: 100,
+                      color: Color.fromARGB(255, 0, 178, 255),
+                    ),
+                  ),
                 ),
               ),
               GestureDetector(
@@ -124,9 +139,11 @@ class _MorseTrainingPageState extends State<MorseTrainingPage> {
                   _morseTraining.beginTraining();
                 },
                 tooltip: 'Reset',
+                backgroundColor: widget.isDarkMode
+                    ? const Color.fromARGB(255, 5, 20, 36)
+                    : Colors.white,
                 child: const Icon(Icons.skip_next_rounded,
                     color: Color.fromARGB(255, 118, 118, 118)),
-                backgroundColor: Colors.white,
               ),
             ],
           ),

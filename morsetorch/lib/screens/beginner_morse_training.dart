@@ -4,8 +4,10 @@ import 'package:morsetorch/widgets/multiple_choice.dart';
 
 class BeginnerMorseTrainingPage extends StatefulWidget {
   final Function(int) setScreen;
+  bool isDarkMode;
 
-  const BeginnerMorseTrainingPage({super.key, required this.setScreen});
+  BeginnerMorseTrainingPage(
+      {super.key, required this.setScreen, required this.isDarkMode});
 
   @override
   State<BeginnerMorseTrainingPage> createState() =>
@@ -53,11 +55,16 @@ class _BeginnerMorseTrainingPageState extends State<BeginnerMorseTrainingPage> {
               width: 50,
               height: 50,
               child: FloatingActionButton(
-                backgroundColor: Colors.white,
+                backgroundColor: widget.isDarkMode
+                    ? Color.fromARGB(255, 5, 20, 36)
+                    : Colors.white,
                 onPressed: () {
                   widget.setScreen(0);
                 },
-                child: const Icon(Icons.arrow_back),
+                child: const Icon(
+                  Icons.arrow_back,
+                  color: Color.fromARGB(255, 118, 118, 118),
+                ),
               ),
             ),
           ),

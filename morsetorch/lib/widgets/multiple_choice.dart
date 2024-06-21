@@ -5,6 +5,7 @@ class MultipleChoiceButton extends StatefulWidget {
   final bool correctAnswer;
   var whenPressed;
 
+
   MultipleChoiceButton(
       {super.key,
       required this.text,
@@ -16,7 +17,7 @@ class MultipleChoiceButton extends StatefulWidget {
 }
 
 class _MultipleChoiceButtonState extends State<MultipleChoiceButton> {
-  Color _buttonColor = Color.fromARGB(255, 165, 238, 255);
+  Color _buttonColor = Color.fromARGB(255,0, 178, 255);
 
   @override
   Widget build(BuildContext context) {
@@ -50,7 +51,7 @@ class _MultipleChoiceButtonState extends State<MultipleChoiceButton> {
             );
           }
           await Future.delayed(const Duration(seconds: 2));
-          _buttonColor = Color.fromARGB(255, 165, 238, 255);
+          _buttonColor = Color.fromARGB(255,0, 178, 255);
           widget.whenPressed();
         },
         child: Text(
