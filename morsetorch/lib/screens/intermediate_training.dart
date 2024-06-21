@@ -20,7 +20,7 @@ class _IntermediateTrainingState extends State<IntermediateTraining> {
   var answers = {};
   var choiceList = [];
   var answerList = [];
-
+  var streak = 0;
   @override
   void initState() {
     super.initState();
@@ -40,6 +40,7 @@ class _IntermediateTrainingState extends State<IntermediateTraining> {
     mediumTraining.initFourRandomLetters();
     answers = mediumTraining.morseResult;
     print(answers);
+    print(streak);
     setAnswers();
   }
 
@@ -58,6 +59,14 @@ class _IntermediateTrainingState extends State<IntermediateTraining> {
     Vibration.vibrate(
       pattern: vibration,
     );
+  }
+
+  void increaseStreak(bool correct) {
+    if (correct == true) {
+      streak += 1;
+    } else {
+      streak = 0;
+    }
   }
 
   @override
@@ -100,11 +109,13 @@ class _IntermediateTrainingState extends State<IntermediateTraining> {
                             text: choiceList[0],
                             correctAnswer: answerList[0],
                             whenPressed: skip,
+                            streak: increaseStreak,
                           ),
                           MultipleChoiceButton(
                             text: choiceList[1],
                             correctAnswer: answerList[1],
                             whenPressed: skip,
+                            streak: increaseStreak,
                           ),
                         ],
                       ),
@@ -118,11 +129,13 @@ class _IntermediateTrainingState extends State<IntermediateTraining> {
                             text: choiceList[2],
                             correctAnswer: answerList[2],
                             whenPressed: skip,
+                            streak: increaseStreak,
                           ),
                           MultipleChoiceButton(
                             text: choiceList[3],
                             correctAnswer: answerList[3],
                             whenPressed: skip,
+                            streak: increaseStreak,
                           ),
                         ],
                       )
@@ -159,6 +172,10 @@ class _IntermediateTrainingState extends State<IntermediateTraining> {
                     color: Color.fromARGB(255, 118, 118, 118),
                   ),
                 ),
+                const SizedBox(
+                  height: 20,
+                ),
+                Text("Streak: $streak", style: const TextStyle(fontSize: 20)),
               ],
             ),
           ),

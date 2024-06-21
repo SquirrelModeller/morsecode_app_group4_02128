@@ -56,6 +56,7 @@ class _BeginnerMorseTrainingPageState extends State<BeginnerMorseTrainingPage> {
 
   List<String> choiceList = [];
   List<bool> answerList = [];
+  int streak = 0;
 
   @override
   void initState() {
@@ -82,6 +83,14 @@ class _BeginnerMorseTrainingPageState extends State<BeginnerMorseTrainingPage> {
     choiceList.clear();
     answerList.clear();
     setUpGame();
+  }
+
+  void increaseStreak(bool correct) {
+    if (correct == true) {
+      streak += 1;
+    } else {
+      streak = 0;
+    }
   }
 
   @override
@@ -118,7 +127,9 @@ class _BeginnerMorseTrainingPageState extends State<BeginnerMorseTrainingPage> {
                     builder: (_, letter, __) => Text(
                         'Guess the character $letter',
                         style: const TextStyle(
-                            fontSize: 24, fontWeight: FontWeight.bold, color: Color.fromARGB(255, 118, 118, 118)))),
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                            color: Color.fromARGB(255, 118, 118, 118)))),
                 SizedBox(height: 30),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -126,11 +137,13 @@ class _BeginnerMorseTrainingPageState extends State<BeginnerMorseTrainingPage> {
                     MultipleChoiceButton(
                         text: choiceList[0],
                         correctAnswer: answerList[0],
-                        whenPressed: reset),
+                        whenPressed: reset,
+                        streak: increaseStreak),
                     MultipleChoiceButton(
                         text: choiceList[1],
                         correctAnswer: answerList[1],
-                        whenPressed: reset),
+                        whenPressed: reset,
+                        streak: increaseStreak),
                   ],
                 ),
                 SizedBox(
@@ -142,21 +155,26 @@ class _BeginnerMorseTrainingPageState extends State<BeginnerMorseTrainingPage> {
                     MultipleChoiceButton(
                         text: choiceList[2],
                         correctAnswer: answerList[2],
-                        whenPressed: reset),
+                        whenPressed: reset,
+                        streak: increaseStreak),
                     MultipleChoiceButton(
                         text: choiceList[3],
                         correctAnswer: answerList[3],
-                        whenPressed: reset),
+                        whenPressed: reset,
+                        streak: increaseStreak),
                   ],
                 ),
-                SizedBox(
-                    height: 30),
+                SizedBox(height: 30),
                 FloatingActionButton(
                   onPressed: () {
                     reset();
                   },
                   child: const Icon(Icons.skip_next),
                 ),
+                const SizedBox(
+                  height: 20,
+                ),
+                Text("Streak: $streak", style: const TextStyle(fontSize: 20)),
               ],
             ),
           ),

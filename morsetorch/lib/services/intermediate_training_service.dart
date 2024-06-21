@@ -4,7 +4,6 @@ import 'package:morsetorch/models/morse_state.dart';
 class IntermediateTrainingService {
   List<MorseState> _correctMorseCode = [];
   Map<String, bool> _morseResult = {};
-
   List<String> getRandomCharacters() {
     List<String> validCharacters = List.generate(
             26, (index) => String.fromCharCode('A'.codeUnitAt(0) + index)) +
@@ -54,7 +53,6 @@ class IntermediateTrainingService {
     }
     return vibration;
   }
-
   List<MorseState> get correctMorseCode => _correctMorseCode;
 
   Map<String, bool> get morseResult => _morseResult;
