@@ -16,48 +16,20 @@ class IntermediateTraining extends StatefulWidget {
 }
 
 class _IntermediateTrainingState extends State<IntermediateTraining> {
-  IntermediateTrainingService mediumTraining = IntermediateTrainingService();
-  var answers = {};
-  var choiceList = [];
-  var answerList = [];
+  IntermediateTrainingService intermediateTrainingService =
+      IntermediateTrainingService();
+
   bool isButtonEnabled = true;
-  var streak = 0;
 
   @override
   void initState() {
     super.initState();
-    mediumTraining.initFourRandomLetters();
-    answers = mediumTraining.morseResult;
-    setAnswers();
-  }
-
-  void reset() {
-    mediumTraining.resetAnswers();
-    choiceList = [];
-    answerList = [];
-  }
-
-  void skip() {
-    reset();
-    mediumTraining.initFourRandomLetters();
-    answers = mediumTraining.morseResult;
-    print(answers);
-    print(streak);
-    setAnswers();
-  }
-
-  void setAnswers() {
-    setState(() {
-      answers.forEach((key, value) {
-        choiceList.add(key);
-        answerList.add(value);
-      });
-    });
+    intermediateTrainingService.setUptGame();
   }
 
   void vibrate() {
-    var morseCode = mediumTraining.correctMorseCode;
-    var vibration = mediumTraining.getVibration(morseCode);
+    var morseCode = intermediateTrainingService.correctMorseCode;
+    var vibration = intermediateTrainingService.getVibration(morseCode);
     Vibration.vibrate(
       pattern: vibration,
     );
@@ -72,14 +44,6 @@ class _IntermediateTrainingState extends State<IntermediateTraining> {
         isButtonEnabled = true;
       });
     });
-  }
-
-  void increaseStreak(bool correct) {
-    if (correct == true) {
-      streak += 1;
-    } else {
-      streak = 0;
-    }
   }
 
   @override
@@ -115,53 +79,17 @@ class _IntermediateTrainingState extends State<IntermediateTraining> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          MultipleChoiceButton(
-                            text: choiceList[0],
-                            correctAnswer: answerList[0],
-                            reset: skip,
-                            disableButton: disableButtonTemporarily,
-                            isEnabled: isButtonEnabled,
-                            streak: increaseStreak,
-                            isDarkMode: widget.isDarkMode,
-                          ),
-                          MultipleChoiceButton(
-                            text: choiceList[1],
-                            correctAnswer: answerList[1],
-                            reset: skip,
-                            disableButton: disableButtonTemporarily,
-                            isEnabled: isButtonEnabled,
-                            streak: increaseStreak,
-                            isDarkMode: widget.isDarkMode,
-                          ),
-                        ],
-                      ),
                       const SizedBox(
                         height: 30,
                       ),
-                      Row(
+                      Column(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
-                          MultipleChoiceButton(
-                            text: choiceList[2],
-                            correctAnswer: answerList[2],
-                            reset: skip,
-                            disableButton: disableButtonTemporarily,
-                            isEnabled: isButtonEnabled,
-                            streak: increaseStreak,
-                            isDarkMode: widget.isDarkMode,
-                          ),
-                          MultipleChoiceButton(
-                            text: choiceList[3],
-                            correctAnswer: answerList[3],
-                            reset: skip,
-                            disableButton: disableButtonTemporarily,
-                            isEnabled: isButtonEnabled,
-                            streak: increaseStreak,
-                            isDarkMode: widget.isDarkMode,
-                          ),
+                          const SizedBox(height: 30),
+                          buildChoiceButtons(0, 1),
+                          const SizedBox(height: 30),
+                          buildChoiceButtons(2, 3),
+                          const SizedBox(height: 30),
                         ],
                       )
                     ],
@@ -187,8 +115,8 @@ class _IntermediateTrainingState extends State<IntermediateTraining> {
                 ),
                 FloatingActionButton(
                   onPressed: () {
-                    increaseStreak(false);
-                    skip();
+                    intermediateTrainingService.increaseStreak(false);
+                    intermediateTrainingService.skip();
                   },
                   backgroundColor: widget.isDarkMode
                       ? const Color.fromARGB(255, 5, 20, 36)
@@ -201,11 +129,14 @@ class _IntermediateTrainingState extends State<IntermediateTraining> {
                 const SizedBox(
                   height: 20,
                 ),
-                Text(
-                  "Streak: $streak",
-                  style: const TextStyle(
-                    fontSize: 20,
-                    color: Color.fromARGB(255, 118, 118, 118),
+                ValueListenableBuilder<int>(
+                  valueListenable: intermediateTrainingService.streak,
+                  builder: (_, streak, __) => Text(
+                    "Streak: $streak",
+                    style: const TextStyle(
+                      fontSize: 20,
+                      color: Color.fromARGB(255, 118, 118, 118),
+                    ),
                   ),
                 ),
               ],
@@ -213,6 +144,44 @@ class _IntermediateTrainingState extends State<IntermediateTraining> {
           ),
         ],
       ),
+    );
+  }
+
+  Row buildChoiceButtons(int firstIndex, int secondIndex) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: [
+        ValueListenableBuilder<List<String>>(
+          valueListenable: intermediateTrainingService.choiceList,
+          builder: (_, choiceList, __) => ValueListenableBuilder<List<bool>>(
+            valueListenable: intermediateTrainingService.answerList,
+            builder: (_, answerList, __) => MultipleChoiceButton(
+              text: choiceList[firstIndex],
+              correctAnswer: answerList[firstIndex],
+              reset: intermediateTrainingService.skip,
+              disableButton: disableButtonTemporarily,
+              isEnabled: isButtonEnabled,
+              streak: intermediateTrainingService.increaseStreak,
+              isDarkMode: widget.isDarkMode,
+            ),
+          ),
+        ),
+        ValueListenableBuilder<List<String>>(
+          valueListenable: intermediateTrainingService.choiceList,
+          builder: (_, choiceList, __) => ValueListenableBuilder<List<bool>>(
+            valueListenable: intermediateTrainingService.answerList,
+            builder: (_, answerList, __) => MultipleChoiceButton(
+              text: choiceList[secondIndex],
+              correctAnswer: answerList[secondIndex],
+              reset: intermediateTrainingService.skip,
+              disableButton: disableButtonTemporarily,
+              isEnabled: isButtonEnabled,
+              streak: intermediateTrainingService.increaseStreak,
+              isDarkMode: widget.isDarkMode,
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

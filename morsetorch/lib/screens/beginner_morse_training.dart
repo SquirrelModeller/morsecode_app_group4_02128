@@ -26,7 +26,6 @@ class _BeginnerMorseTrainingPageState extends State<BeginnerMorseTrainingPage> {
   }
 
   void setUpGame() {
-    print("reset");
     beginnerTrainingService.setUpGame();
   }
 

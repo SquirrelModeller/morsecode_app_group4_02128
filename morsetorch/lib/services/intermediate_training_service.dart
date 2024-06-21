@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'package:flutter/material.dart';
 import 'package:morsetorch/models/morse_state.dart';
 
 class IntermediateTrainingService {
@@ -13,9 +14,47 @@ class IntermediateTrainingService {
     return characters;
   }
 
+  ValueNotifier<List<String>> choiceList = ValueNotifier<List<String>>([]);
+  ValueNotifier<List<bool>> answerList = ValueNotifier<List<bool>>([]);
+  ValueNotifier<int> streak = ValueNotifier(0);
+
+  void setUptGame() {
+    initFourRandomLetters();
+    setAnswers();
+  }
+
+  void setAnswers() {
+    _morseResult.forEach((key, value) {
+        choiceList.value.add(key);
+        answerList.value.add(value);
+    });
+  }
+
+  void reset() {
+    resetAnswers();
+    choiceList.value = [];
+    answerList.value = [];
+  }
+
   void resetAnswers() {
     _correctMorseCode = [];
     _morseResult = {};
+  }
+
+  void skip() {
+    reset();
+    initFourRandomLetters();
+    print(morseResult);
+    print(streak);
+    setAnswers();
+  }
+
+  void increaseStreak(bool correct) {
+    if (correct) {
+        streak.value += 1;
+      } else {
+        streak.value = 0;
+      }
   }
 
   int getRandomNumber() {
