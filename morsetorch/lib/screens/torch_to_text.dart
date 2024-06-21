@@ -14,7 +14,6 @@ class CameraScreen extends StatefulWidget {
 }
 
 class _CameraScreenState extends State<CameraScreen> {
-  late CameraController _controller;
   final TextEditingController _textController = TextEditingController();
   String? _selectedLanguage;
   final List<String> _dropdownItems = languages.keys.toList();
@@ -23,12 +22,6 @@ class _CameraScreenState extends State<CameraScreen> {
   @override
   void initState() {
     super.initState();
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
   }
 
   @override
