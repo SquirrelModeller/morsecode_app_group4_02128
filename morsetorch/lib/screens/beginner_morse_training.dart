@@ -56,6 +56,7 @@ class _BeginnerMorseTrainingPageState extends State<BeginnerMorseTrainingPage> {
 
   List<String> choiceList = [];
   List<bool> answerList = [];
+  int streak = 0;
 
   @override
   void initState() {
@@ -91,6 +92,14 @@ class _BeginnerMorseTrainingPageState extends State<BeginnerMorseTrainingPage> {
   void skip() {
     reset();
   }
+
+  void increaseStreak(bool correct) {
+  if (correct == true) {
+    streak += 1;
+  } else {
+    streak = 0;
+  }
+}
 
   @override
   Widget build(BuildContext context) {
@@ -134,11 +143,13 @@ class _BeginnerMorseTrainingPageState extends State<BeginnerMorseTrainingPage> {
                     MultipleChoiceButton(
                         text: choiceList[0],
                         correctAnswer: answerList[0],
-                        whenPressed: skip),
+                        whenPressed: skip,
+                        streak: increaseStreak),
                     MultipleChoiceButton(
                         text: choiceList[1],
                         correctAnswer: answerList[1],
-                        whenPressed: skip),
+                        whenPressed: skip,
+                        streak: increaseStreak),
                   ],
                 ),
                 SizedBox(
@@ -150,11 +161,13 @@ class _BeginnerMorseTrainingPageState extends State<BeginnerMorseTrainingPage> {
                     MultipleChoiceButton(
                         text: choiceList[2],
                         correctAnswer: answerList[2],
-                        whenPressed: skip),
+                        whenPressed: skip,
+                        streak: increaseStreak),
                     MultipleChoiceButton(
                         text: choiceList[3],
                         correctAnswer: answerList[3],
-                        whenPressed: skip),
+                        whenPressed: skip,
+                        streak: increaseStreak),
                   ],
                 ),
                 SizedBox(
@@ -165,6 +178,10 @@ class _BeginnerMorseTrainingPageState extends State<BeginnerMorseTrainingPage> {
                   },
                   child: const Icon(Icons.skip_next),
                 ),
+                const SizedBox(
+                  height: 20,
+                ),
+                Text("Streak: $streak", style: const TextStyle(fontSize: 20)),
               ],
             ),
           ),
