@@ -16,7 +16,8 @@ class MorseDetection extends StatefulWidget {
   _MorseDetectionPageState createState() => _MorseDetectionPageState();
 }
 
-class _MorseDetectionPageState extends State<MorseDetection> with WidgetsBindingObserver {
+class _MorseDetectionPageState extends State<MorseDetection>
+    with WidgetsBindingObserver {
   CameraController? _camController;
   late MorseDetectionAsync _lightDetector;
   int _lastRun = 0;
@@ -54,9 +55,10 @@ class _MorseDetectionPageState extends State<MorseDetection> with WidgetsBinding
     super.dispose();
   }
 
-Future<void> initCamera() async {
+  Future<void> initCamera() async {
     final cameras = await availableCameras();
-    var idx = cameras.indexWhere((c) => c.lensDirection == CameraLensDirection.back);
+    var idx =
+        cameras.indexWhere((c) => c.lensDirection == CameraLensDirection.back);
     if (idx < 0) {
       log("No back camera found");
       return;
@@ -67,11 +69,14 @@ Future<void> initCamera() async {
       desc,
       ResolutionPreset.high,
       enableAudio: false,
-      imageFormatGroup: Platform.isAndroid ? ImageFormatGroup.yuv420 : ImageFormatGroup.bgra8888,
+      imageFormatGroup: Platform.isAndroid
+          ? ImageFormatGroup.yuv420
+          : ImageFormatGroup.bgra8888,
     );
     try {
       await _camController!.initialize();
-      await _camController!.startImageStream((image) => _processCameraImage(image));
+      await _camController!
+          .startImageStream((image) => _processCameraImage(image));
     } catch (e) {
       log("Error initializing camera, error: ${e.toString()}");
     }
@@ -81,16 +86,18 @@ Future<void> initCamera() async {
   }
 
   void _processCameraImage(CameraImage image) async {
-    if (_detectionInProgress || !mounted || DateTime.now().millisecondsSinceEpoch - _lastRun < 30) {
+    if (_detectionInProgress ||
+        !mounted ||
+        DateTime.now().millisecondsSinceEpoch - _lastRun < 30) {
       return;
     }
 
     // Call the detector
     _detectionInProgress = true;
-    var res = await _lightDetector.detect(image, DateTime.now().millisecondsSinceEpoch);
+    var res = await _lightDetector.detect(
+        image, DateTime.now().millisecondsSinceEpoch);
     _detectionInProgress = false;
     _lastRun = DateTime.now().millisecondsSinceEpoch;
-    
 
     if (!mounted || res == null) {
       return;
@@ -119,4 +126,3 @@ Future<void> initCamera() async {
     );
   }
 }
-
