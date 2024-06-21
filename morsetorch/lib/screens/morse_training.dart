@@ -94,10 +94,14 @@ class _MorseTrainingPageState extends State<MorseTrainingPage> {
                       return ValueListenableBuilder<String>(
                         valueListenable: _morseTraining.builder,
                         builder: (_, typedString, __) => Text(
-                            'Current Input: $typedString $typed',
-                            style: const TextStyle(
-                                fontSize: 20,
-                                color: Color.fromARGB(255, 0, 178, 255))),
+                          'Current Input: $typedString $typed',
+                          style: TextStyle(
+                            fontSize: 20,
+                            color: widget.isDarkMode
+                                ? const Color.fromRGBO(5, 94, 132, 1)
+                                : const Color.fromRGBO(0, 178, 255, 1),
+                          ),
+                        ),
                       );
                     }),
               ),
@@ -107,9 +111,11 @@ class _MorseTrainingPageState extends State<MorseTrainingPage> {
                   valueListenable: _morseTraining.characterTyped,
                   builder: (_, typed, __) => Text(
                     '${_morseTraining.convertMorseStateEnumToString()}',
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 100,
-                      color: Color.fromARGB(255, 0, 178, 255),
+                      color: widget.isDarkMode
+                          ? const Color.fromRGBO(5, 94, 132, 1)
+                          : const Color.fromRGBO(0, 178, 255, 1),
                     ),
                   ),
                 ),
@@ -123,7 +129,9 @@ class _MorseTrainingPageState extends State<MorseTrainingPage> {
                   height: 125,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    color: color1,
+                    color: widget.isDarkMode
+                        ? const Color.fromRGBO(5, 94, 132, 1)
+                        : const Color.fromRGBO(0, 178, 255, 1),
                   ),
                   child: const Center(
                     child: Text(
