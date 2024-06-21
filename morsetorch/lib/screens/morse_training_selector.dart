@@ -25,7 +25,10 @@ class MorseTrainingSelectorPageState extends State<MorseTrainingSelectorPage> {
     }
 
     if (_currentScreen == 1) {
-      return BeginnerMorseTrainingPage(setScreen: setCurrentScreen, isDarkMode: widget.isDarkMode,);
+      return BeginnerMorseTrainingPage(
+        setScreen: setCurrentScreen,
+        isDarkMode: widget.isDarkMode,
+      );
     } else if (_currentScreen == 2) {
       return IntermediateTraining(
         setScreen: setCurrentScreen,
@@ -39,54 +42,69 @@ class MorseTrainingSelectorPageState extends State<MorseTrainingSelectorPage> {
     } else {
       return Scaffold(
         body: Center(
-          child: Row(
+          child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
+              const SizedBox(
+                height: 15,
+              ),
               SizedBox(
-                width: MediaQuery.of(context).size.width / 3.5,
-                height: MediaQuery.of(context).size.width / 3.5,
+                width: MediaQuery.of(context).size.width - 20,
+                height: MediaQuery.of(context).size.width / 2.5,
                 child: ElevatedButton(
                   onPressed: () {
                     setState(() {
                       _currentScreen = 1;
                     });
                   },
+                  style: ElevatedButton.styleFrom(
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15.0)),
+                  ),
                   child: Text(
-                    'Beginner',
+                    'Morse Match',
                     style: TextStyle(
-                        fontSize: MediaQuery.of(context).size.width / 35),
+                        fontSize: MediaQuery.of(context).size.width / 15),
                   ),
                 ),
               ),
               SizedBox(
-                width: MediaQuery.of(context).size.width / 3.5,
-                height: MediaQuery.of(context).size.width / 3.5,
+                width: MediaQuery.of(context).size.width - 20,
+                height: MediaQuery.of(context).size.width / 2.5,
                 child: ElevatedButton(
                   onPressed: () {
                     setState(() {
                       _currentScreen = 2;
                     });
                   },
+                  style: ElevatedButton.styleFrom(
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15.0)),
+                  ),
                   child: Text(
-                    'Intermediate',
+                    'Buzz Code',
                     style: TextStyle(
-                        fontSize: MediaQuery.of(context).size.width / 35),
+                        fontSize: MediaQuery.of(context).size.width / 15),
                   ),
                 ),
               ),
               SizedBox(
-                width: MediaQuery.of(context).size.width / 3.5,
-                height: MediaQuery.of(context).size.width / 3.5,
+                width: MediaQuery.of(context).size.width - 20,
+                height: MediaQuery.of(context).size.width / 2.5,
                 child: ElevatedButton(
                   onPressed: () {
                     setState(() {
                       _currentScreen = 3;
                     });
                   },
+                  style: ElevatedButton.styleFrom(
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15.0)),
+                  ),
                   child: Text(
-                    'Advanced',
+                    'Tap n\' Type',
                     style: TextStyle(
-                        fontSize: MediaQuery.of(context).size.width / 35),
+                        fontSize: MediaQuery.of(context).size.width / 15),
                   ),
                 ),
               ),

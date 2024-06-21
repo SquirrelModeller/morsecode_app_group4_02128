@@ -3,7 +3,6 @@ import 'package:flutter/services.dart';
 
 class ExpandableTextField extends StatefulWidget {
   final TextEditingController controller;
-  final double textFieldHeight;
   final Color color;
   final String text;
   final Color textColor;
@@ -13,7 +12,6 @@ class ExpandableTextField extends StatefulWidget {
   const ExpandableTextField(
       {super.key,
       required this.controller,
-      required this.textFieldHeight,
       this.color = Colors.white,
       this.text = '',
       this.textColor = Colors.black,
@@ -25,7 +23,7 @@ class ExpandableTextField extends StatefulWidget {
 }
 
 class _ExpandableTextFieldState extends State<ExpandableTextField> {
-  double textFieldHeight = 200;
+  double textFieldHeight = 150;
 
   @override
   Widget build(BuildContext context) {

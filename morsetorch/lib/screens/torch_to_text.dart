@@ -16,7 +16,6 @@ class _CameraScreenState extends State<CameraScreen> {
   late CameraController _controller;
   late Future<void> _initializeControllerFuture;
   final TextEditingController _textController = TextEditingController();
-  double textFieldHeight = 100;
   String? _selectedLanguage;
   final List<String> _dropdownItems = languages.keys.toList();
   final nativeOpencv = McNativeOpencv();
@@ -89,11 +88,10 @@ class _CameraScreenState extends State<CameraScreen> {
                   padding: const EdgeInsets.all(25),
                   child: ExpandableTextField(
                     controller: _textController,
-                    textFieldHeight: textFieldHeight,
                     color: const Color.fromARGB(150, 43, 42, 42),
                     text: 'Searching for morse signal...',
                     textColor: Colors.white,
-                    maxHeight: MediaQuery.of(context).size.height / 4.5,
+                    maxHeight: MediaQuery.of(context).size.height / 5,
                     canWrite: false,
                   ),
                 ),
