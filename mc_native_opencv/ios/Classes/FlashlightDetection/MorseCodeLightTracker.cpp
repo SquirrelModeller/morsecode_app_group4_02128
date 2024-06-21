@@ -19,8 +19,6 @@ LightSource::LightSource(bool isOn, const cv::Rect &boundingBox,
   toggleHistory.push_back(isOn);
 }
 
-
-
 MorseCodeLightTracker::MorseCodeLightTracker(size_t maxSize)
     : maxSize(maxSize) {}
 
@@ -43,8 +41,8 @@ MorseCodeLightTracker::detectLightSources(cv::Mat &image) {
     if (area < 100)
       continue;
     cv::Rect boundingBox = cv::boundingRect(contour);
-    boundingBox.height += boundingBox.height/4;
-    boundingBox.width += boundingBox.width/4;
+    boundingBox.height += boundingBox.height / 4;
+    boundingBox.width += boundingBox.width / 4;
     lightSources.emplace_back(true, boundingBox);
     if (lightSources.size() == MAX_LIGHT_SOURCES)
       break;
@@ -82,13 +80,13 @@ void MorseCodeLightTracker::addFrame(std::vector<LightSource> &&newSources) {
   history.emplace_back(std::move(newSources));
 }
 
-
 int MorseCodeLightTracker::nextID = 0;
 
 int MorseCodeLightTracker::getNextID() { return nextID++; }
 
-
-std::vector<MorseSignal>MorseCodeLightTracker::processFrame(std::vector<LightSource> &detectedLights, long long timestamp) {
+std::vector<MorseSignal>
+MorseCodeLightTracker::processFrame(std::vector<LightSource> &detectedLights,
+                                    long long timestamp) {
   if (history.empty()) {
     for (auto &light : detectedLights) {
       light.id = getNextID();
@@ -103,8 +101,7 @@ std::vector<MorseSignal>MorseCodeLightTracker::processFrame(std::vector<LightSou
   std::vector<LightSource> currentSources;
   std::vector<MorseSignal> signalsToSend;
   std::unordered_map<int, bool> updated;
-   const int toggleThreshold = 5;
-
+  const int toggleThreshold = 10;
 
   // Process overlaps and assign IDs
   for (auto &newSrc : detectedLights) {
@@ -119,26 +116,25 @@ std::vector<MorseSignal>MorseCodeLightTracker::processFrame(std::vector<LightSou
         newSrc.toggleHistory = oldSrc.toggleHistory;
         newSrc.hasExceededThreshold = oldSrc.hasExceededThreshold;
         if (newSrc.isOn != oldSrc.isOn) {
-        //   std::cout << "Overlapped: " << newSrc.toggleCount << " " << oldSrc.toggleCount << std::endl;
           newSrc.toggleCount++;
           newSrc.toggleHistory.push_back(newSrc.isOn);
 
           if (newSrc.toggleCount == toggleThreshold + 1) {
             if (trackedLightID == -1) { // Lock onto light
-                trackedLightID = newSrc.id;
+              trackedLightID = newSrc.id;
             }
-            // std::cout << "Thresh exceeded!" << std::endl;
             // Just exceeded the threshold, send all history as MorseSignals
-            for (bool state : newSrc.toggleHistory) {
-              signalsToSend.push_back({state, timestamps.back()});
+            // for (bool state : newSrc.toggleHistory) {
+            //   signalsToSend.push_back({state, timestamps.back()});
+            // }
+            for (size_t i = 0; i < newSrc.toggleHistory.size(); ++i) {
+                signalsToSend.push_back({newSrc.toggleHistory[i], timestamps[i]});
             }
+
             newSrc.hasExceededThreshold = true;
-          } else if (newSrc.toggleCount > toggleThreshold) {
-            // std::cout << "Begun streaming!" << std::endl;
-            // Already above threshold, send current state
+          } else if (newSrc.toggleCount > toggleThreshold && trackedLightID == oldSrc.id) {
             signalsToSend.push_back({newSrc.isOn, timestamps.back()});
           }
-
         }
         updated[oldSrc.id] = true;
         break;
@@ -148,41 +144,44 @@ std::vector<MorseSignal>MorseCodeLightTracker::processFrame(std::vector<LightSou
     if (!foundOverlap) {
       newSrc.id = getNextID();
     }
-    
+
     currentSources.push_back(newSrc);
   }
 
-  
+  // Update old sources that were not matched
+  for (auto &oldSrc : history.back()) {
+    if (!updated[oldSrc.id]) {
+      oldSrc.age++;
+      if (oldSrc.isOn) { // If the light was on and now is not detected
+        oldSrc.isOn = false;
+        oldSrc.toggleHistory.push_back(false);
+        oldSrc.toggleCount++;
+        // This is a very convoluted solution, and slows everything down, having it written twice.
+        // I am doing it anyway. It sorta works.
+        if (oldSrc.toggleCount == toggleThreshold + 1) {
+          if (trackedLightID == -1) { // Lock onto light
+            trackedLightID = oldSrc.id;
+          }
+        //   for (bool state : oldSrc.toggleHistory) {
+        //     signalsToSend.push_back({state, timestamps.back()});
+        //   }
+          for (size_t i = 0; i < oldSrc.toggleHistory.size(); ++i) {
+            signalsToSend.push_back({oldSrc.toggleHistory[i], timestamps[i]});
+          }
 
-// Update old sources that were not matched
-for (auto &oldSrc : history.back()) {
-  if (!updated[oldSrc.id]) {
-    oldSrc.age++;
-    if (oldSrc.isOn) {  // If the light was on and now is not detected
-      oldSrc.isOn = false;
-      oldSrc.toggleHistory.push_back(false);
-      oldSrc.toggleCount++;
-      // Check if this change is significant
-      if (oldSrc.toggleCount == toggleThreshold + 1) {
-        if (trackedLightID == -1) { // Lock onto light
-                trackedLightID = oldSrc.id;
+          oldSrc.hasExceededThreshold = true;
+        } else if (oldSrc.toggleCount > toggleThreshold && trackedLightID == oldSrc.id) {
+          signalsToSend.push_back({false, timestamps.back()});
         }
-        for (bool state : oldSrc.toggleHistory) {
-          signalsToSend.push_back({state, timestamps.back()});
-        }
-        oldSrc.hasExceededThreshold = true;
-      } else if (oldSrc.toggleCount > toggleThreshold ) {
-        signalsToSend.push_back({false, timestamps.back()});  // Send the off state
+      }
+      if (oldSrc.age <= MAX_AGE) {
+        currentSources.push_back(oldSrc);
+      }
+      if (oldSrc.age > MAX_AGE && trackedLightID == oldSrc.id) {
+        trackedLightID = -1; // Release light
       }
     }
-    if (oldSrc.age <= MAX_AGE) {
-      currentSources.push_back(oldSrc);
-    }
-    if (oldSrc.age == trackedLightID ) {
-      trackedLightID = -1; // Release light
-    }
   }
-}
   // Update history and timestamps
   if (history.size() >= maxSize) {
     history.pop_front();
@@ -193,7 +192,6 @@ for (auto &oldSrc : history.back()) {
 
   return signalsToSend;
 }
-
 
 std::vector<MorseSignal>
 MorseCodeLightTracker::updateLights(cv::Mat &image, int width, int height,
