@@ -55,7 +55,7 @@ class _MultipleChoiceButtonState extends State<MultipleChoiceButton> {
         },
         child: Text(
           widget.text,
-          style: const TextStyle(fontSize: 40, color: Colors.white),
+          style: const TextStyle(fontSize: 30, color: Colors.white),
         ),
       ),
     );
