@@ -51,13 +51,9 @@ class _MultipleChoiceButtonState extends State<MultipleChoiceButton> {
 
 class _BeginnerMorseTrainingPageState extends State<BeginnerMorseTrainingPage> {
   BeginnerTrainingService beginnerTrainingService = BeginnerTrainingService();
-  Map<dynamic, dynamic> morseCodes = {};
-  String correctLetter = '';
-
   List<String> choiceList = [];
   List<bool> answerList = [];
   int streak = 0;
-
   bool isButtonEnabled = true;
 
   @override
@@ -67,24 +63,7 @@ class _BeginnerMorseTrainingPageState extends State<BeginnerMorseTrainingPage> {
   }
 
   void setUpGame() {
-    morseCodes = beginnerTrainingService.get4RandomMorseCodes();
-    correctLetter = beginnerTrainingService.getCorrectLetter();
-    setAnswers();
-  }
-
-  void setAnswers() {
-    setState(() {
-      morseCodes.forEach((key, value) {
-        choiceList.add(key);
-        answerList.add(value);
-      });
-    });
-  }
-
-  void reset() {
-    choiceList.clear();
-    answerList.clear();
-    setUpGame();
+    beginnerTrainingService.setUpGame();
   }
 
   void increaseStreak(bool correct) {
@@ -147,26 +126,44 @@ class _BeginnerMorseTrainingPageState extends State<BeginnerMorseTrainingPage> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    MultipleChoiceButton(
-                      text: choiceList[0],
-                      correctAnswer: answerList[0],
-                      whenPressed: () {
-                        reset();
-                        disableButtonTemporarily();
-                      },
-                      isEnabled: isButtonEnabled,
-                      streak: increaseStreak,
+                    ValueListenableBuilder<List<String>>(
+                      valueListenable: beginnerTrainingService.choiceList,
+                      builder: (_, choiceList, __) =>
+                          ValueListenableBuilder<List<bool>>(
+                        valueListenable: beginnerTrainingService.answerList,
+                        builder: (_, answerList, __) => MultipleChoiceButton(
+                          text: choiceList[
+                              0], // Access the list from the builder parameter
+                          correctAnswer: answerList[
+                              0], // Access the list from the inner builder parameter
+                          whenPressed: () {
+                            setUpGame();
+                            disableButtonTemporarily();
+                          },
+                          isEnabled: isButtonEnabled,
+                          streak: increaseStreak,
+                        ),
+                      ),
                     ),
-                    MultipleChoiceButton(
-                      text: choiceList[1],
-                      correctAnswer: answerList[1],
-                      whenPressed: () {
-                        reset();
-                        disableButtonTemporarily();
-                      },
-                      isEnabled: isButtonEnabled,
-                      streak: increaseStreak,
-                    ),
+                    ValueListenableBuilder<List<String>>(
+                      valueListenable: beginnerTrainingService.choiceList,
+                      builder: (_, choiceList, __) =>
+                          ValueListenableBuilder<List<bool>>(
+                        valueListenable: beginnerTrainingService.answerList,
+                        builder: (_, answerList, __) => MultipleChoiceButton(
+                          text: choiceList[
+                              1], // Access the list from the builder parameter
+                          correctAnswer: answerList[
+                              1], // Access the list from the inner builder parameter
+                          whenPressed: () {
+                            setUpGame();
+                            disableButtonTemporarily();
+                          },
+                          isEnabled: isButtonEnabled,
+                          streak: increaseStreak,
+                        ),
+                      ),
+                    )
                   ],
                 ),
                 const SizedBox(
@@ -175,33 +172,51 @@ class _BeginnerMorseTrainingPageState extends State<BeginnerMorseTrainingPage> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    MultipleChoiceButton(
-                      text: choiceList[2],
-                      correctAnswer: answerList[2],
-                      whenPressed: () {
-                        reset();
-                        disableButtonTemporarily();
-                      },
-                      isEnabled: isButtonEnabled,
-                      streak: increaseStreak,
+                    ValueListenableBuilder<List<String>>(
+                      valueListenable: beginnerTrainingService.choiceList,
+                      builder: (_, choiceList, __) =>
+                          ValueListenableBuilder<List<bool>>(
+                        valueListenable: beginnerTrainingService.answerList,
+                        builder: (_, answerList, __) => MultipleChoiceButton(
+                          text: choiceList[
+                              2], // Access the list from the builder parameter
+                          correctAnswer: answerList[
+                              2], // Access the list from the inner builder parameter
+                          whenPressed: () {
+                            setUpGame();
+                            disableButtonTemporarily();
+                          },
+                          isEnabled: isButtonEnabled,
+                          streak: increaseStreak,
+                        ),
+                      ),
                     ),
-                    MultipleChoiceButton(
-                      text: choiceList[3],
-                      correctAnswer: answerList[3],
-                      whenPressed: () {
-                        reset();
-                        disableButtonTemporarily();
-                      },
-                      isEnabled: isButtonEnabled,
-                      streak: increaseStreak,
-                    ),
+                    ValueListenableBuilder<List<String>>(
+                      valueListenable: beginnerTrainingService.choiceList,
+                      builder: (_, choiceList, __) =>
+                          ValueListenableBuilder<List<bool>>(
+                        valueListenable: beginnerTrainingService.answerList,
+                        builder: (_, answerList, __) => MultipleChoiceButton(
+                          text: choiceList[
+                              3], // Access the list from the builder parameter
+                          correctAnswer: answerList[
+                              3], // Access the list from the inner builder parameter
+                          whenPressed: () {
+                            setUpGame();
+                            disableButtonTemporarily();
+                          },
+                          isEnabled: isButtonEnabled,
+                          streak: increaseStreak,
+                        ),
+                      ),
+                    )
                   ],
                 ),
                 const SizedBox(height: 30),
                 FloatingActionButton(
                   onPressed: () {
                     increaseStreak(false);
-                    reset();
+                    setUpGame();
                   },
                   backgroundColor: widget.isDarkMode
                       ? const Color.fromARGB(255, 5, 20, 36)

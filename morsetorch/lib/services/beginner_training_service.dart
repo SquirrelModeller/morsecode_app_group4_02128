@@ -5,7 +5,22 @@ import 'package:morsetorch/models/morse_state.dart';
 class BeginnerTrainingService {
   //String correctLetter = "";
   ValueNotifier<String> correctLetter = ValueNotifier("");
+  ValueNotifier<List<String>> choiceList = ValueNotifier<List<String>>([]);
+  ValueNotifier<List<bool>> answerList = ValueNotifier<List<bool>>([]);
+
+  setUpGame() {
+    resetGame();
+    get4RandomMorseCodes().forEach((key, value) {
+      choiceList.value.add(key);
+      answerList.value.add(value);
+    });
+  }
   
+  void resetGame() {
+    choiceList.value.clear();
+    answerList.value.clear();
+  }
+
   Map get4RandomMorseCodes() {
     List<String> validCharacters = List.generate(
             26, (index) => String.fromCharCode('A'.codeUnitAt(0) + index)) +
