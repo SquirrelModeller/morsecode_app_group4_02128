@@ -96,7 +96,17 @@ class _IntermediateTrainingState extends State<IntermediateTraining> {
                   ),
                 ),
                 const SizedBox(
-                  height: 50,
+                  height: 40,
+                ),
+                const Text(
+                  "Press to Vibrate",
+                  style: TextStyle(
+                    fontSize: 20,
+                    color: Color.fromARGB(255, 118, 118, 118),
+                  ),
+                ),
+                const SizedBox(
+                  height: 1,
                 ),
                 FloatingActionButton(
                   onPressed: () {

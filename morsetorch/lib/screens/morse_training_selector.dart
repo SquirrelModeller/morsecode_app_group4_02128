@@ -60,12 +60,14 @@ class MorseTrainingSelectorPageState extends State<MorseTrainingSelectorPage> {
                   style: ElevatedButton.styleFrom(
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(15.0)),
+                    backgroundColor: widget.isDarkMode
+                        ? const Color.fromARGB(255, 5, 20, 36)
+                        : Colors.white,
                   ),
-                  child: Text(
-                    'Morse Match',
-                    style: TextStyle(
-                        fontSize: MediaQuery.of(context).size.width / 15),
-                  ),
+                  child: Text('Morse Match',
+                      style: TextStyle(
+                          fontSize: MediaQuery.of(context).size.width / 15),
+                      selectionColor: const Color.fromARGB(255, 118, 118, 118)),
                 ),
               ),
               SizedBox(
@@ -78,14 +80,15 @@ class MorseTrainingSelectorPageState extends State<MorseTrainingSelectorPage> {
                     });
                   },
                   style: ElevatedButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(15.0)),
-                  ),
-                  child: Text(
-                    'Buzz Code',
-                    style: TextStyle(
-                        fontSize: MediaQuery.of(context).size.width / 15),
-                  ),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(15.0)),
+                      backgroundColor: widget.isDarkMode
+                          ? const Color.fromARGB(255, 5, 20, 36)
+                          : Colors.white),
+                  child: Text('Buzz Code',
+                      style: TextStyle(
+                          fontSize: MediaQuery.of(context).size.width / 15),
+                      selectionColor: const Color.fromARGB(255, 118, 118, 118)),
                 ),
               ),
               SizedBox(
@@ -98,14 +101,15 @@ class MorseTrainingSelectorPageState extends State<MorseTrainingSelectorPage> {
                     });
                   },
                   style: ElevatedButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(15.0)),
-                  ),
-                  child: Text(
-                    'Tap n\' Type',
-                    style: TextStyle(
-                        fontSize: MediaQuery.of(context).size.width / 15),
-                  ),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(15.0)),
+                      backgroundColor: widget.isDarkMode
+                          ? const Color.fromARGB(255, 5, 20, 36)
+                          : Colors.white),
+                  child: Text('Tap n\' Type',
+                      style: TextStyle(
+                          fontSize: MediaQuery.of(context).size.width / 15),
+                      selectionColor: const Color.fromARGB(255, 118, 118, 118)),
                 ),
               ),
             ],

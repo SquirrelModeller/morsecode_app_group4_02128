@@ -53,8 +53,8 @@ class _BeginnerMorseTrainingPageState extends State<BeginnerMorseTrainingPage> {
               height: 50,
               child: FloatingActionButton(
                 backgroundColor: widget.isDarkMode
-                    ? const Color.fromARGB(255, 5, 20, 36)
-                    : Colors.white,
+                    ? const Color.fromRGBO(5, 94, 132, 1)
+                    : const Color.fromRGBO(0, 178, 255, 1),
                 onPressed: () {
                   widget.setScreen(0);
                 },
