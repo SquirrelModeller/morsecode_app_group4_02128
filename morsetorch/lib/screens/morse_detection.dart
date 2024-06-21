@@ -15,12 +15,13 @@ import 'package:morsetorch/services/morse_translator.dart';
 
 class MorseDetection extends StatefulWidget {
   const MorseDetection({Key? key}) : super(key: key);
-  
+
   @override
   MorseDetectionPageState createState() => MorseDetectionPageState();
 }
 
-class MorseDetectionPageState extends State<MorseDetection> with WidgetsBindingObserver {
+class MorseDetectionPageState extends State<MorseDetection>
+    with WidgetsBindingObserver {
   CameraController? _camController;
   late MorseDetectionAsync _lightDetector;
   Morsetranslator translate = Morsetranslator();
@@ -30,7 +31,6 @@ class MorseDetectionPageState extends State<MorseDetection> with WidgetsBindingO
   bool _detectionInProgress = false;
 
   bool recievedFirstPackage = false;
-
 
   @override
   void initState() {
@@ -63,9 +63,10 @@ class MorseDetectionPageState extends State<MorseDetection> with WidgetsBindingO
     super.dispose();
   }
 
-Future<void> initCamera() async {
+  Future<void> initCamera() async {
     final cameras = await availableCameras();
-    var idx = cameras.indexWhere((c) => c.lensDirection == CameraLensDirection.back);
+    var idx =
+        cameras.indexWhere((c) => c.lensDirection == CameraLensDirection.back);
     if (idx < 0) {
       log("No back camera found");
       return;
@@ -76,11 +77,14 @@ Future<void> initCamera() async {
       desc,
       ResolutionPreset.high,
       enableAudio: false,
-      imageFormatGroup: Platform.isAndroid ? ImageFormatGroup.yuv420 : ImageFormatGroup.bgra8888,
+      imageFormatGroup: Platform.isAndroid
+          ? ImageFormatGroup.yuv420
+          : ImageFormatGroup.bgra8888,
     );
     try {
       await _camController!.initialize();
-      await _camController!.startImageStream((image) => _processCameraImage(image));
+      await _camController!
+          .startImageStream((image) => _processCameraImage(image));
     } catch (e) {
       log("Error initializing camera, error: ${e.toString()}");
     }
@@ -90,16 +94,18 @@ Future<void> initCamera() async {
   }
 
   void _processCameraImage(CameraImage image) async {
-    if (_detectionInProgress || !mounted || DateTime.now().millisecondsSinceEpoch - _lastRun < 10) {
+    if (_detectionInProgress ||
+        !mounted ||
+        DateTime.now().millisecondsSinceEpoch - _lastRun < 10) {
       return;
     }
 
     // Call the detector
     _detectionInProgress = true;
-    var res = await _lightDetector.detect(image, DateTime.now().millisecondsSinceEpoch);
+    var res = await _lightDetector.detect(
+        image, DateTime.now().millisecondsSinceEpoch);
     _detectionInProgress = false;
     _lastRun = DateTime.now().millisecondsSinceEpoch;
-    
 
     if (!mounted || res == null) {
       return;
@@ -107,6 +113,12 @@ Future<void> initCamera() async {
 
     if (res.isNotEmpty) {
       translate.addPackageToList(res);
+      // for (var sig in translate.morseReciveBuilder) {
+      //   log("${sig.isOn.toString()} " " ${sig.time.toString()}");
+      // }
+      for (int i = 0; i < res.length; i += 2) {
+        log("${res[i] == 1}, ${res[i + 1]}");
+      }
     }
   }
 
@@ -124,4 +136,3 @@ Future<void> initCamera() async {
     );
   }
 }
-
