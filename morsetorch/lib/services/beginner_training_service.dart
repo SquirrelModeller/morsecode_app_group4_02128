@@ -3,28 +3,26 @@ import 'package:flutter/material.dart';
 import 'package:morsetorch/models/morse_state.dart';
 
 class BeginnerTrainingService {
-  //String correctLetter = "";
   ValueNotifier<String> correctLetter = ValueNotifier("");
   ValueNotifier<List<String>> choiceList = ValueNotifier<List<String>>([]);
   ValueNotifier<List<bool>> answerList = ValueNotifier<List<bool>>([]);
+  List<String> validCharacters = List.generate(
+          26, (index) => String.fromCharCode('A'.codeUnitAt(0) + index)) +
+      List.generate(10, (index) => index.toString());
 
   setUpGame() {
     resetGame();
-    get4RandomMorseCodes().forEach((key, value) {
-      choiceList.value.add(key);
-      answerList.value.add(value);
-    });
-  }
-  
-  void resetGame() {
-    choiceList.value.clear();
-    answerList.value.clear();
+    var morseResult = get4RandomMorseCodes();
+    choiceList.value = morseResult.keys.toList();
+    answerList.value = morseResult.values.toList();
   }
 
-  Map get4RandomMorseCodes() {
-    List<String> validCharacters = List.generate(
-            26, (index) => String.fromCharCode('A'.codeUnitAt(0) + index)) +
-        List.generate(10, (index) => index.toString());
+  void resetGame() {
+    choiceList.value = [];
+    answerList.value = [];
+  }
+
+  Map<String, bool> get4RandomMorseCodes() {
     validCharacters.shuffle(Random());
     var characters = validCharacters.sublist(0, 4);
 
@@ -53,17 +51,10 @@ class BeginnerTrainingService {
     Map<String, bool> morseResult = {};
 
     for (int i = 0; i < 4; i++) {
-      if (i == randomNumber) {
-        morseResult[allLetters[i]] = true;
-      } else {
-        morseResult[allLetters[i]] = false;
-      }
+      morseResult[allLetters[i]] = i == randomNumber;
     }
+
     correctLetter.value = characters[randomNumber];
     return morseResult;
-  }
-
-  String getCorrectLetter() {
-    return correctLetter.value;
   }
 }

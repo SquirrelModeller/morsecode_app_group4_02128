@@ -14,45 +14,8 @@ class BeginnerMorseTrainingPage extends StatefulWidget {
       _BeginnerMorseTrainingPageState();
 }
 
-class _MultipleChoiceButtonState extends State<MultipleChoiceButton> {
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      width: 100,
-      height: 100,
-      child: FloatingActionButton(
-        onPressed: () {
-          if (widget.correctAnswer) {
-            // Handle correct answer
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text('Correct!'),
-                duration: Duration(seconds: 1),
-              ),
-            );
-          } else {
-            // Handle incorrect answer
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text('Incorrect!'),
-                duration: Duration(seconds: 1),
-              ),
-            );
-          }
-        },
-        child: Text(
-          widget.text,
-          style: const TextStyle(fontSize: 40, color: Colors.white),
-        ),
-      ),
-    );
-  }
-}
-
 class _BeginnerMorseTrainingPageState extends State<BeginnerMorseTrainingPage> {
   BeginnerTrainingService beginnerTrainingService = BeginnerTrainingService();
-  List<String> choiceList = [];
-  List<bool> answerList = [];
   int streak = 0;
   bool isButtonEnabled = true;
 
@@ -63,15 +26,18 @@ class _BeginnerMorseTrainingPageState extends State<BeginnerMorseTrainingPage> {
   }
 
   void setUpGame() {
+    print("reset");
     beginnerTrainingService.setUpGame();
   }
 
   void increaseStreak(bool correct) {
-    if (correct == true) {
-      streak += 1;
-    } else {
-      streak = 0;
-    }
+    setState(() {
+      if (correct) {
+        streak += 1;
+      } else {
+        streak = 0;
+      }
+    });
   }
 
   void disableButtonTemporarily() {
@@ -115,102 +81,24 @@ class _BeginnerMorseTrainingPageState extends State<BeginnerMorseTrainingPage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 ValueListenableBuilder<String>(
-                    valueListenable: beginnerTrainingService.correctLetter,
-                    builder: (_, letter, __) => Text(
-                        'Guess the character: $letter',
-                        style: const TextStyle(
-                            fontSize: 24,
-                            fontWeight: FontWeight.bold,
-                            color: Color.fromARGB(255, 118, 118, 118)))),
+                  valueListenable: beginnerTrainingService.correctLetter,
+                  builder: (_, letter, __) => Text(
+                    'Guess the character: $letter',
+                    style: const TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                      color: Color.fromARGB(255, 118, 118, 118),
+                    ),
+                  ),
+                ),
                 const SizedBox(height: 30),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    ValueListenableBuilder<List<String>>(
-                      valueListenable: beginnerTrainingService.choiceList,
-                      builder: (_, choiceList, __) =>
-                          ValueListenableBuilder<List<bool>>(
-                        valueListenable: beginnerTrainingService.answerList,
-                        builder: (_, answerList, __) => MultipleChoiceButton(
-                          text: choiceList[
-                              0], // Access the list from the builder parameter
-                          correctAnswer: answerList[
-                              0], // Access the list from the inner builder parameter
-                          reset: setUpGame,
-                          disableButton: disableButtonTemporarily,
-                          isEnabled: isButtonEnabled,
-                          streak: increaseStreak,
-                          isDarkMode: widget.isDarkMode,
-                        ),
-                      ),
-                    ),
-                    ValueListenableBuilder<List<String>>(
-                      valueListenable: beginnerTrainingService.choiceList,
-                      builder: (_, choiceList, __) =>
-                          ValueListenableBuilder<List<bool>>(
-                        valueListenable: beginnerTrainingService.answerList,
-                        builder: (_, answerList, __) => MultipleChoiceButton(
-                          text: choiceList[
-                              1], // Access the list from the builder parameter
-                          correctAnswer: answerList[
-                              1], // Access the list from the inner builder parameter
-                          reset: setUpGame,
-                          disableButton: disableButtonTemporarily,
-                          isEnabled: isButtonEnabled,
-                          streak: increaseStreak,
-                          isDarkMode: widget.isDarkMode,
-                        ),
-                      ),
-                    )
-                  ],
-                ),
-                const SizedBox(
-                  height: 30,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    ValueListenableBuilder<List<String>>(
-                      valueListenable: beginnerTrainingService.choiceList,
-                      builder: (_, choiceList, __) =>
-                          ValueListenableBuilder<List<bool>>(
-                        valueListenable: beginnerTrainingService.answerList,
-                        builder: (_, answerList, __) => MultipleChoiceButton(
-                          text: choiceList[
-                              2], // Access the list from the builder parameter
-                          correctAnswer: answerList[
-                              2], // Access the list from the inner builder parameter
-                          reset: setUpGame,
-                          disableButton: disableButtonTemporarily,
-                          isEnabled: isButtonEnabled,
-                          streak: increaseStreak,
-                          isDarkMode: widget.isDarkMode,
-                        ),
-                      ),
-                    ),
-                    ValueListenableBuilder<List<String>>(
-                      valueListenable: beginnerTrainingService.choiceList,
-                      builder: (_, choiceList, __) =>
-                          ValueListenableBuilder<List<bool>>(
-                        valueListenable: beginnerTrainingService.answerList,
-                        builder: (_, answerList, __) => MultipleChoiceButton(
-                          text: choiceList[
-                              3], // Access the list from the builder parameter
-                          correctAnswer: answerList[
-                              3], // Access the list from the inner builder parameter
-                          reset: setUpGame,
-                          disableButton: disableButtonTemporarily,
-                          isEnabled: isButtonEnabled,
-                          streak: increaseStreak,
-                          isDarkMode: widget.isDarkMode,
-                        ),
-                      ),
-                    )
-                  ],
-                ),
+                buildChoiceButtons(0, 1),
+                const SizedBox(height: 30),
+                buildChoiceButtons(2, 3),
                 const SizedBox(height: 30),
                 FloatingActionButton(
                   onPressed: () {
+                    print("Hello");
                     increaseStreak(false);
                     setUpGame();
                   },
@@ -222,9 +110,7 @@ class _BeginnerMorseTrainingPageState extends State<BeginnerMorseTrainingPage> {
                     color: Color.fromARGB(255, 118, 118, 118),
                   ),
                 ),
-                const SizedBox(
-                  height: 20,
-                ),
+                const SizedBox(height: 20),
                 Text(
                   "Streak: $streak",
                   style: const TextStyle(
@@ -237,6 +123,44 @@ class _BeginnerMorseTrainingPageState extends State<BeginnerMorseTrainingPage> {
           ),
         ],
       ),
+    );
+  }
+
+  Row buildChoiceButtons(int firstIndex, int secondIndex) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: [
+        ValueListenableBuilder<List<String>>(
+          valueListenable: beginnerTrainingService.choiceList,
+          builder: (_, choiceList, __) => ValueListenableBuilder<List<bool>>(
+            valueListenable: beginnerTrainingService.answerList,
+            builder: (_, answerList, __) => MultipleChoiceButton(
+              text: choiceList[firstIndex],
+              correctAnswer: answerList[firstIndex],
+              reset: setUpGame,
+              disableButton: disableButtonTemporarily,
+              isEnabled: isButtonEnabled,
+              streak: increaseStreak,
+              isDarkMode: widget.isDarkMode,
+            ),
+          ),
+        ),
+        ValueListenableBuilder<List<String>>(
+          valueListenable: beginnerTrainingService.choiceList,
+          builder: (_, choiceList, __) => ValueListenableBuilder<List<bool>>(
+            valueListenable: beginnerTrainingService.answerList,
+            builder: (_, answerList, __) => MultipleChoiceButton(
+              text: choiceList[secondIndex],
+              correctAnswer: answerList[secondIndex],
+              reset: setUpGame,
+              disableButton: disableButtonTemporarily,
+              isEnabled: isButtonEnabled,
+              streak: increaseStreak,
+              isDarkMode: widget.isDarkMode,
+            ),
+          ),
+        ),
+      ],
     );
   }
 }
