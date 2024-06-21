@@ -3,6 +3,9 @@ import 'package:morsetorch/models/morse_signal.dart';
 import 'package:morsetorch/models/morse_state.dart';
 
 class Morsetranslator {
+  List<MorseSignal> morseReciveBuilder = [];
+  int currentTimeUnit = 0;
+  String currentText = "";
   textToMorse(String text) {
     var morseCodeSentence = [[]];
     text.runes.forEach((e) {
@@ -29,17 +32,27 @@ class Morsetranslator {
     }
     return equal;
   }
+  
+  void clearMorseBuilder(){
+    morseReciveBuilder = [];
+  }
+
+  void addPackageToList(List<int> package){
+    MorseSignal signal = MorseSignal(false, 0);
+    signal.isOn = package[0] == 1 ? true : false;
+    signal.time = package[1];
+    morseReciveBuilder.add(signal);
+  }
 
   calculateTimeUnit(List<MorseSignal> morseCodeInput) {
-    num timeUnit = 0;
-
+    int timeUnit = 0;
     for (int i = 0; i < morseCodeInput.length - 1; i++) {
-      num deltaTime = morseCodeInput[i + 1].time - morseCodeInput[i].time;
+      int deltaTime = morseCodeInput[i + 1].time - morseCodeInput[i].time;
       if (timeUnit == 0 || timeUnit > deltaTime) {
         timeUnit = deltaTime;
       }
     }
-    return timeUnit;
+    currentTimeUnit = timeUnit;
   }
 
   morseToText(List<MorseState> input) {
@@ -47,34 +60,34 @@ class Morsetranslator {
         orElse: () => throw Exception("Value has no key"));
   }
 
-  timeframeToText(List<MorseSignal> morseCodeInput, num timeUnit) {
-    num timePadding = 0.1; //Not a valid value for miliseconds
+  timeframeToText(List<MorseSignal> morseCodeInput) {
+    int timePadding = 20; //Not a valid value for miliseconds
     String text = "";
     List<MorseState> character = [];
     for (int i = 0; i < morseCodeInput.length - 1; i++) {
       num deltaTime = morseCodeInput[i + 1].time - morseCodeInput[i].time;
       try {
         if (morseCodeInput[i].isOn == true &&
-            (deltaTime < 1 * timeUnit + timePadding &&
-                deltaTime > 1 * timeUnit - timePadding)) {
+            (deltaTime < 1 * currentTimeUnit + timePadding &&
+                deltaTime > 1 * currentTimeUnit- timePadding)) {
           character.add(MorseState.Dot);
         } else if (morseCodeInput[i].isOn == true &&
-            (deltaTime < 3 * timeUnit + timePadding &&
-                deltaTime > 3 * timeUnit - timePadding)) {
+            (deltaTime < 3 * currentTimeUnit + timePadding &&
+                deltaTime > 3 * currentTimeUnit - timePadding)) {
           character.add(MorseState.Dash);
         } else if (morseCodeInput[i].isOn == false &&
-            (deltaTime < 3 * timeUnit + timePadding &&
-                deltaTime > 3 * timeUnit - timePadding)) {
+            (deltaTime < 3 * currentTimeUnit + timePadding &&
+                deltaTime > 3 * currentTimeUnit - timePadding)) {
           text += morseToText(character);
           character = [];
         } else if (morseCodeInput[i].isOn == false &&
-            (deltaTime < 7 * timeUnit + timePadding &&
-                deltaTime > 7 * timeUnit - timePadding)) {
+            (deltaTime < 7 * currentTimeUnit + timePadding &&
+                deltaTime > 7 * currentTimeUnit - timePadding)) {
           text += "${morseToText(character)} ";
           character = [];
         } else if ((morseCodeInput[i].isOn == false &&
-                (deltaTime < 1 * timeUnit + timePadding &&
-                    deltaTime > 1 * timeUnit - timePadding)) ==
+                (deltaTime < 1 * currentTimeUnit + timePadding &&
+                    deltaTime > 1 * currentTimeUnit - timePadding)) ==
             false) {
           throw Exception(
               "Invalid Time frame. Position:$i DeltaTime:$deltaTime");
@@ -86,23 +99,6 @@ class Morsetranslator {
         dev.log("$e");
       }
     }
-    return text;
+    currentText = text;
   }
-}
-
-void main() {
-  Morsetranslator translator = Morsetranslator();
-  // var dataToTest = garbageData();
-
-  var testData = [
-    MorseSignal(false, 0),
-    MorseSignal(true, 1 * 2),
-    MorseSignal(false, 2 * 2),
-    MorseSignal(true, 3 * 2),
-    MorseSignal(false, 6 * 2),
-    MorseSignal(true, 7 * 2),
-    MorseSignal(false, 10 * 2)
-  ];
-  num time = translator.calculateTimeUnit(testData);
-  print(translator.timeframeToText(testData, time));
 }

@@ -1,6 +1,6 @@
 class MorseSignal {
   bool isOn;
-  num time;
+  int time;
 
   MorseSignal(this.isOn,this.time);
 }

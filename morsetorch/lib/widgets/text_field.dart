@@ -23,7 +23,7 @@ class ExpandableTextField extends StatefulWidget {
 }
 
 class _ExpandableTextFieldState extends State<ExpandableTextField> {
-  double textFieldHeight = 150;
+  double textFieldHeight = 140;
 
   @override
   Widget build(BuildContext context) {
