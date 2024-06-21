@@ -3,24 +3,52 @@ import 'package:flutter/material.dart';
 class MultipleChoiceButton extends StatefulWidget {
   final String text;
   final bool correctAnswer;
-  var whenPressed;
+  var reset;
   var isEnabled;
   var streak;
+  var disableButton;
+  var isDarkMode;
 
   MultipleChoiceButton(
       {super.key,
       required this.text,
       required this.correctAnswer,
-      this.whenPressed,
+      this.reset,
+      this.disableButton,
       this.isEnabled = true,
-      this.streak});
+      this.streak,
+      required this.isDarkMode});
 
   @override
   _MultipleChoiceButtonState createState() => _MultipleChoiceButtonState();
 }
 
 class _MultipleChoiceButtonState extends State<MultipleChoiceButton> {
-  Color _buttonColor = Color.fromARGB(255, 0, 178, 255);
+  late Color _buttonColor;
+
+  @override
+  void initState() {
+    super.initState();
+    _buttonColor = widget.isDarkMode
+        ? const Color.fromRGBO(5, 94, 132, 1)
+        : const Color.fromARGB(255, 0, 178, 255);
+  }
+
+  @override
+  void didUpdateWidget(MultipleChoiceButton oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.isDarkMode != widget.isDarkMode) {
+      _updateButtonColor();
+    }
+  }
+
+  void _updateButtonColor() {
+    setState(() {
+      _buttonColor = widget.isDarkMode
+          ? const Color.fromRGBO(5, 94, 132, 1)
+          : const Color.fromARGB(255, 0, 178, 255);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +59,7 @@ class _MultipleChoiceButtonState extends State<MultipleChoiceButton> {
         backgroundColor: _buttonColor,
         onPressed: widget.isEnabled
             ? () async {
-                widget.whenPressed();
+                widget.disableButton();
                 if (widget.correctAnswer) {
                   // Handle correct answer
                   widget.streak(true);
@@ -58,9 +86,8 @@ class _MultipleChoiceButtonState extends State<MultipleChoiceButton> {
                   );
                 }
                 await Future.delayed(const Duration(seconds: 2));
-                setState(() {
-                  _buttonColor = Color.fromARGB(255, 0, 178, 255);
-                });
+                _updateButtonColor();
+                widget.reset();
               }
             : null,
         child: Text(

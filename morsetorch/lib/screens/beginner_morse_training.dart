@@ -117,7 +117,7 @@ class _BeginnerMorseTrainingPageState extends State<BeginnerMorseTrainingPage> {
                 ValueListenableBuilder<String>(
                     valueListenable: beginnerTrainingService.correctLetter,
                     builder: (_, letter, __) => Text(
-                        'Guess the character $letter',
+                        'Guess the character: $letter',
                         style: const TextStyle(
                             fontSize: 24,
                             fontWeight: FontWeight.bold,
@@ -136,12 +136,11 @@ class _BeginnerMorseTrainingPageState extends State<BeginnerMorseTrainingPage> {
                               0], // Access the list from the builder parameter
                           correctAnswer: answerList[
                               0], // Access the list from the inner builder parameter
-                          whenPressed: () {
-                            setUpGame();
-                            disableButtonTemporarily();
-                          },
+                          reset: setUpGame,
+                          disableButton: disableButtonTemporarily,
                           isEnabled: isButtonEnabled,
                           streak: increaseStreak,
+                          isDarkMode: widget.isDarkMode,
                         ),
                       ),
                     ),
@@ -155,12 +154,11 @@ class _BeginnerMorseTrainingPageState extends State<BeginnerMorseTrainingPage> {
                               1], // Access the list from the builder parameter
                           correctAnswer: answerList[
                               1], // Access the list from the inner builder parameter
-                          whenPressed: () {
-                            setUpGame();
-                            disableButtonTemporarily();
-                          },
+                          reset: setUpGame,
+                          disableButton: disableButtonTemporarily,
                           isEnabled: isButtonEnabled,
                           streak: increaseStreak,
+                          isDarkMode: widget.isDarkMode,
                         ),
                       ),
                     )
@@ -182,12 +180,11 @@ class _BeginnerMorseTrainingPageState extends State<BeginnerMorseTrainingPage> {
                               2], // Access the list from the builder parameter
                           correctAnswer: answerList[
                               2], // Access the list from the inner builder parameter
-                          whenPressed: () {
-                            setUpGame();
-                            disableButtonTemporarily();
-                          },
+                          reset: setUpGame,
+                          disableButton: disableButtonTemporarily,
                           isEnabled: isButtonEnabled,
                           streak: increaseStreak,
+                          isDarkMode: widget.isDarkMode,
                         ),
                       ),
                     ),
@@ -201,12 +198,11 @@ class _BeginnerMorseTrainingPageState extends State<BeginnerMorseTrainingPage> {
                               3], // Access the list from the builder parameter
                           correctAnswer: answerList[
                               3], // Access the list from the inner builder parameter
-                          whenPressed: () {
-                            setUpGame();
-                            disableButtonTemporarily();
-                          },
+                          reset: setUpGame,
+                          disableButton: disableButtonTemporarily,
                           isEnabled: isButtonEnabled,
                           streak: increaseStreak,
+                          isDarkMode: widget.isDarkMode,
                         ),
                       ),
                     )
@@ -229,7 +225,13 @@ class _BeginnerMorseTrainingPageState extends State<BeginnerMorseTrainingPage> {
                 const SizedBox(
                   height: 20,
                 ),
-                Text("Streak: $streak", style: const TextStyle(fontSize: 20)),
+                Text(
+                  "Streak: $streak",
+                  style: const TextStyle(
+                    fontSize: 20,
+                    color: Color.fromARGB(255, 118, 118, 118),
+                  ),
+                ),
               ],
             ),
           ),
