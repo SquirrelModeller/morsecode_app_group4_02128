@@ -66,7 +66,6 @@ class _BeginnerMorseTrainingPageState extends State<BeginnerMorseTrainingPage> {
   void setUpGame() {
     morseCodes = beginnerTrainingService.get4RandomMorseCodes();
     correctLetter = beginnerTrainingService.getCorrectLetter();
-    print(correctLetter);
     setAnswers();
   }
 
@@ -75,21 +74,14 @@ class _BeginnerMorseTrainingPageState extends State<BeginnerMorseTrainingPage> {
       morseCodes.forEach((key, value) {
         choiceList.add(key);
         answerList.add(value);
-        print('Key: $key, Value: $value');
       });
     });
-    print(choiceList);
-    print(answerList);
   }
 
   void reset() {
     choiceList.clear();
     answerList.clear();
     setUpGame();
-  }
-
-  void skip() {
-    reset();
   }
 
   @override
@@ -134,11 +126,11 @@ class _BeginnerMorseTrainingPageState extends State<BeginnerMorseTrainingPage> {
                     MultipleChoiceButton(
                         text: choiceList[0],
                         correctAnswer: answerList[0],
-                        whenPressed: skip),
+                        whenPressed: reset),
                     MultipleChoiceButton(
                         text: choiceList[1],
                         correctAnswer: answerList[1],
-                        whenPressed: skip),
+                        whenPressed: reset),
                   ],
                 ),
                 SizedBox(
@@ -150,18 +142,18 @@ class _BeginnerMorseTrainingPageState extends State<BeginnerMorseTrainingPage> {
                     MultipleChoiceButton(
                         text: choiceList[2],
                         correctAnswer: answerList[2],
-                        whenPressed: skip),
+                        whenPressed: reset),
                     MultipleChoiceButton(
                         text: choiceList[3],
                         correctAnswer: answerList[3],
-                        whenPressed: skip),
+                        whenPressed: reset),
                   ],
                 ),
                 SizedBox(
                     height: 30),
                 FloatingActionButton(
                   onPressed: () {
-                    skip();
+                    reset();
                   },
                   child: const Icon(Icons.skip_next),
                 ),
