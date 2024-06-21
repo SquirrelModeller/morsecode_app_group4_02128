@@ -17,7 +17,7 @@ class BeginnerMorseTrainingPage extends StatefulWidget {
 class _MultipleChoiceButtonState extends State<MultipleChoiceButton> {
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       width: 100,
       height: 100,
       child: FloatingActionButton(
@@ -25,7 +25,7 @@ class _MultipleChoiceButtonState extends State<MultipleChoiceButton> {
           if (widget.correctAnswer) {
             // Handle correct answer
             ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
+              const SnackBar(
                 content: Text('Correct!'),
                 duration: Duration(seconds: 1),
               ),
@@ -33,7 +33,7 @@ class _MultipleChoiceButtonState extends State<MultipleChoiceButton> {
           } else {
             // Handle incorrect answer
             ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
+              const SnackBar(
                 content: Text('Incorrect!'),
                 duration: Duration(seconds: 1),
               ),
@@ -42,7 +42,7 @@ class _MultipleChoiceButtonState extends State<MultipleChoiceButton> {
         },
         child: Text(
           widget.text,
-          style: TextStyle(fontSize: 40, color: Colors.white),
+          style: const TextStyle(fontSize: 40, color: Colors.white),
         ),
       ),
     );
@@ -56,6 +56,8 @@ class _BeginnerMorseTrainingPageState extends State<BeginnerMorseTrainingPage> {
 
   List<String> choiceList = [];
   List<bool> answerList = [];
+
+  bool isButtonEnabled = true;
 
   @override
   void initState() {
@@ -92,6 +94,17 @@ class _BeginnerMorseTrainingPageState extends State<BeginnerMorseTrainingPage> {
     reset();
   }
 
+  void disableButtonTemporarily() {
+    setState(() {
+      isButtonEnabled = false;
+    });
+    Future.delayed(Duration(seconds: 2), () {
+      setState(() {
+        isButtonEnabled = true;
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -105,7 +118,7 @@ class _BeginnerMorseTrainingPageState extends State<BeginnerMorseTrainingPage> {
               height: 50,
               child: FloatingActionButton(
                 backgroundColor: widget.isDarkMode
-                    ? Color.fromARGB(255, 5, 20, 36)
+                    ? const Color.fromARGB(255, 5, 20, 36)
                     : Colors.white,
                 onPressed: () {
                   widget.setScreen(0);
@@ -126,44 +139,71 @@ class _BeginnerMorseTrainingPageState extends State<BeginnerMorseTrainingPage> {
                     builder: (_, letter, __) => Text(
                         'Guess the character $letter',
                         style: const TextStyle(
-                            fontSize: 24, fontWeight: FontWeight.bold, color: Color.fromARGB(255, 118, 118, 118)))),
-                SizedBox(height: 30),
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                            color: Color.fromARGB(255, 118, 118, 118)))),
+                const SizedBox(height: 30),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     MultipleChoiceButton(
-                        text: choiceList[0],
-                        correctAnswer: answerList[0],
-                        whenPressed: skip),
+                      text: choiceList[0],
+                      correctAnswer: answerList[0],
+                      whenPressed: () {
+                        skip();
+                        disableButtonTemporarily();
+                      },
+                      isEnabled: isButtonEnabled,
+                    ),
                     MultipleChoiceButton(
-                        text: choiceList[1],
-                        correctAnswer: answerList[1],
-                        whenPressed: skip),
+                      text: choiceList[1],
+                      correctAnswer: answerList[1],
+                      whenPressed: () {
+                        skip();
+                        disableButtonTemporarily();
+                      },
+                      isEnabled: isButtonEnabled,
+                    ),
                   ],
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 30,
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     MultipleChoiceButton(
-                        text: choiceList[2],
-                        correctAnswer: answerList[2],
-                        whenPressed: skip),
+                      text: choiceList[2],
+                      correctAnswer: answerList[2],
+                      whenPressed: () {
+                        skip();
+                        disableButtonTemporarily();
+                      },
+                      isEnabled: isButtonEnabled,
+                    ),
                     MultipleChoiceButton(
-                        text: choiceList[3],
-                        correctAnswer: answerList[3],
-                        whenPressed: skip),
+                      text: choiceList[3],
+                      correctAnswer: answerList[3],
+                      whenPressed: () {
+                        skip();
+                        disableButtonTemporarily();
+                      },
+                      isEnabled: isButtonEnabled,
+                    ),
                   ],
                 ),
-                SizedBox(
-                    height: 30),
+                const SizedBox(height: 30),
                 FloatingActionButton(
                   onPressed: () {
                     skip();
                   },
-                  child: const Icon(Icons.skip_next),
+                  backgroundColor: widget.isDarkMode
+                      ? const Color.fromARGB(255, 5, 20, 36)
+                      : Colors.white,
+                  child: const Icon(
+                    Icons.skip_next,
+                    color: Color.fromARGB(255, 118, 118, 118),
+                  ),
                 ),
               ],
             ),

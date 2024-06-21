@@ -20,6 +20,7 @@ class _IntermediateTrainingState extends State<IntermediateTraining> {
   var answers = {};
   var choiceList = [];
   var answerList = [];
+  bool isButtonEnabled = true;
 
   @override
   void initState() {
@@ -39,7 +40,6 @@ class _IntermediateTrainingState extends State<IntermediateTraining> {
     reset();
     mediumTraining.initFourRandomLetters();
     answers = mediumTraining.morseResult;
-    print(answers);
     setAnswers();
   }
 
@@ -58,6 +58,17 @@ class _IntermediateTrainingState extends State<IntermediateTraining> {
     Vibration.vibrate(
       pattern: vibration,
     );
+  }
+
+  void disableButtonTemporarily() {
+    setState(() {
+      isButtonEnabled = false;
+    });
+    Future.delayed(Duration(seconds: 2), () {
+      setState(() {
+        isButtonEnabled = true;
+      });
+    });
   }
 
   @override
@@ -99,12 +110,20 @@ class _IntermediateTrainingState extends State<IntermediateTraining> {
                           MultipleChoiceButton(
                             text: choiceList[0],
                             correctAnswer: answerList[0],
-                            whenPressed: skip,
+                            whenPressed: () {
+                              skip();
+                              disableButtonTemporarily();
+                            },
+                            isEnabled: isButtonEnabled,
                           ),
                           MultipleChoiceButton(
                             text: choiceList[1],
                             correctAnswer: answerList[1],
-                            whenPressed: skip,
+                            whenPressed: () {
+                              skip();
+                              disableButtonTemporarily();
+                            },
+                            isEnabled: isButtonEnabled,
                           ),
                         ],
                       ),
@@ -117,12 +136,20 @@ class _IntermediateTrainingState extends State<IntermediateTraining> {
                           MultipleChoiceButton(
                             text: choiceList[2],
                             correctAnswer: answerList[2],
-                            whenPressed: skip,
+                            whenPressed: () {
+                              skip();
+                              disableButtonTemporarily();
+                            },
+                            isEnabled: isButtonEnabled,
                           ),
                           MultipleChoiceButton(
                             text: choiceList[3],
                             correctAnswer: answerList[3],
-                            whenPressed: skip,
+                            whenPressed: () {
+                              skip();
+                              disableButtonTemporarily();
+                            },
+                            isEnabled: isButtonEnabled,
                           ),
                         ],
                       )
@@ -137,8 +164,8 @@ class _IntermediateTrainingState extends State<IntermediateTraining> {
                     vibrate();
                   },
                   backgroundColor: widget.isDarkMode
-                    ? const Color.fromARGB(255, 5, 20, 36)
-                    : Colors.white,
+                      ? const Color.fromARGB(255, 5, 20, 36)
+                      : Colors.white,
                   child: const Icon(
                     Icons.play_arrow,
                     color: Color.fromARGB(255, 118, 118, 118),
@@ -152,8 +179,8 @@ class _IntermediateTrainingState extends State<IntermediateTraining> {
                     skip();
                   },
                   backgroundColor: widget.isDarkMode
-                    ? const Color.fromARGB(255, 5, 20, 36)
-                    : Colors.white,
+                      ? const Color.fromARGB(255, 5, 20, 36)
+                      : Colors.white,
                   child: const Icon(
                     Icons.skip_next,
                     color: Color.fromARGB(255, 118, 118, 118),
