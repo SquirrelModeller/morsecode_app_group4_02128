@@ -4,8 +4,8 @@ import 'package:morsetorch/widgets/text_field.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class TextToTorch extends StatefulWidget {
-  TextToTorch({super.key, required this.isDarkMode});
-  bool isDarkMode;
+  TextToTorch({Key? key, required this.isDarkMode}) : super(key: key);
+  final bool isDarkMode;
 
   @override
   State<TextToTorch> createState() => _TextToTorchState();
@@ -13,15 +13,15 @@ class TextToTorch extends StatefulWidget {
 
 class _TextToTorchState extends State<TextToTorch> {
   final TextEditingController _controller = TextEditingController();
-  double textFieldHeight = 200;
   final TorchService _torchService = TorchService();
   bool _isButtonEnabled = false;
-  double _currentSliderValue = 5;
+  double _currentSliderValue = 5.0;
   int _currentIndex = -1;
 
   @override
-  void initState() {
-    super.initState();
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
   }
 
   void _toggleMorseCodeSending() async {
@@ -30,7 +30,7 @@ class _TextToTorchState extends State<TextToTorch> {
     });
 
     if (_isButtonEnabled) {
-      _sendMorseCode();
+      await _sendMorseCode();
     } else {
       _torchService.stopMorseCodeSending();
     }
@@ -56,11 +56,6 @@ class _TextToTorchState extends State<TextToTorch> {
   }
 
   @override
-  void dispose() {
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: true,
@@ -79,7 +74,7 @@ class _TextToTorchState extends State<TextToTorch> {
                     child: ExpandableTextField(
                       controller: _controller,
                       textFieldHeight: 150,
-                      maxHeight: MediaQuery.of(context).size.height / 2.2,
+                      maxHeight: MediaQuery.of(context).size.height / 2,
                       text: 'Enter text to convert to morse',
                       textColor: widget.isDarkMode
                           ? const Color.fromARGB(255, 202, 202, 202)
@@ -140,47 +135,30 @@ class _TextToTorchState extends State<TextToTorch> {
             ),
             Padding(
               padding: const EdgeInsets.all(20.0),
-              child: Stack(
-                children: [
-                  Wrap(
-                    children: List.generate(_controller.text.length, (index) {
-                      return Text(
-                        _controller.text[index],
+              child: RichText(
+                text: TextSpan(
+                  children: List.generate(
+                    _controller.text.length,
+                    (index) {
+                      return TextSpan(
+                        text: _controller.text[index],
                         style: TextStyle(
                           fontSize: 24,
-                          color: widget.isDarkMode ? Colors.white : Colors.black,
+                          color: index <= _currentIndex
+                              ? (widget.isDarkMode ? Colors.blue : Colors.red)
+                              : (widget.isDarkMode
+                                  ? Colors.grey
+                                  : Colors.black),
                         ),
                       );
-                    }),
+                    },
                   ),
-                  if (_currentIndex >= 0)
-                    Positioned(
-                      left: _calculatePosition(_controller.text, _currentIndex),
-                      top: 0,
-                      child: Container(
-                        width: 10,
-                        height: 10,
-                        color: Colors.black,
-                      ),
-                    ),
-                ],
+                ),
               ),
             ),
           ],
         ),
       ),
     );
-  }
-
-  double _calculatePosition(String text, int index) {
-    TextPainter textPainter = TextPainter(
-      text: TextSpan(
-        text: text.substring(0, index),
-        style: TextStyle(fontSize: 24),
-      ),
-      textDirection: TextDirection.ltr,
-    );
-    textPainter.layout();
-    return textPainter.width;
   }
 }

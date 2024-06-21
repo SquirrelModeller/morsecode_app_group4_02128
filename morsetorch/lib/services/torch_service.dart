@@ -27,11 +27,8 @@ class TorchService {
     int currentIndex = 0;
     for (var sentence in morseCode) {
       for (var word in sentence) {
-          updateIndex(currentIndex);
-          currentIndex++;
-        for (var symbol in word) {
+          for (var symbol in word) {
           if (!_isSendingMorse) return;
-
           TorchLight.enableTorch();
           int startTime = stopwatch.elapsedMilliseconds;
           await Future.delayed(Duration(
@@ -42,10 +39,15 @@ class TorchService {
           log('Symbol ${symbol == MorseState.Dot ? '.' : '-'} started at $startTime ms and ended at $endTime ms, difference: ${endTime - startTime}');
           await Future.delayed(Duration(milliseconds: elementGap));
         }
+          updateIndex(currentIndex);
+          currentIndex++;
         await Future.delayed(Duration(milliseconds: letterGap - elementGap));
       }
       await Future.delayed(Duration(milliseconds: wordGap - letterGap));
+      currentIndex ++; 
+      updateIndex(currentIndex);
     }
+
     stopwatch.stop();
     _isSendingMorse = false;
   }
