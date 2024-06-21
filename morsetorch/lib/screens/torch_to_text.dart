@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
 import 'package:mc_native_opencv/mc_native_opencv.dart';
 import 'package:morsetorch/models/language_map.dart';
+import 'package:morsetorch/screens/morse_detection.dart';
 import 'package:morsetorch/widgets/text_field.dart';
 
 class CameraScreen extends StatefulWidget {
@@ -14,7 +15,6 @@ class CameraScreen extends StatefulWidget {
 
 class _CameraScreenState extends State<CameraScreen> {
   late CameraController _controller;
-  late Future<void> _initializeControllerFuture;
   final TextEditingController _textController = TextEditingController();
   String? _selectedLanguage;
   final List<String> _dropdownItems = languages.keys.toList();
@@ -23,19 +23,6 @@ class _CameraScreenState extends State<CameraScreen> {
   @override
   void initState() {
     super.initState();
-    _initializeControllerFuture = _setupCamera();
-  }
-
-  Future<void> _setupCamera() async {
-    final cameras = await availableCameras();
-    final firstCamera = cameras.first;
-
-    _controller = CameraController(
-      firstCamera,
-      ResolutionPreset.high,
-      enableAudio: false,
-    );
-    return _controller.initialize();
   }
 
   @override
@@ -51,16 +38,7 @@ class _CameraScreenState extends State<CameraScreen> {
         child: Stack(
           children: [
             SizedBox.expand(
-              child: FutureBuilder<void>(
-                future: _initializeControllerFuture,
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.done) {
-                    return CameraPreview(_controller);
-                  } else {
-                    return const Center(child: CircularProgressIndicator());
-                  }
-                },
-              ),
+              child: MorseDetection(),
             ),
             Column(
               children: [

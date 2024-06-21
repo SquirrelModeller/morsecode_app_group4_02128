@@ -1,54 +1,35 @@
-
 import 'dart:ffi';
 import 'dart:io';
+import 'dart:typed_data';
 import 'package:ffi/ffi.dart';
 import 'package:flutter/services.dart';
 
+// Used information from https://github.com/ValYouW/flutter-opencv-stream-processing, author ValYouW, for exposing function to Flutter/Dart.
+// Written/Modified by William Pii Jæger
 
 final DynamicLibrary nativeLib = Platform.isAndroid ? DynamicLibrary.open("libnative_opencv.so") : DynamicLibrary.process();
 
 // C Functions Signatures
 typedef _c_version = Pointer<Utf8> Function();
 typedef _c_initLightTracker = Void Function(Int32 maxSize);
-typedef _c_updateLights = Pointer<MorseSignal> Function(Pointer<Uint8> bytes, Int32 width, Int32 height, Int64 timestamp);
+typedef _c_destroyLightTracker = Void Function();
+typedef _c_detect = Pointer<Int64> Function(Int32 width, Int32 height, Pointer<Uint8> bytes, Int64 timestamp, Pointer<Int32> outCount);
 
 // Dart functions signatures
 typedef _dart_version = Pointer<Utf8> Function();
 typedef _dart_initLightTracker = void Function(int maxSize);
-typedef _dart_updateLights = Pointer<MorseSignal> Function(Pointer<Uint8> bytes, int width, int height, int timestamp);
-typedef _c_freeMemory = Void Function(Pointer<Void>);
-typedef _dart_freeMemory = void Function(Pointer<Void>);
-
-final _freeMemory = nativeLib.lookupFunction<_c_freeMemory, _dart_freeMemory>('freeMemory');
-
-
-
-// MorseSignal in Dart
-final class MorseSignal extends Struct {
-  @Bool()
-  external bool isOn;
-
-  @Int64()
-  external int timestamp;
-}
-
-final class MorseSignalResult extends Struct {
-  @Int32()
-  external int count;
-
-  // Pointer<MorseSignal> get signals => addressOf.cast<MorseSignal>();
-}
-
+typedef _dart_destroyLightTracker = void Function();
+typedef _dart_detect = Pointer<Int64> Function(int width, int height, Pointer<Uint8> bytes, int timestamp, Pointer<Int32> outCount);
 
 // Create dart functions that invoke the C funcion
 final _version = nativeLib.lookupFunction<_c_version, _dart_version>('version');
 final _initLightTracker = nativeLib.lookupFunction<_c_initLightTracker, _dart_initLightTracker>('initLightTracker');
-final _updateLights = nativeLib.lookupFunction<_c_updateLights, _dart_updateLights>('updateLights');
-
-// final _testfunction = nativeLib.lookupFunction<bool>('test');
+final _destroyLightTracker = nativeLib.lookupFunction<_c_destroyLightTracker, _dart_destroyLightTracker>('destroyLightTracker');
+final _detect = nativeLib.lookupFunction<_c_detect, _dart_detect>('detect');
 
 class McNativeOpencv {
   static const MethodChannel _channel = MethodChannel('mc_native_opencv');
+  Pointer<Uint8>? _imageBuffer;
 
   static Future<String?> get platformVersion async {
     final String? version = await _channel.invokeMethod('getPlatformVersion');
@@ -63,28 +44,38 @@ class McNativeOpencv {
     _initLightTracker(maxSize);
   }
 
-  // Dart function to free a pointer to MorseSignal
-  void freeMorseSignals(Pointer<MorseSignal> ptr) {
-      _freeMemory(ptr.cast<Void>());
+  void destoy() {
+    _destroyLightTracker();
+    if (_imageBuffer != null) {
+      malloc.free(_imageBuffer!);
+    }
   }
 
-  // List<MorseSignal> updateLights(Uint8List byteData, int width, int height, int timestamp) {
-  //   final bytesPointer = malloc.allocate<Uint8>(byteData.length);
-  //   bytesPointer.asTypedList(byteData.length).setAll(0, byteData);
+  Int64List detect(int width, int height, int timeStamp, Uint8List yBuffer, Uint8List? uBuffer, Uint8List? vBuffer) {
+    var ySize = yBuffer.lengthInBytes;
+    var uSize = uBuffer?.lengthInBytes ?? 0;
+    var vSize = vBuffer?.lengthInBytes ?? 0;
+    var totalSize = ySize + uSize + vSize;
 
-    // Pointer<MorseSignalResult> result = _updateLights(bytesPointer, width, height, timestamp);
-    // int count = result.ref.count;
+    _imageBuffer ??= malloc.allocate<Uint8>(totalSize);
 
-    // List<MorseSignal> signals = List.generate(count, (i) {
-    //   return result.ref.signals.elementAt(i).ref;
-    // });
+    Uint8List _bytes = _imageBuffer!.asTypedList(totalSize);
+    _bytes.setAll(0, yBuffer);
 
-    // // Freeing the memory
-    // _freeMemory(result.cast<Void>());
-    // malloc.free(bytesPointer);
+    if (Platform.isAndroid) {
+      _bytes.setAll(ySize, vBuffer!);
+      _bytes.setAll(ySize + vSize, uBuffer!);
+    }
 
-    // return signals;
-// }
-// final _freeMemory = nativeLib.lookupFunction<_c_freeMemory, _dart_freeMemory>('freeMemory');
+    Pointer<Int32> outCount = malloc.allocate<Int32>(1);
+
+    var res = _detect(width, height, _imageBuffer!, timeStamp, outCount);
+
+    final count = outCount.value;
+
+    malloc.free(outCount);
+    
+    return res.asTypedList(count);
+  }
 }
 
