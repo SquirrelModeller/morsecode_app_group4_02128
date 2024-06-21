@@ -1,4 +1,5 @@
 import 'dart:developer' as dev;
+import 'dart:typed_data';
 import 'package:morsetorch/models/morse_signal.dart';
 import 'package:morsetorch/models/morse_state.dart';
 
@@ -37,11 +38,10 @@ class Morsetranslator {
     morseReciveBuilder = [];
   }
 
-  void addPackageToList(List<int> package){
-    MorseSignal signal = MorseSignal(false, 0);
-    signal.isOn = package[0] == 1 ? true : false;
-    signal.time = package[1];
-    morseReciveBuilder.add(signal);
+  void addPackageToList(Int64List package){
+    for (int i = 0; i < package.length; i+=2) {
+      morseReciveBuilder.add(MorseSignal(package[i] == 1, package[i+1]));
+    }
   }
 
   calculateTimeUnit(List<MorseSignal> morseCodeInput) {
