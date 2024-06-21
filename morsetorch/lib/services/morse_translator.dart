@@ -33,26 +33,44 @@ class Morsetranslator {
     }
     return equal;
   }
-  
-  void clearMorseBuilder(){
+
+  void clearMorseBuilder() {
     morseReciveBuilder = [];
   }
 
-  void addPackageToList(Int64List package){
-    for (int i = 0; i < package.length; i+=2) {
-      morseReciveBuilder.add(MorseSignal(package[i] == 1, package[i+1]));
+  void addPackageToList(Int64List package) {
+    for (int i = 0; i < package.length; i += 2) {
+      morseReciveBuilder.add(MorseSignal(package[i] == 1, package[i + 1]));
     }
   }
 
-  calculateTimeUnit(List<MorseSignal> morseCodeInput) {
-    int timeUnit = 0;
-    for (int i = 0; i < morseCodeInput.length - 1; i++) {
-      int deltaTime = morseCodeInput[i + 1].time - morseCodeInput[i].time;
-      if (timeUnit == 0 || timeUnit > deltaTime) {
-        timeUnit = deltaTime;
+  String returnText() {
+    int timeUnit = calculateTimeUnit();
+    return timeframeToText(morseReciveBuilder, timeUnit);
+  }
+
+  calculateTimeUnit() {
+    List<int> differences = [];
+
+    for (int i = 0; i < morseReciveBuilder.length - 1; i++) {
+      int currentUnixTime = morseReciveBuilder[i].time;
+      int nextUnixTime = morseReciveBuilder[i + 1].time;
+      int difference = nextUnixTime - currentUnixTime;
+      differences.add(difference);
+    }
+
+    differences.sort();
+    var oneUnitTimes = [];
+    for (int i = 0; i < differences.length - 1; i++) {
+      if (differences[i + 1] > differences[i] * 2) {
+        oneUnitTimes = differences.sublist(0, i);
+        break;
       }
     }
-    currentTimeUnit = timeUnit;
+
+    int sum = oneUnitTimes.reduce((a, b) => a + b);
+    int averageTimeUnit = (sum / oneUnitTimes.length) as int;
+    return averageTimeUnit;
   }
 
   morseToText(List<MorseState> input) {
@@ -60,34 +78,34 @@ class Morsetranslator {
         orElse: () => throw Exception("Value has no key"));
   }
 
-  timeframeToText(List<MorseSignal> morseCodeInput) {
-    int timePadding = 20; //Not a valid value for miliseconds
+  timeframeToText(List<MorseSignal> morseCodeInput, int timeUnit) {
+    int timePadding = 50; //Not a valid value for miliseconds
     String text = "";
     List<MorseState> character = [];
     for (int i = 0; i < morseCodeInput.length - 1; i++) {
       num deltaTime = morseCodeInput[i + 1].time - morseCodeInput[i].time;
       try {
         if (morseCodeInput[i].isOn == true &&
-            (deltaTime < 1 * currentTimeUnit + timePadding &&
-                deltaTime > 1 * currentTimeUnit- timePadding)) {
+            (deltaTime < 1 * timeUnit + timePadding &&
+                deltaTime > 1 * timeUnit - timePadding)) {
           character.add(MorseState.Dot);
         } else if (morseCodeInput[i].isOn == true &&
-            (deltaTime < 3 * currentTimeUnit + timePadding &&
-                deltaTime > 3 * currentTimeUnit - timePadding)) {
+            (deltaTime < 3 * timeUnit + timePadding &&
+                deltaTime > 3 * timeUnit - timePadding)) {
           character.add(MorseState.Dash);
         } else if (morseCodeInput[i].isOn == false &&
-            (deltaTime < 3 * currentTimeUnit + timePadding &&
-                deltaTime > 3 * currentTimeUnit - timePadding)) {
+            (deltaTime < 3 * timeUnit + timePadding &&
+                deltaTime > 3 * timeUnit - timePadding)) {
           text += morseToText(character);
           character = [];
         } else if (morseCodeInput[i].isOn == false &&
-            (deltaTime < 7 * currentTimeUnit + timePadding &&
-                deltaTime > 7 * currentTimeUnit - timePadding)) {
+            (deltaTime < 7 * timeUnit + timePadding &&
+                deltaTime > 7 * timeUnit - timePadding)) {
           text += "${morseToText(character)} ";
           character = [];
         } else if ((morseCodeInput[i].isOn == false &&
-                (deltaTime < 1 * currentTimeUnit + timePadding &&
-                    deltaTime > 1 * currentTimeUnit - timePadding)) ==
+                (deltaTime < 1 * timeUnit + timePadding &&
+                    deltaTime > 1 * timeUnit - timePadding)) ==
             false) {
           throw Exception(
               "Invalid Time frame. Position:$i DeltaTime:$deltaTime");
@@ -99,6 +117,6 @@ class Morsetranslator {
         dev.log("$e");
       }
     }
-    currentText = text;
+    return text;
   }
 }
