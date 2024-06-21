@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:morsetorch/services/beginner_training_service.dart';
+import 'package:morsetorch/widgets/multiple_choice.dart';
 
 class BeginnerMorseTrainingPage extends StatefulWidget {
   final Function(int) setScreen;
@@ -9,51 +10,6 @@ class BeginnerMorseTrainingPage extends StatefulWidget {
   @override
   State<BeginnerMorseTrainingPage> createState() =>
       _BeginnerMorseTrainingPageState();
-}
-
-class MultipleChoiceButton extends StatefulWidget {
-  final String text;
-  final bool correctAnswer;
-
-  MultipleChoiceButton({required this.text, required this.correctAnswer});
-
-  @override
-  _MultipleChoiceButtonState createState() => _MultipleChoiceButtonState();
-}
-
-class _MultipleChoiceButtonState extends State<MultipleChoiceButton> {
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: 100,
-      height: 100,
-      child: FloatingActionButton(
-        onPressed: () {
-          if (widget.correctAnswer) {
-            // Handle correct answer
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text('Correct!'),
-                duration: Duration(seconds: 1),
-              ),
-            );
-          } else {
-            // Handle incorrect answer
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text('Incorrect!'),
-                duration: Duration(seconds: 1),
-              ),
-            );
-          }
-        },
-        child: Text(
-          widget.text,
-          style: TextStyle(fontSize: 40, color: Colors.white),
-        ),
-      ),
-    );
-  }
 }
 
 class _BeginnerMorseTrainingPageState extends State<BeginnerMorseTrainingPage> {
@@ -114,10 +70,11 @@ class _BeginnerMorseTrainingPageState extends State<BeginnerMorseTrainingPage> {
                   children: [
                     MultipleChoiceButton(
                         text: choiceList[0], correctAnswer: answerList[0]),
-                    MultipleChoiceButton(text: choiceList[1], correctAnswer: answerList[1]),
+                    MultipleChoiceButton(
+                        text: choiceList[1], correctAnswer: answerList[1]),
                   ],
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 30,
                 ),
                 Row(

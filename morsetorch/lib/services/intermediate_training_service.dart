@@ -1,8 +1,9 @@
 import 'dart:math';
 import 'package:morsetorch/models/morse_state.dart';
 
-class MediumTrainingService {
+class IntermediateTrainingService {
   List<MorseState> _correctMorseCode = [];
+  Map<String, bool> _morseResult = {};
 
   List<String> getRandomCharacters() {
     List<String> validCharacters = List.generate(
@@ -13,6 +14,11 @@ class MediumTrainingService {
     return characters;
   }
 
+  void resetAnswers() {
+    _correctMorseCode = [];
+    _morseResult = {};
+  }
+
   int getRandomNumber() {
     Random random = Random();
     int randomNumber = random.nextInt(4);
@@ -20,22 +26,36 @@ class MediumTrainingService {
   }
 
   void initFourRandomLetters() {
-    Map<String, bool> morseResult = {};
     var characters = getRandomCharacters();
     int randomNumber = getRandomNumber();
     var correctChar = characters[randomNumber];
 
     for (String c in characters) {
       if (c == correctChar) {
-        morseResult[c] = true;
+        _morseResult[c] = true;
         if (morseCode.containsKey(c)) {
           _correctMorseCode = morseCode[c]!;
         }
       } else {
-        morseResult[c] = false;
+        _morseResult[c] = false;
       }
     }
   }
 
+  List<int> getVibration(List<MorseState> morseCode) {
+    List<int> vibration = [];
+    for (var c in morseCode) {
+      vibration.add(130);
+      if (c == MorseState.Dot) {
+        vibration.add(130);
+      } else {
+        vibration.add(390);
+      }
+    }
+    return vibration;
+  }
+
   List<MorseState> get correctMorseCode => _correctMorseCode;
+
+  Map<String, bool> get morseResult => _morseResult;
 }
