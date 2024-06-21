@@ -162,6 +162,7 @@ class _IntermediateTrainingState extends State<IntermediateTraining> {
                 ),
                 FloatingActionButton(
                   onPressed: () {
+                    increaseStreak(false);
                     skip();
                   },
                   backgroundColor: widget.isDarkMode

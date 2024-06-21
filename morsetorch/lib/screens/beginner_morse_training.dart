@@ -167,6 +167,7 @@ class _BeginnerMorseTrainingPageState extends State<BeginnerMorseTrainingPage> {
                 SizedBox(height: 30),
                 FloatingActionButton(
                   onPressed: () {
+                    increaseStreak(false);
                     reset();
                   },
                   child: const Icon(Icons.skip_next),
