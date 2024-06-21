@@ -1,21 +1,18 @@
-import 'package:translator/translator.dart';
+import 'dart:developer';
 
-void main() async {
-  try {
-    print(await translateText("dette er super hurtigt", "zh-tw"));
-  }
-  catch (e){
-    print("Can't Translate with no network");
-  }
-}
+import 'package:translator/translator.dart';
 
 translateText(String text, String language) async {
   if (language == "none") {
     return text;
   }
-  final translator = GoogleTranslator();
-  var translation = translator.translate(text, to: language);
-  return translation;  
-  
+  try {
+    final translator = GoogleTranslator();
+    var translation = translator.translate(text, to: language);
+    return translation;  
+  }
+  catch (e){
+    log("Can't Translate with no network");
+  }
 
 }

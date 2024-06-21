@@ -109,7 +109,7 @@ class _NavigationState extends State<Navigation> {
           items: [
             BottomNavigationBarItem(
               icon: SizedBox(
-                height: MediaQuery.of(context).size.height / 13,
+                height: MediaQuery.of(context).size.height / 14,
                 child: Image.asset(
                   'icons/Button3.png',
                   color: _currentIndex == 0
@@ -121,7 +121,7 @@ class _NavigationState extends State<Navigation> {
             ),
             BottomNavigationBarItem(
               icon: SizedBox(
-                height: MediaQuery.of(context).size.height / 12,
+                height: MediaQuery.of(context).size.height / 14,
                 child: Image.asset(
                   'icons/Flashlight2.png',
                   color: _currentIndex == 1
@@ -133,7 +133,7 @@ class _NavigationState extends State<Navigation> {
             ),
             BottomNavigationBarItem(
               icon: SizedBox(
-                height: MediaQuery.of(context).size.height / 12,
+                height: MediaQuery.of(context).size.height / 14,
                 child: Image.asset(
                   'icons/Flashlight.png',
                   color: _currentIndex == 2

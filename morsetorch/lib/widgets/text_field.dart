@@ -36,6 +36,7 @@ class _ExpandableTextFieldState extends State<ExpandableTextField> {
             borderRadius: BorderRadius.circular(10.0),
           ),
           child: TextField(
+            style: TextStyle(color: widget.textColor),
             readOnly: !widget.canWrite,
             enabled: widget.canWrite,
             controller: widget.controller,

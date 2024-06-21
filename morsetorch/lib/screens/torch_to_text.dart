@@ -4,6 +4,7 @@ import 'package:camera/camera.dart';
 import 'package:mc_native_opencv/mc_native_opencv.dart';
 import 'package:morsetorch/models/language_map.dart';
 import 'package:morsetorch/screens/morse_detection.dart';
+import 'package:morsetorch/services/language_translator.dart';
 import 'package:morsetorch/widgets/text_field.dart';
 
 class CameraScreen extends StatefulWidget {
@@ -15,10 +16,11 @@ class CameraScreen extends StatefulWidget {
 
 class _CameraScreenState extends State<CameraScreen> {
   final TextEditingController _textController = TextEditingController();
-  String? _selectedLanguage;
+  late String selectedLanguage = "None";
   final List<String> _dropdownItems = languages.keys.toList();
   final nativeOpencv = McNativeOpencv();
-  String? languageID = "none";
+  String languageID = "none";
+  String textBoxText ='Searching for morse signal...';
   @override
   void initState() {
     super.initState();
@@ -60,7 +62,7 @@ class _CameraScreenState extends State<CameraScreen> {
                   child: ExpandableTextField(
                     controller: _textController,
                     color: const Color.fromARGB(150, 43, 42, 42),
-                    text: 'Searching for morse signal...',
+                    text: textBoxText,
                     textColor: Colors.white,
                     maxHeight: MediaQuery.of(context).size.height / 5,
                     canWrite: false,
@@ -68,11 +70,7 @@ class _CameraScreenState extends State<CameraScreen> {
                 ),
                 DropdownButton<String>(
                   dropdownColor: const Color.fromARGB(150, 43, 42, 42),
-                  icon: const Icon(
-                    Icons.translate,
-                    color: Colors.white,
-                  ),
-                  value: _selectedLanguage,
+                  value: selectedLanguage,
                   hint: const Text(
                     'Select a Language',
                     style: TextStyle(color: Colors.white),
@@ -88,8 +86,8 @@ class _CameraScreenState extends State<CameraScreen> {
                   }).toList(),
                   onChanged: (String? newValue) {
                     setState(() {
-                      _selectedLanguage = newValue;
-                      languageID = languages[_selectedLanguage];
+                      selectedLanguage = newValue!;
+                      languageID = languages[selectedLanguage]!;
                     });
                   },
                 ),
@@ -99,11 +97,13 @@ class _CameraScreenState extends State<CameraScreen> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          log('--> OpenCV version: ${nativeOpencv.cvVersion()}');
-          nativeOpencv.initLightTracker(100);
+        onPressed: () async {
+           var newText = await translateText(_textController.text, languageID);
+          _textController.text = newText.toString();
         },
-        child: Icon(Icons.camera_alt),
+        child: const Icon(
+          Icons.translate,
+        ),
       ),
     );
   }
