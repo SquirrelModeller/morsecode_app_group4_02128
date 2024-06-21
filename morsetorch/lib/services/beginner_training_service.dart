@@ -6,6 +6,8 @@ class BeginnerTrainingService {
   ValueNotifier<String> correctLetter = ValueNotifier("");
   ValueNotifier<List<String>> choiceList = ValueNotifier<List<String>>([]);
   ValueNotifier<List<bool>> answerList = ValueNotifier<List<bool>>([]);
+  ValueNotifier<int> streak = ValueNotifier(0);
+
   List<String> validCharacters = List.generate(
           26, (index) => String.fromCharCode('A'.codeUnitAt(0) + index)) +
       List.generate(10, (index) => index.toString());
@@ -20,6 +22,14 @@ class BeginnerTrainingService {
   void resetGame() {
     choiceList.value = [];
     answerList.value = [];
+  }
+
+  void increaseStreak(bool correct) {
+    if (correct) {
+        streak.value += 1;
+      } else {
+        streak.value = 0;
+      }
   }
 
   Map<String, bool> get4RandomMorseCodes() {

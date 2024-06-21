@@ -30,16 +30,6 @@ class _BeginnerMorseTrainingPageState extends State<BeginnerMorseTrainingPage> {
     beginnerTrainingService.setUpGame();
   }
 
-  void increaseStreak(bool correct) {
-    setState(() {
-      if (correct) {
-        streak += 1;
-      } else {
-        streak = 0;
-      }
-    });
-  }
-
   void disableButtonTemporarily() {
     setState(() {
       isButtonEnabled = false;
@@ -99,7 +89,7 @@ class _BeginnerMorseTrainingPageState extends State<BeginnerMorseTrainingPage> {
                 FloatingActionButton(
                   onPressed: () {
                     print("Hello");
-                    increaseStreak(false);
+                    beginnerTrainingService.increaseStreak(false);
                     setUpGame();
                   },
                   backgroundColor: widget.isDarkMode
@@ -111,11 +101,14 @@ class _BeginnerMorseTrainingPageState extends State<BeginnerMorseTrainingPage> {
                   ),
                 ),
                 const SizedBox(height: 20),
-                Text(
-                  "Streak: $streak",
-                  style: const TextStyle(
-                    fontSize: 20,
-                    color: Color.fromARGB(255, 118, 118, 118),
+                ValueListenableBuilder<int>(
+                  valueListenable: beginnerTrainingService.streak,
+                  builder: (_, streak, __) => Text(
+                    "Streak: $streak",
+                    style: const TextStyle(
+                      fontSize: 20,
+                      color: Color.fromARGB(255, 118, 118, 118),
+                    ),
                   ),
                 ),
               ],
@@ -140,7 +133,7 @@ class _BeginnerMorseTrainingPageState extends State<BeginnerMorseTrainingPage> {
               reset: setUpGame,
               disableButton: disableButtonTemporarily,
               isEnabled: isButtonEnabled,
-              streak: increaseStreak,
+              streak: beginnerTrainingService.increaseStreak,
               isDarkMode: widget.isDarkMode,
             ),
           ),
@@ -155,7 +148,7 @@ class _BeginnerMorseTrainingPageState extends State<BeginnerMorseTrainingPage> {
               reset: setUpGame,
               disableButton: disableButtonTemporarily,
               isEnabled: isButtonEnabled,
-              streak: increaseStreak,
+              streak: beginnerTrainingService.increaseStreak,
               isDarkMode: widget.isDarkMode,
             ),
           ),
