@@ -56,6 +56,7 @@ class _BeginnerMorseTrainingPageState extends State<BeginnerMorseTrainingPage> {
 
   List<String> choiceList = [];
   List<bool> answerList = [];
+  int streak = 0;
 
   bool isButtonEnabled = true;
 
@@ -68,7 +69,6 @@ class _BeginnerMorseTrainingPageState extends State<BeginnerMorseTrainingPage> {
   void setUpGame() {
     morseCodes = beginnerTrainingService.get4RandomMorseCodes();
     correctLetter = beginnerTrainingService.getCorrectLetter();
-    print(correctLetter);
     setAnswers();
   }
 
@@ -77,11 +77,8 @@ class _BeginnerMorseTrainingPageState extends State<BeginnerMorseTrainingPage> {
       morseCodes.forEach((key, value) {
         choiceList.add(key);
         answerList.add(value);
-        print('Key: $key, Value: $value');
       });
     });
-    print(choiceList);
-    print(answerList);
   }
 
   void reset() {
@@ -90,8 +87,12 @@ class _BeginnerMorseTrainingPageState extends State<BeginnerMorseTrainingPage> {
     setUpGame();
   }
 
-  void skip() {
-    reset();
+  void increaseStreak(bool correct) {
+    if (correct == true) {
+      streak += 1;
+    } else {
+      streak = 0;
+    }
   }
 
   void disableButtonTemporarily() {
@@ -150,19 +151,21 @@ class _BeginnerMorseTrainingPageState extends State<BeginnerMorseTrainingPage> {
                       text: choiceList[0],
                       correctAnswer: answerList[0],
                       whenPressed: () {
-                        skip();
+                        reset();
                         disableButtonTemporarily();
                       },
                       isEnabled: isButtonEnabled,
+                      streak: increaseStreak,
                     ),
                     MultipleChoiceButton(
                       text: choiceList[1],
                       correctAnswer: answerList[1],
                       whenPressed: () {
-                        skip();
+                        reset();
                         disableButtonTemporarily();
                       },
                       isEnabled: isButtonEnabled,
+                      streak: increaseStreak,
                     ),
                   ],
                 ),
@@ -176,26 +179,29 @@ class _BeginnerMorseTrainingPageState extends State<BeginnerMorseTrainingPage> {
                       text: choiceList[2],
                       correctAnswer: answerList[2],
                       whenPressed: () {
-                        skip();
+                        reset();
                         disableButtonTemporarily();
                       },
                       isEnabled: isButtonEnabled,
+                      streak: increaseStreak,
                     ),
                     MultipleChoiceButton(
                       text: choiceList[3],
                       correctAnswer: answerList[3],
                       whenPressed: () {
-                        skip();
+                        reset();
                         disableButtonTemporarily();
                       },
                       isEnabled: isButtonEnabled,
+                      streak: increaseStreak,
                     ),
                   ],
                 ),
                 const SizedBox(height: 30),
                 FloatingActionButton(
                   onPressed: () {
-                    skip();
+                    increaseStreak(false);
+                    reset();
                   },
                   backgroundColor: widget.isDarkMode
                       ? const Color.fromARGB(255, 5, 20, 36)
@@ -205,6 +211,10 @@ class _BeginnerMorseTrainingPageState extends State<BeginnerMorseTrainingPage> {
                     color: Color.fromARGB(255, 118, 118, 118),
                   ),
                 ),
+                const SizedBox(
+                  height: 20,
+                ),
+                Text("Streak: $streak", style: const TextStyle(fontSize: 20)),
               ],
             ),
           ),

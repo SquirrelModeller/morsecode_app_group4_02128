@@ -21,6 +21,7 @@ class _IntermediateTrainingState extends State<IntermediateTraining> {
   var choiceList = [];
   var answerList = [];
   bool isButtonEnabled = true;
+  var streak = 0;
 
   @override
   void initState() {
@@ -40,6 +41,8 @@ class _IntermediateTrainingState extends State<IntermediateTraining> {
     reset();
     mediumTraining.initFourRandomLetters();
     answers = mediumTraining.morseResult;
+    print(answers);
+    print(streak);
     setAnswers();
   }
 
@@ -69,6 +72,14 @@ class _IntermediateTrainingState extends State<IntermediateTraining> {
         isButtonEnabled = true;
       });
     });
+  }
+
+  void increaseStreak(bool correct) {
+    if (correct == true) {
+      streak += 1;
+    } else {
+      streak = 0;
+    }
   }
 
   @override
@@ -115,6 +126,7 @@ class _IntermediateTrainingState extends State<IntermediateTraining> {
                               disableButtonTemporarily();
                             },
                             isEnabled: isButtonEnabled,
+                            streak: increaseStreak,
                           ),
                           MultipleChoiceButton(
                             text: choiceList[1],
@@ -124,6 +136,7 @@ class _IntermediateTrainingState extends State<IntermediateTraining> {
                               disableButtonTemporarily();
                             },
                             isEnabled: isButtonEnabled,
+                            streak: increaseStreak,
                           ),
                         ],
                       ),
@@ -141,6 +154,7 @@ class _IntermediateTrainingState extends State<IntermediateTraining> {
                               disableButtonTemporarily();
                             },
                             isEnabled: isButtonEnabled,
+                            streak: increaseStreak,
                           ),
                           MultipleChoiceButton(
                             text: choiceList[3],
@@ -150,6 +164,7 @@ class _IntermediateTrainingState extends State<IntermediateTraining> {
                               disableButtonTemporarily();
                             },
                             isEnabled: isButtonEnabled,
+                            streak: increaseStreak,
                           ),
                         ],
                       )
@@ -176,6 +191,7 @@ class _IntermediateTrainingState extends State<IntermediateTraining> {
                 ),
                 FloatingActionButton(
                   onPressed: () {
+                    increaseStreak(false);
                     skip();
                   },
                   backgroundColor: widget.isDarkMode
@@ -186,6 +202,10 @@ class _IntermediateTrainingState extends State<IntermediateTraining> {
                     color: Color.fromARGB(255, 118, 118, 118),
                   ),
                 ),
+                const SizedBox(
+                  height: 20,
+                ),
+                Text("Streak: $streak", style: const TextStyle(fontSize: 20)),
               ],
             ),
           ),
