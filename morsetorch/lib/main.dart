@@ -109,7 +109,7 @@ class _NavigationState extends State<Navigation> {
           items: [
             BottomNavigationBarItem(
               icon: SizedBox(
-                height: MediaQuery.of(context).size.height / 12,
+                height: MediaQuery.of(context).size.height / 13,
                 child: Image.asset(
                   'icons/Button3.png',
                   color: _currentIndex == 0

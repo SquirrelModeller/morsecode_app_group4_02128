@@ -121,22 +121,20 @@ class _IntermediateTrainingState extends State<IntermediateTraining> {
                           MultipleChoiceButton(
                             text: choiceList[0],
                             correctAnswer: answerList[0],
-                            whenPressed: () {
-                              skip();
-                              disableButtonTemporarily();
-                            },
+                            reset: skip,
+                            disableButton: disableButtonTemporarily,
                             isEnabled: isButtonEnabled,
                             streak: increaseStreak,
+                            isDarkMode: widget.isDarkMode,
                           ),
                           MultipleChoiceButton(
                             text: choiceList[1],
                             correctAnswer: answerList[1],
-                            whenPressed: () {
-                              skip();
-                              disableButtonTemporarily();
-                            },
+                            reset: skip,
+                            disableButton: disableButtonTemporarily,
                             isEnabled: isButtonEnabled,
                             streak: increaseStreak,
+                            isDarkMode: widget.isDarkMode,
                           ),
                         ],
                       ),
@@ -149,22 +147,20 @@ class _IntermediateTrainingState extends State<IntermediateTraining> {
                           MultipleChoiceButton(
                             text: choiceList[2],
                             correctAnswer: answerList[2],
-                            whenPressed: () {
-                              skip();
-                              disableButtonTemporarily();
-                            },
+                            reset: skip,
+                            disableButton: disableButtonTemporarily,
                             isEnabled: isButtonEnabled,
                             streak: increaseStreak,
+                            isDarkMode: widget.isDarkMode,
                           ),
                           MultipleChoiceButton(
                             text: choiceList[3],
                             correctAnswer: answerList[3],
-                            whenPressed: () {
-                              skip();
-                              disableButtonTemporarily();
-                            },
+                            reset: skip,
+                            disableButton: disableButtonTemporarily,
                             isEnabled: isButtonEnabled,
                             streak: increaseStreak,
+                            isDarkMode: widget.isDarkMode,
                           ),
                         ],
                       )
@@ -205,7 +201,13 @@ class _IntermediateTrainingState extends State<IntermediateTraining> {
                 const SizedBox(
                   height: 20,
                 ),
-                Text("Streak: $streak", style: const TextStyle(fontSize: 20)),
+                Text(
+                  "Streak: $streak",
+                  style: const TextStyle(
+                    fontSize: 20,
+                    color: Color.fromARGB(255, 118, 118, 118),
+                  ),
+                ),
               ],
             ),
           ),

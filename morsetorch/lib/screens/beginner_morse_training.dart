@@ -138,7 +138,7 @@ class _BeginnerMorseTrainingPageState extends State<BeginnerMorseTrainingPage> {
                 ValueListenableBuilder<String>(
                     valueListenable: beginnerTrainingService.correctLetter,
                     builder: (_, letter, __) => Text(
-                        'Guess the character $letter',
+                        'Guess the character: $letter',
                         style: const TextStyle(
                             fontSize: 24,
                             fontWeight: FontWeight.bold,
@@ -150,22 +150,20 @@ class _BeginnerMorseTrainingPageState extends State<BeginnerMorseTrainingPage> {
                     MultipleChoiceButton(
                       text: choiceList[0],
                       correctAnswer: answerList[0],
-                      whenPressed: () {
-                        reset();
-                        disableButtonTemporarily();
-                      },
+                      reset: reset,
+                      disableButton: disableButtonTemporarily,
                       isEnabled: isButtonEnabled,
                       streak: increaseStreak,
+                      isDarkMode: widget.isDarkMode,
                     ),
                     MultipleChoiceButton(
                       text: choiceList[1],
                       correctAnswer: answerList[1],
-                      whenPressed: () {
-                        reset();
-                        disableButtonTemporarily();
-                      },
+                      reset: reset,
+                      disableButton: disableButtonTemporarily,
                       isEnabled: isButtonEnabled,
                       streak: increaseStreak,
+                      isDarkMode: widget.isDarkMode,
                     ),
                   ],
                 ),
@@ -178,22 +176,20 @@ class _BeginnerMorseTrainingPageState extends State<BeginnerMorseTrainingPage> {
                     MultipleChoiceButton(
                       text: choiceList[2],
                       correctAnswer: answerList[2],
-                      whenPressed: () {
-                        reset();
-                        disableButtonTemporarily();
-                      },
+                      reset: reset,
+                      disableButton: disableButtonTemporarily,
                       isEnabled: isButtonEnabled,
                       streak: increaseStreak,
+                      isDarkMode: widget.isDarkMode,
                     ),
                     MultipleChoiceButton(
                       text: choiceList[3],
                       correctAnswer: answerList[3],
-                      whenPressed: () {
-                        reset();
-                        disableButtonTemporarily();
-                      },
+                      reset: reset,
+                      disableButton: disableButtonTemporarily,
                       isEnabled: isButtonEnabled,
                       streak: increaseStreak,
+                      isDarkMode: widget.isDarkMode,
                     ),
                   ],
                 ),
@@ -214,7 +210,13 @@ class _BeginnerMorseTrainingPageState extends State<BeginnerMorseTrainingPage> {
                 const SizedBox(
                   height: 20,
                 ),
-                Text("Streak: $streak", style: const TextStyle(fontSize: 20)),
+                Text(
+                  "Streak: $streak",
+                  style: const TextStyle(
+                    fontSize: 20,
+                    color: Color.fromARGB(255, 118, 118, 118),
+                  ),
+                ),
               ],
             ),
           ),
