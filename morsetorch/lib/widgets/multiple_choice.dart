@@ -4,13 +4,15 @@ class MultipleChoiceButton extends StatefulWidget {
   final String text;
   final bool correctAnswer;
   var whenPressed;
+  var streak;
 
 
   MultipleChoiceButton(
       {super.key,
       required this.text,
       required this.correctAnswer,
-      this.whenPressed});
+      this.whenPressed,
+      this.streak});
 
   @override
   _MultipleChoiceButtonState createState() => _MultipleChoiceButtonState();
@@ -29,6 +31,7 @@ class _MultipleChoiceButtonState extends State<MultipleChoiceButton> {
         onPressed: () async {
           if (widget.correctAnswer) {
             // Handle correct answer
+            widget.streak(true);
             setState(() {
               _buttonColor = Colors.green;
             });
@@ -40,6 +43,7 @@ class _MultipleChoiceButtonState extends State<MultipleChoiceButton> {
             );
           } else {
             // Handle incorrect answer
+            widget.streak(false);
             setState(() {
               _buttonColor = Colors.red;
             });
