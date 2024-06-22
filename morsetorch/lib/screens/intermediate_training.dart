@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:morsetorch/models/morse_state.dart';
 import 'package:morsetorch/services/intermediate_training_service.dart';
+import 'package:morsetorch/widgets/custom_floating_action_button.dart';
 import 'package:morsetorch/widgets/multiple_choice.dart';
 import 'package:vibration/vibration.dart';
 
@@ -51,26 +52,7 @@ class _IntermediateTrainingState extends State<IntermediateTraining> {
     return Scaffold(
       body: Stack(
         children: [
-          Positioned(
-            top: 35,
-            left: 20,
-            child: SizedBox(
-              width: 50,
-              height: 50,
-              child: FloatingActionButton(
-                backgroundColor: widget.isDarkMode
-                    ? const Color.fromARGB(255, 5, 20, 36)
-                    : Colors.white,
-                onPressed: () {
-                  widget.setScreen(0);
-                },
-                child: const Icon(
-                  Icons.arrow_back,
-                  color: Color.fromARGB(255, 118, 118, 118),
-                ),
-              ),
-            ),
-          ),
+          CustomFloatingActionButton(isDarkMode: widget.isDarkMode, onPressed: () => widget.setScreen(0)),
           Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,

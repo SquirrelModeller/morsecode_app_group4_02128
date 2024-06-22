@@ -1,121 +1,55 @@
 import 'package:flutter/material.dart';
 import 'package:morsetorch/screens/beginner_morse_training.dart';
 import 'package:morsetorch/screens/intermediate_training.dart';
+import 'package:morsetorch/screens/morse_practice_timing_screen.dart';
 import 'package:morsetorch/screens/morse_training.dart';
+import 'package:morsetorch/widgets/custom_menu_navigation_button.dart';
 
 class MorseTrainingSelectorPage extends StatefulWidget {
-  bool isDarkMode;
+  final bool isDarkMode;
 
   MorseTrainingSelectorPage({super.key, required this.isDarkMode});
 
   @override
-  MorseTrainingSelectorPageState createState() =>
-      MorseTrainingSelectorPageState();
+  MorseTrainingSelectorPageState createState() => MorseTrainingSelectorPageState();
 }
 
 class MorseTrainingSelectorPageState extends State<MorseTrainingSelectorPage> {
   int _currentScreen = 0;
 
+  // Define a map of screen widgets
+  Map<int, Widget Function()> get screenWidgets => {
+    1: () => BeginnerMorseTrainingPage(setScreen: changeScreen, isDarkMode: widget.isDarkMode),
+    2: () => IntermediateTraining(setScreen: changeScreen, isDarkMode: widget.isDarkMode),
+    3: () => MorseTrainingPage(setScreen: changeScreen, isDarkMode: widget.isDarkMode),
+    4: () => MorsePracticeTimingScreen(setScreen: changeScreen, isDarkMode: widget.isDarkMode),
+  };
+
+  void changeScreen(int newScreen) {
+    setState(() => _currentScreen = newScreen);
+  }
+
   @override
   Widget build(BuildContext context) {
-    setCurrentScreen(int newScreen) {
-      setState(() {
-        _currentScreen = newScreen;
-      });
-    }
+    // Use screenWidgets map to fetch the appropriate widget
+    Widget content = screenWidgets[_currentScreen]?.call() ?? buildHomeScreen();
+    return content;
+  }
 
-    if (_currentScreen == 1) {
-      return BeginnerMorseTrainingPage(
-        setScreen: setCurrentScreen,
-        isDarkMode: widget.isDarkMode,
-      );
-    } else if (_currentScreen == 2) {
-      return IntermediateTraining(
-        setScreen: setCurrentScreen,
-        isDarkMode: widget.isDarkMode,
-      );
-    } else if (_currentScreen == 3) {
-      return MorseTrainingPage(
-        setScreen: setCurrentScreen,
-        isDarkMode: widget.isDarkMode,
-      );
-    } else {
-      return Scaffold(
-        body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              const SizedBox(
-                height: 15,
-              ),
-              SizedBox(
-                width: MediaQuery.of(context).size.width - 20,
-                height: MediaQuery.of(context).size.width / 2.5,
-                child: ElevatedButton(
-                  onPressed: () {
-                    setState(() {
-                      _currentScreen = 1;
-                    });
-                  },
-                  style: ElevatedButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(15.0)),
-                    backgroundColor: widget.isDarkMode
-                        ? const Color.fromARGB(255, 5, 20, 36)
-                        : Colors.white,
-                  ),
-                  child: Text('Morse Match',
-                      style: TextStyle(
-                          fontSize: MediaQuery.of(context).size.width / 15),
-                      selectionColor: const Color.fromARGB(255, 118, 118, 118)),
-                ),
-              ),
-              SizedBox(
-                width: MediaQuery.of(context).size.width - 20,
-                height: MediaQuery.of(context).size.width / 2.5,
-                child: ElevatedButton(
-                  onPressed: () {
-                    setState(() {
-                      _currentScreen = 2;
-                    });
-                  },
-                  style: ElevatedButton.styleFrom(
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(15.0)),
-                      backgroundColor: widget.isDarkMode
-                          ? const Color.fromARGB(255, 5, 20, 36)
-                          : Colors.white),
-                  child: Text('Buzz Code',
-                      style: TextStyle(
-                          fontSize: MediaQuery.of(context).size.width / 15),
-                      selectionColor: const Color.fromARGB(255, 118, 118, 118)),
-                ),
-              ),
-              SizedBox(
-                width: MediaQuery.of(context).size.width - 20,
-                height: MediaQuery.of(context).size.width / 2.5,
-                child: ElevatedButton(
-                  onPressed: () {
-                    setState(() {
-                      _currentScreen = 3;
-                    });
-                  },
-                  style: ElevatedButton.styleFrom(
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(15.0)),
-                      backgroundColor: widget.isDarkMode
-                          ? const Color.fromARGB(255, 5, 20, 36)
-                          : Colors.white),
-                  child: Text('Tap n\' Type',
-                      style: TextStyle(
-                          fontSize: MediaQuery.of(context).size.width / 15),
-                      selectionColor: const Color.fromARGB(255, 118, 118, 118)),
-                ),
-              ),
-            ],
-          ),
+  Widget buildHomeScreen() {
+    return Scaffold(
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            const SizedBox(height: 15),
+            CustomMenuNavigationButton(isDarkMode: widget.isDarkMode, onPressed: () => changeScreen(1), buttonText: 'Morse Match'),
+            CustomMenuNavigationButton(isDarkMode: widget.isDarkMode, onPressed: () => changeScreen(2), buttonText: 'Buzz Code'),
+            CustomMenuNavigationButton(isDarkMode: widget.isDarkMode, onPressed: () => changeScreen(3), buttonText: 'Tap n\' Type'),
+            CustomMenuNavigationButton(isDarkMode: widget.isDarkMode, onPressed: () => changeScreen(4), buttonText: 'Morse Timing Practice'),
+          ],
         ),
-      );
-    }
+      ),
+    );
   }
 }
