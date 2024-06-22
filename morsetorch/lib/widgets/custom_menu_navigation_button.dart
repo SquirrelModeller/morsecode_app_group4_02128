@@ -31,7 +31,7 @@ class CustomMenuNavigationButton extends StatelessWidget {
           buttonText,
           style: TextStyle(
             fontSize: MediaQuery.of(context).size.width / 15,
-            color: isDarkMode ? Colors.white : const Color.fromARGB(255, 5, 20, 36),  // Adjust text color based on theme
+            color: isDarkMode ? Colors.white : const Color.fromARGB(255, 5, 20, 36),
           ),
         ),
       ),
