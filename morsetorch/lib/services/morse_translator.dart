@@ -1,4 +1,5 @@
 import 'dart:developer' as dev;
+import 'dart:math';
 import 'dart:typed_data';
 import 'package:morsetorch/models/morse_signal.dart';
 import 'package:morsetorch/models/morse_state.dart';
@@ -7,6 +8,7 @@ class Morsetranslator {
   List<MorseSignal> morseReciveBuilder = [];
   int currentTimeUnit = 0;
   String currentText = "";
+
   textToMorse(String text) {
     var morseCodeSentence = [[]];
     text.runes.forEach((e) {
@@ -46,6 +48,7 @@ class Morsetranslator {
 
   String returnText() {
     int timeUnit = calculateTimeUnit();
+
     return timeframeToText(morseReciveBuilder, timeUnit);
   }
 
@@ -59,27 +62,42 @@ class Morsetranslator {
       differences.add(difference);
     }
 
-    differences.sort();
-    var oneUnitTimes = [];
-    for (int i = 0; i < differences.length - 1; i++) {
-      if (differences[i + 1] > differences[i] * 2) {
-        oneUnitTimes = differences.sublist(0, i);
-        break;
+    Map<String, int> counts100 = classifyTimeDifferences(differences, 100);
+    Map<String, int> counts200 = classifyTimeDifferences(differences, 200);
+
+    int total100 = counts100.values.reduce((a, b) => (a) + (b));
+    int total200 = counts200.values.reduce((a, b) => (a) + (b));
+
+    return total100 > total200 ? 100 : 200;
+  }
+
+  Map<String, int> classifyTimeDifferences(
+      List<int> differences, int timeUnit) {
+    Map<String, int> counts = {
+      '1 unit': 0,
+      '3 unit': 0,
+      '7 unit': 0,
+    };
+
+    for (var diff in differences) {
+      if (diff >= timeUnit - 50 && diff <= timeUnit + 50) {
+        counts['1 unit'] = (counts['1 unit'] ?? 0) + 1;
+      } else if (diff >= 3 * timeUnit - 50 && diff <= 3 * timeUnit + 50) {
+        counts['3 unit'] = (counts['3 unit'] ?? 0) + 1;
+      } else if (diff >= 7 * timeUnit - 50 && diff <= 7 * timeUnit + 50) {
+        counts['7 unit'] = (counts['7 unit'] ?? 0) + 1;
       }
     }
-
-    int sum = oneUnitTimes.reduce((a, b) => a + b);
-    int averageTimeUnit = (sum / oneUnitTimes.length) as int;
-    return averageTimeUnit;
+    return counts;
   }
 
   morseToText(List<MorseState> input) {
     return morseCode.keys.firstWhere((k) => compareEnum(morseCode[k]!, input),
-        orElse: () => throw Exception("Value has no key"));
+        orElse: () => throw Exception("Value has no key $input"));
   }
 
   timeframeToText(List<MorseSignal> morseCodeInput, int timeUnit) {
-    int timePadding = 50; //Not a valid value for miliseconds
+    int timePadding = 100; //Not a valid value for miliseconds
     String text = "";
     List<MorseState> character = [];
     for (int i = 0; i < morseCodeInput.length - 1; i++) {
@@ -96,11 +114,13 @@ class Morsetranslator {
         } else if (morseCodeInput[i].isOn == false &&
             (deltaTime < 3 * timeUnit + timePadding &&
                 deltaTime > 3 * timeUnit - timePadding)) {
+          dev.log("New Character");
           text += morseToText(character);
           character = [];
         } else if (morseCodeInput[i].isOn == false &&
             (deltaTime < 7 * timeUnit + timePadding &&
                 deltaTime > 7 * timeUnit - timePadding)) {
+          dev.log("New Space");
           text += "${morseToText(character)} ";
           character = [];
         } else if ((morseCodeInput[i].isOn == false &&
@@ -112,6 +132,7 @@ class Morsetranslator {
         }
         if (i == morseCodeInput.length - 2) {
           text += morseToText(character);
+          character = [];
         }
       } catch (e) {
         dev.log("$e");

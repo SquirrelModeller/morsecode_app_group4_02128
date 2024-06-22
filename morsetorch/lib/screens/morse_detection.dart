@@ -84,7 +84,7 @@ class MorseDetectionPageState extends State<MorseDetection>
     try {
       await _camController!.initialize();
       await _camController!
-          .startImageStream((image) => _processCameraImage(image));
+          .startImageStream((image) => _processCameraImage(image, DateTime.now().millisecondsSinceEpoch));
     } catch (e) {
       log("Error initializing camera, error: ${e.toString()}");
     }
@@ -93,7 +93,8 @@ class MorseDetectionPageState extends State<MorseDetection>
     }
   }
 
-  void _processCameraImage(CameraImage image) async {
+  int previousTime = 0;
+  void _processCameraImage(CameraImage image, int time) async {
     if (_detectionInProgress ||
         !mounted ||
         DateTime.now().millisecondsSinceEpoch - _lastRun < 10) {
@@ -103,7 +104,7 @@ class MorseDetectionPageState extends State<MorseDetection>
     // Call the detector
     _detectionInProgress = true;
     var res = await _lightDetector.detect(
-        image, DateTime.now().millisecondsSinceEpoch);
+        image, time);
     _detectionInProgress = false;
     _lastRun = DateTime.now().millisecondsSinceEpoch;
 
@@ -113,12 +114,14 @@ class MorseDetectionPageState extends State<MorseDetection>
 
     if (res.isNotEmpty) {
       translate.addPackageToList(res);
-      // for (var sig in translate.morseReciveBuilder) {
-      //   log("${sig.isOn.toString()} " " ${sig.time.toString()}");
-      // }
-      for (int i = 0; i < res.length; i += 2) {
-        log("${res[i] == 1}, ${res[i + 1]}");
-      }
+      try {
+        log(translate.returnText());
+        log(translate.calculateTimeUnit().toString());
+      } on Exception catch (e) {}
+      //for (int i = 0; i < res.length; i += 2) {
+       //log("${res[i] == 1}, ${res[i + 1]}, timeDiff: ${res[i+1]-previousTime}");
+       //previousTime = res[i+1];
+      //}
     }
   }
 

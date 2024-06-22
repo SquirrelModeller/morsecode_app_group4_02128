@@ -6,7 +6,7 @@
 #include <opencv2/opencv.hpp>
 
 constexpr int MAX_LIGHT_SOURCES = 100;
-constexpr int MAX_AGE = 80;
+constexpr int MAX_AGE = 150;
 
 struct LightSource {
     bool isOn = false;

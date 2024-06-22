@@ -15,7 +15,7 @@ class _TextToTorchState extends State<TextToTorch> {
   final TextEditingController _controller = TextEditingController();
   final TorchService _torchService = TorchService();
   bool _isButtonEnabled = false;
-  double _currentSliderValue = 5.0;
+  double _currentSliderValue = 1;
   int _currentIndex = -1;
 
   @override
@@ -41,7 +41,7 @@ class _TextToTorchState extends State<TextToTorch> {
     textToSend = textToSend.replaceAll('\n', ' ');
 
     await _torchService.sendMorseCode(
-        textToSend, 325 - (_currentSliderValue.toInt()) * 25, _updateIndex);
+        textToSend, 300 - (_currentSliderValue.toInt()) * 100, _updateIndex);
 
     setState(() {
       _isButtonEnabled = false;
@@ -117,8 +117,8 @@ class _TextToTorchState extends State<TextToTorch> {
                               : const Color.fromARGB(255, 255, 255, 255),
                           value: _currentSliderValue,
                           min: 1,
-                          max: 9,
-                          divisions: 8,
+                          max: 2,
+                          divisions: 1,
                           label: _currentSliderValue.round().toString(),
                           onChanged: (double value) {
                             setState(() {

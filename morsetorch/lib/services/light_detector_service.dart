@@ -71,7 +71,7 @@ class _LightDetectorService {
 
   init() async {
     _nativeOpencv = McNativeOpencv();
-    _nativeOpencv!.initLightTracker(100);
+    _nativeOpencv!.initLightTracker(200);
   }
 
   Int64List? detect(CameraImage image, int timeStamp) {
