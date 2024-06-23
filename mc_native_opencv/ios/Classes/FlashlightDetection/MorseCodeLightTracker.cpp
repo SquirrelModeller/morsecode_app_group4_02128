@@ -38,7 +38,7 @@ MorseCodeLightTracker::detectLightSources(cv::Mat &image) {
   for (const auto &contour : contours) {
     double area = cv::contourArea(contour);
     // LOGI("COUNTOUR FOUND");
-    if (area < 100)
+    if (area < 40)
       continue;
     cv::Rect boundingBox = cv::boundingRect(contour);
     boundingBox.height += boundingBox.height / 4;
@@ -101,7 +101,7 @@ MorseCodeLightTracker::processFrame(std::vector<LightSource> &detectedLights,
   std::vector<LightSource> currentSources;
   std::vector<MorseSignal> signalsToSend;
   std::unordered_map<int, bool> updated;
-  const int toggleThreshold = 10;
+  const int toggleThreshold = 5;
 
   // Process overlaps and assign IDs
   for (auto &newSrc : detectedLights) {
