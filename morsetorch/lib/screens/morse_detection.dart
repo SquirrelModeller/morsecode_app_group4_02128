@@ -97,7 +97,7 @@ class MorseDetectionPageState extends State<MorseDetection>
   void _processCameraImage(CameraImage image, int time) async {
     if (_detectionInProgress ||
         !mounted ||
-        DateTime.now().millisecondsSinceEpoch - _lastRun < 10) {
+        DateTime.now().millisecondsSinceEpoch - _lastRun < 5) {
       return;
     }
 
@@ -115,8 +115,9 @@ class MorseDetectionPageState extends State<MorseDetection>
     if (res.isNotEmpty) {
       translate.addPackageToList(res);
       try {
-        log(translate.returnText());
         log(translate.calculateTimeUnit().toString());
+        log(translate.returnText());
+        
       } on Exception catch (e) {}
       //for (int i = 0; i < res.length; i += 2) {
        //log("${res[i] == 1}, ${res[i + 1]}, timeDiff: ${res[i+1]-previousTime}");

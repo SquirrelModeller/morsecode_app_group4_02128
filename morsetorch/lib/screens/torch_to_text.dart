@@ -1,10 +1,9 @@
-import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
 import 'package:mc_native_opencv/mc_native_opencv.dart';
 import 'package:morsetorch/models/language_map.dart';
-import 'package:morsetorch/screens/morse_detection.dart';
 import 'package:morsetorch/services/language_translator.dart';
+import 'package:morsetorch/services/morse_translation_service.dart';
 import 'package:morsetorch/widgets/text_field.dart';
 
 class CameraScreen extends StatefulWidget {
@@ -16,14 +15,33 @@ class CameraScreen extends StatefulWidget {
 
 class _CameraScreenState extends State<CameraScreen> {
   final TextEditingController _textController = TextEditingController();
+  late MorseTranslationService morseService;
+
   late String selectedLanguage = "None";
   final List<String> _dropdownItems = languages.keys.toList();
   final nativeOpencv = McNativeOpencv();
   String languageID = "none";
-  String textBoxText ='Searching for morse signal...';
+  String textBoxText = 'Searching for morse signal...';
+    bool isCameraInitialized = false;
+  
   @override
   void initState() {
     super.initState();
+    morseService = MorseTranslationService((translatedText) {
+      setState(() {
+        _textController.text = translatedText;
+      });
+    });
+    initializeCameraService();
+  }
+
+  Future<void> initializeCameraService() async {
+    await morseService.initializeCamera();
+    if (mounted) {
+      setState(() {
+        isCameraInitialized = morseService.cameraController?.value.isInitialized ?? false;
+      });
+    }
   }
 
   @override
@@ -32,9 +50,7 @@ class _CameraScreenState extends State<CameraScreen> {
       body: Center(
         child: Stack(
           children: [
-            SizedBox.expand(
-              child: MorseDetection(),
-            ),
+            isCameraInitialized ? CameraPreview(morseService.cameraController!) : const CircularProgressIndicator(),
             Column(
               children: [
                 const SizedBox(
@@ -98,7 +114,7 @@ class _CameraScreenState extends State<CameraScreen> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
-           var newText = await translateText(_textController.text, languageID);
+          var newText = await translateText(_textController.text, languageID);
           _textController.text = newText.toString();
         },
         child: const Icon(

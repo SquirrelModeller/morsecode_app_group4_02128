@@ -56,9 +56,9 @@ class Morsetranslator {
     List<int> differences = [];
 
     for (int i = 0; i < morseReciveBuilder.length - 1; i++) {
-      int currentUnixTime = morseReciveBuilder[i].time;
-      int nextUnixTime = morseReciveBuilder[i + 1].time;
-      int difference = nextUnixTime - currentUnixTime;
+      int currentTime = morseReciveBuilder[i].time;
+      int nextTime = morseReciveBuilder[i + 1].time;
+      int difference = nextTime - currentTime;
       differences.add(difference);
     }
 
@@ -97,47 +97,49 @@ class Morsetranslator {
   }
 
   timeframeToText(List<MorseSignal> morseCodeInput, int timeUnit) {
-    int timePadding = 100; //Not a valid value for miliseconds
+    int timePadding = 50;
     String text = "";
     List<MorseState> character = [];
     for (int i = 0; i < morseCodeInput.length - 1; i++) {
       num deltaTime = morseCodeInput[i + 1].time - morseCodeInput[i].time;
-      try {
-        if (morseCodeInput[i].isOn == true &&
-            (deltaTime < 1 * timeUnit + timePadding &&
-                deltaTime > 1 * timeUnit - timePadding)) {
-          character.add(MorseState.Dot);
-        } else if (morseCodeInput[i].isOn == true &&
-            (deltaTime < 3 * timeUnit + timePadding &&
-                deltaTime > 3 * timeUnit - timePadding)) {
-          character.add(MorseState.Dash);
-        } else if (morseCodeInput[i].isOn == false &&
-            (deltaTime < 3 * timeUnit + timePadding &&
-                deltaTime > 3 * timeUnit - timePadding)) {
-          dev.log("New Character");
-          text += morseToText(character);
+
+      if (morseCodeInput[i].isOn) {
+        character.add(
+            (deltaTime - timeUnit).abs() < (deltaTime - timeUnit * 3).abs()
+                ? MorseState.Dot
+                : MorseState.Dash);
+      } else {
+        if ((deltaTime - timeUnit).abs() < (deltaTime - timeUnit * 3).abs() &&
+            (deltaTime - timeUnit).abs() < (deltaTime - timeUnit * 7).abs()) {
+          continue;
+        } else if ((deltaTime - timeUnit * 3).abs() <
+                (deltaTime - timeUnit).abs() &&
+            (deltaTime - timeUnit * 3).abs() <
+                (deltaTime - timeUnit * 7).abs()) {
+          try {
+            dev.log(character.toString());
+            text += morseToText(character);
+          } on Exception catch (e) {}
           character = [];
-        } else if (morseCodeInput[i].isOn == false &&
-            (deltaTime < 7 * timeUnit + timePadding &&
-                deltaTime > 7 * timeUnit - timePadding)) {
-          dev.log("New Space");
-          text += "${morseToText(character)} ";
-          character = [];
-        } else if ((morseCodeInput[i].isOn == false &&
-                (deltaTime < 1 * timeUnit + timePadding &&
-                    deltaTime > 1 * timeUnit - timePadding)) ==
-            false) {
-          throw Exception(
-              "Invalid Time frame. Position:$i DeltaTime:$deltaTime");
-        }
-        if (i == morseCodeInput.length - 2) {
-          text += morseToText(character);
+        } else {
+          try {
+            dev.log(character.toString());
+            text += "${morseToText(character)} ";
+          } on Exception catch (e) {}
           character = [];
         }
-      } catch (e) {
-        dev.log("$e");
+      }
+      if (i == morseCodeInput.length - 2) {
+        try {
+          dev.log(character.toString());
+          text += morseToText(character);
+        } on Exception catch (e) {}
+        character = [];
+        break;
       }
     }
+    
+    dev.log(text);
     return text;
   }
 }
