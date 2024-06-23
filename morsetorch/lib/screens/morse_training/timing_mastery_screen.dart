@@ -16,7 +16,7 @@ class TimingMasteryScreen extends StatefulWidget {
 }
 
 class _MorsePracticeTimingState extends State<TimingMasteryScreen> {
-  late TimingMasteryService morsePracticeTiming;
+  late TimingMasteryService timingMasteryService;
   Color buttonColor = Colors.grey;
   Timer? colorUpdateTimer;
   int pressDuration = 0;
@@ -26,7 +26,7 @@ class _MorsePracticeTimingState extends State<TimingMasteryScreen> {
   @override
   void initState() {
     super.initState();
-    morsePracticeTiming = TimingMasteryService(gameMode);
+    timingMasteryService = TimingMasteryService(gameMode);
   }
 
   @override
@@ -36,15 +36,15 @@ class _MorsePracticeTimingState extends State<TimingMasteryScreen> {
   }
 
   void startPress() {
-    buttonDuration.value = morsePracticeTiming.pressSpeed.value;
-    morsePracticeTiming.startedPress();
+    buttonDuration.value = timingMasteryService.pressSpeed.value;
+    timingMasteryService.startedPress();
     setState(() {
       buttonColor = Colors.green;
     });
 
-    morsePracticeTiming.result.addListener(() {
-      if (morsePracticeTiming.result.value == MorseChallengeResult.tooSoon ||
-          morsePracticeTiming.result.value == MorseChallengeResult.tooLate) {
+    timingMasteryService.result.addListener(() {
+      if (timingMasteryService.result.value == MorseChallengeResult.tooSoon ||
+          timingMasteryService.result.value == MorseChallengeResult.tooLate) {
         buttonDuration.value = 0;
       }
     });
@@ -53,7 +53,7 @@ class _MorsePracticeTimingState extends State<TimingMasteryScreen> {
         Timer.periodic(const Duration(milliseconds: 50), (timer) {
       setState(() {
         pressDuration += 50;
-        if (pressDuration > morsePracticeTiming.pressSpeed.value) {
+        if (pressDuration > timingMasteryService.pressSpeed.value) {
           buttonDuration.value = 0;
           buttonColor = Colors.red;
         } else {
@@ -65,7 +65,7 @@ class _MorsePracticeTimingState extends State<TimingMasteryScreen> {
 
   void endPress() {
     buttonDuration.value = 0;
-    morsePracticeTiming.stoppedPress();
+    timingMasteryService.stoppedPress();
     colorUpdateTimer?.cancel();
     setState(() {
       buttonColor = Colors.grey;
@@ -114,7 +114,7 @@ class _MorsePracticeTimingState extends State<TimingMasteryScreen> {
                       if (newValue != null) {
                         setState(() {
                           gameMode = newValue;
-                          morsePracticeTiming = TimingMasteryService(gameMode);
+                          timingMasteryService = TimingMasteryService(gameMode);
                         });
                       }
                     },
@@ -138,7 +138,7 @@ class _MorsePracticeTimingState extends State<TimingMasteryScreen> {
                 ],
               ),
               ValueListenableBuilder<String>(
-                valueListenable: morsePracticeTiming.currentCharacter,
+                valueListenable: timingMasteryService.currentCharacter,
                 builder: (_, char, __) => Text(
                   char,
                   style: TextStyle(
@@ -147,10 +147,10 @@ class _MorsePracticeTimingState extends State<TimingMasteryScreen> {
                 ),
               ),
               ValueListenableBuilder<String>(
-                valueListenable: morsePracticeTiming.morseCode,
+                valueListenable: timingMasteryService.morseCode,
                 builder: (_, morse, __) {
                   final typedLength =
-                      morsePracticeTiming.typedMorseCode.value.length;
+                      timingMasteryService.typedMorseCode.value.length;
                   final untypedMorse = morse.length > typedLength
                       ? morse.substring(typedLength)
                       : '';
@@ -158,7 +158,7 @@ class _MorsePracticeTimingState extends State<TimingMasteryScreen> {
                     text: TextSpan(
                       children: [
                         TextSpan(
-                          text: morsePracticeTiming.typedMorseCode.value,
+                          text: timingMasteryService.typedMorseCode.value,
                           style: TextStyle(
                             fontSize: 48,
                             color:
@@ -183,7 +183,7 @@ class _MorsePracticeTimingState extends State<TimingMasteryScreen> {
                 onTapUp: (_) => endPress(),
                 onTapCancel: () => endPress(),
                 child: ValueListenableBuilder<int>(
-                  valueListenable: morsePracticeTiming.pressSpeed,
+                  valueListenable: timingMasteryService.pressSpeed,
                   builder: (_, duration, __) => AnimatedContainer(
                     width: 150,
                     height: 150,
@@ -199,7 +199,7 @@ class _MorsePracticeTimingState extends State<TimingMasteryScreen> {
                 ),
               ),
               ValueListenableBuilder<MorseChallengeResult>(
-                valueListenable: morsePracticeTiming.result,
+                valueListenable: timingMasteryService.result,
                 builder: (_, result, __) {
                   String resultStr = "";
 
@@ -230,7 +230,7 @@ class _MorsePracticeTimingState extends State<TimingMasteryScreen> {
                 },
               ),
               CustomSkipButton(
-                onPressed: morsePracticeTiming.skipCharacter,
+                onPressed: timingMasteryService.skipCharacter,
                 isDarkMode: widget.isDarkMode,
               ),
             ],

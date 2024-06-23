@@ -18,7 +18,7 @@ class BuzzCodeService {
   ValueNotifier<List<bool>> answerList = ValueNotifier<List<bool>>([]);
   ValueNotifier<int> streak = ValueNotifier(0);
 
-  void setUptGame() {
+  void setUpGame() {
     initFourRandomLetters();
     setAnswers();
   }

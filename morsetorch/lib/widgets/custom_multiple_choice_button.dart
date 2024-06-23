@@ -79,7 +79,7 @@ class _CustomMultipleChoiceButtonState
                   });
                   costumSnackBar.showSnackBar("Incorrect!", context);
                 }
-                await Future.delayed(const Duration(seconds: 2));
+                await Future.delayed(const Duration(seconds: 1));
                 _updateButtonColor();
                 widget.reset();
               }

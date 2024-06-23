@@ -16,7 +16,7 @@ class MorseMatchScreen extends StatefulWidget {
 }
 
 class _MorseMatchScreenState extends State<MorseMatchScreen> {
-  MorseMatchService beginnerTrainingService = MorseMatchService();
+  MorseMatchService morseMatchService = MorseMatchService();
   int streak = 0;
   bool isButtonEnabled = true;
 
@@ -27,14 +27,14 @@ class _MorseMatchScreenState extends State<MorseMatchScreen> {
   }
 
   void setUpGame() {
-    beginnerTrainingService.setUpGame();
+    morseMatchService.setUpGame();
   }
 
   void disableButtonTemporarily() {
     setState(() {
       isButtonEnabled = false;
     });
-    Future.delayed(const Duration(seconds: 2), () {
+    Future.delayed(const Duration(seconds: 1), () {
       setState(() {
         isButtonEnabled = true;
       });
@@ -54,7 +54,7 @@ class _MorseMatchScreenState extends State<MorseMatchScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 ValueListenableBuilder<String>(
-                  valueListenable: beginnerTrainingService.correctLetter,
+                  valueListenable: morseMatchService.correctLetter,
                   builder: (_, letter, __) => Text(
                     'Guess the character: $letter',
                     style: const TextStyle(
@@ -71,14 +71,14 @@ class _MorseMatchScreenState extends State<MorseMatchScreen> {
                 const SizedBox(height: 30),
                 CustomSkipButton(
                   onPressed: () {
-                    beginnerTrainingService.increaseStreak(false);
+                    morseMatchService.increaseStreak(false);
                     setUpGame();
                   },
                   isDarkMode: widget.isDarkMode,
                 ),
                 const SizedBox(height: 20),
                 ValueListenableBuilder<int>(
-                  valueListenable: beginnerTrainingService.streak,
+                  valueListenable: morseMatchService.streak,
                   builder: (_, streak, __) => Text(
                     "Streak: $streak",
                     style: const TextStyle(
@@ -100,31 +100,31 @@ class _MorseMatchScreenState extends State<MorseMatchScreen> {
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
         ValueListenableBuilder<List<String>>(
-          valueListenable: beginnerTrainingService.choiceList,
+          valueListenable: morseMatchService.choiceList,
           builder: (_, choiceList, __) => ValueListenableBuilder<List<bool>>(
-            valueListenable: beginnerTrainingService.answerList,
+            valueListenable: morseMatchService.answerList,
             builder: (_, answerList, __) => CustomMultipleChoiceButton(
               text: choiceList[firstIndex],
               correctAnswer: answerList[firstIndex],
               reset: setUpGame,
               disableButton: disableButtonTemporarily,
               isEnabled: isButtonEnabled,
-              streak: beginnerTrainingService.increaseStreak,
+              streak: morseMatchService.increaseStreak,
               isDarkMode: widget.isDarkMode,
             ),
           ),
         ),
         ValueListenableBuilder<List<String>>(
-          valueListenable: beginnerTrainingService.choiceList,
+          valueListenable: morseMatchService.choiceList,
           builder: (_, choiceList, __) => ValueListenableBuilder<List<bool>>(
-            valueListenable: beginnerTrainingService.answerList,
+            valueListenable: morseMatchService.answerList,
             builder: (_, answerList, __) => CustomMultipleChoiceButton(
               text: choiceList[secondIndex],
               correctAnswer: answerList[secondIndex],
               reset: setUpGame,
               disableButton: disableButtonTemporarily,
               isEnabled: isButtonEnabled,
-              streak: beginnerTrainingService.increaseStreak,
+              streak: morseMatchService.increaseStreak,
               isDarkMode: widget.isDarkMode,
             ),
           ),

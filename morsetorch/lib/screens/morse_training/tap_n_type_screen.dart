@@ -20,7 +20,7 @@ class TapNTypeScreen extends StatefulWidget {
 }
 
 class _TapNTypeScreenState extends State<TapNTypeScreen> {
-  final TapNTypeService _morseTraining = TapNTypeService();
+  final TapNTypeService tapNTypeService = TapNTypeService();
   final FunctionMorseTools tools = FunctionMorseTools();
   final CostumSnackBar costumSnackBar = CostumSnackBar();
 
@@ -30,24 +30,24 @@ class _TapNTypeScreenState extends State<TapNTypeScreen> {
   @override
   void initState() {
     super.initState();
-    _morseTraining.beginTraining();
+    tapNTypeService.beginTraining();
   }
 
   @override
   void dispose() {
-    _morseTraining.dispose();
+    tapNTypeService.dispose();
     super.dispose();
   }
 
   void handlePress(bool isPressed) {
     if (isPressed) {
-      _morseTraining.startedPress();
+      tapNTypeService.startedPress();
       setState(() {
         colorLight = const Color.fromARGB(255, 112, 112, 112);
         colorDark = const Color.fromARGB(255, 76, 76, 76);
       });
     } else {
-      _morseTraining.release();
+      tapNTypeService.release();
       setState(() {
         colorLight = const Color.fromARGB(255, 0, 178, 255);
         colorDark = const Color.fromRGBO(5, 94, 132, 1);
@@ -70,7 +70,7 @@ class _TapNTypeScreenState extends State<TapNTypeScreen> {
                 height: 80,
               ),
               ValueListenableBuilder<String>(
-                valueListenable: _morseTraining.wordToType,
+                valueListenable: tapNTypeService.wordToType,
                 builder: (_, word, __) => Text(
                   'Word to type: $word',
                   style: const TextStyle(
@@ -83,10 +83,10 @@ class _TapNTypeScreenState extends State<TapNTypeScreen> {
               Padding(
                 padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
                 child: ValueListenableBuilder<String>(
-                    valueListenable: _morseTraining.characterTyped,
+                    valueListenable: tapNTypeService.characterTyped,
                     builder: (_, typed, __) {
                       return ValueListenableBuilder<String>(
-                        valueListenable: _morseTraining.builder,
+                        valueListenable: tapNTypeService.builder,
                         builder: (_, typedString, __) => Text(
                           'Current Input: $typedString $typed',
                           style: TextStyle(
@@ -102,9 +102,9 @@ class _TapNTypeScreenState extends State<TapNTypeScreen> {
               Padding(
                 padding: const EdgeInsets.all(0),
                 child: ValueListenableBuilder<String>(
-                  valueListenable: _morseTraining.characterTyped,
+                  valueListenable: tapNTypeService.characterTyped,
                   builder: (_, typed, __) => Text(
-                    _morseTraining.typedMorseCode.value,
+                    tapNTypeService.typedMorseCode.value,
                     style: TextStyle(
                       fontSize: 100,
                       color: widget.isDarkMode
@@ -133,11 +133,11 @@ class _TapNTypeScreenState extends State<TapNTypeScreen> {
               ),
               const SizedBox(height: 20),
               CustomSkipButton(
-                onPressed: _morseTraining.beginTraining,
+                onPressed: tapNTypeService.beginTraining,
                 isDarkMode: widget.isDarkMode,
               ),
               ValueListenableBuilder<MorseChallengeResult>(
-                valueListenable: _morseTraining.result,
+                valueListenable: tapNTypeService.result,
                 builder: (_, result, __) {
                   String resultStr = "";
                   switch (result) {

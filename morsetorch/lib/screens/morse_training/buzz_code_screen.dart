@@ -17,19 +17,19 @@ class BuzzCodeScreen extends StatefulWidget {
 }
 
 class _BuzzCodeScreenState extends State<BuzzCodeScreen> {
-  BuzzCodeService intermediateTrainingService = BuzzCodeService();
+  BuzzCodeService buzzCodeService = BuzzCodeService();
 
   bool isButtonEnabled = true;
 
   @override
   void initState() {
     super.initState();
-    intermediateTrainingService.setUptGame();
+    buzzCodeService.setUpGame();
   }
 
   void vibrate() {
-    var morseCode = intermediateTrainingService.correctMorseCode;
-    var vibration = intermediateTrainingService.getVibration(morseCode);
+    var morseCode = buzzCodeService.correctMorseCode;
+    var vibration = buzzCodeService.getVibration(morseCode);
     Vibration.vibrate(
       pattern: vibration,
     );
@@ -39,7 +39,7 @@ class _BuzzCodeScreenState extends State<BuzzCodeScreen> {
     setState(() {
       isButtonEnabled = false;
     });
-    Future.delayed(const Duration(seconds: 2), () {
+    Future.delayed(const Duration(seconds: 1), () {
       setState(() {
         isButtonEnabled = true;
       });
@@ -93,7 +93,9 @@ class _BuzzCodeScreenState extends State<BuzzCodeScreen> {
                 ),
                 FloatingActionButton(
                   onPressed: () {
-                    vibrate();
+                    if (isButtonEnabled) {
+                      vibrate();
+                    }
                   },
                   backgroundColor: widget.isDarkMode
                       ? const Color.fromARGB(255, 5, 20, 36)
@@ -108,8 +110,8 @@ class _BuzzCodeScreenState extends State<BuzzCodeScreen> {
                 ),
                 CustomSkipButton(
                   onPressed: () {
-                    intermediateTrainingService.increaseStreak(false);
-                    intermediateTrainingService.skip();
+                    buzzCodeService.increaseStreak(false);
+                    buzzCodeService.skip();
                   },
                   isDarkMode: widget.isDarkMode,
                 ),
@@ -117,7 +119,7 @@ class _BuzzCodeScreenState extends State<BuzzCodeScreen> {
                   height: 20,
                 ),
                 ValueListenableBuilder<int>(
-                  valueListenable: intermediateTrainingService.streak,
+                  valueListenable: buzzCodeService.streak,
                   builder: (_, streak, __) => Text(
                     "Streak: $streak",
                     style: const TextStyle(
@@ -139,31 +141,31 @@ class _BuzzCodeScreenState extends State<BuzzCodeScreen> {
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
         ValueListenableBuilder<List<String>>(
-          valueListenable: intermediateTrainingService.choiceList,
+          valueListenable: buzzCodeService.choiceList,
           builder: (_, choiceList, __) => ValueListenableBuilder<List<bool>>(
-            valueListenable: intermediateTrainingService.answerList,
+            valueListenable: buzzCodeService.answerList,
             builder: (_, answerList, __) => CustomMultipleChoiceButton(
               text: choiceList[firstIndex],
               correctAnswer: answerList[firstIndex],
-              reset: intermediateTrainingService.skip,
+              reset: buzzCodeService.skip,
               disableButton: disableButtonTemporarily,
               isEnabled: isButtonEnabled,
-              streak: intermediateTrainingService.increaseStreak,
+              streak: buzzCodeService.increaseStreak,
               isDarkMode: widget.isDarkMode,
             ),
           ),
         ),
         ValueListenableBuilder<List<String>>(
-          valueListenable: intermediateTrainingService.choiceList,
+          valueListenable: buzzCodeService.choiceList,
           builder: (_, choiceList, __) => ValueListenableBuilder<List<bool>>(
-            valueListenable: intermediateTrainingService.answerList,
+            valueListenable: buzzCodeService.answerList,
             builder: (_, answerList, __) => CustomMultipleChoiceButton(
               text: choiceList[secondIndex],
               correctAnswer: answerList[secondIndex],
-              reset: intermediateTrainingService.skip,
+              reset: buzzCodeService.skip,
               disableButton: disableButtonTemporarily,
               isEnabled: isButtonEnabled,
-              streak: intermediateTrainingService.increaseStreak,
+              streak: buzzCodeService.increaseStreak,
               isDarkMode: widget.isDarkMode,
             ),
           ),
