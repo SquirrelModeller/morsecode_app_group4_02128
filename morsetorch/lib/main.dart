@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:morsetorch/screens/morse_training.dart';
-import 'package:morsetorch/screens/morse_training_selector.dart';
+import 'package:morsetorch/screens/morse_training/morse_training_selector.dart';
 import 'package:morsetorch/screens/text_to_torch.dart';
 import 'package:morsetorch/screens/torch_to_text.dart';
 import 'package:morsetorch/theme/color_theme.dart';

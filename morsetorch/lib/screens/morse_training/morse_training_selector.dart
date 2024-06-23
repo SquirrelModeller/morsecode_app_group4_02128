@@ -11,7 +11,8 @@ class MorseTrainingSelectorPage extends StatefulWidget {
   MorseTrainingSelectorPage({super.key, required this.isDarkMode});
 
   @override
-  MorseTrainingSelectorPageState createState() => MorseTrainingSelectorPageState();
+  MorseTrainingSelectorPageState createState() =>
+      MorseTrainingSelectorPageState();
 }
 
 class MorseTrainingSelectorPageState extends State<MorseTrainingSelectorPage> {
@@ -19,11 +20,15 @@ class MorseTrainingSelectorPageState extends State<MorseTrainingSelectorPage> {
 
   // Define a map of screen widgets
   Map<int, Widget Function()> get screenWidgets => {
-    1: () => BeginnerMorseTrainingPage(setScreen: changeScreen, isDarkMode: widget.isDarkMode),
-    2: () => IntermediateTraining(setScreen: changeScreen, isDarkMode: widget.isDarkMode),
-    3: () => MorseTrainingPage(setScreen: changeScreen, isDarkMode: widget.isDarkMode),
-    4: () => MorsePracticeTimingScreen(setScreen: changeScreen, isDarkMode: widget.isDarkMode),
-  };
+        1: () => BeginnerMorseTrainingPage(
+            setScreen: changeScreen, isDarkMode: widget.isDarkMode),
+        2: () => IntermediateTraining(
+            setScreen: changeScreen, isDarkMode: widget.isDarkMode),
+        3: () => MorseTrainingPage(
+            setScreen: changeScreen, isDarkMode: widget.isDarkMode),
+        4: () => MorsePracticeTimingScreen(
+            setScreen: changeScreen, isDarkMode: widget.isDarkMode),
+      };
 
   void changeScreen(int newScreen) {
     setState(() => _currentScreen = newScreen);
@@ -43,10 +48,22 @@ class MorseTrainingSelectorPageState extends State<MorseTrainingSelectorPage> {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             const SizedBox(height: 15),
-            CustomMenuNavigationButton(isDarkMode: widget.isDarkMode, onPressed: () => changeScreen(1), buttonText: 'Morse Match'),
-            CustomMenuNavigationButton(isDarkMode: widget.isDarkMode, onPressed: () => changeScreen(2), buttonText: 'Buzz Code'),
-            CustomMenuNavigationButton(isDarkMode: widget.isDarkMode, onPressed: () => changeScreen(3), buttonText: 'Tap n\' Type'),
-            CustomMenuNavigationButton(isDarkMode: widget.isDarkMode, onPressed: () => changeScreen(4), buttonText: 'Morse Timing Practice'),
+            CustomMenuNavigationButton(
+                isDarkMode: widget.isDarkMode,
+                onPressed: () => changeScreen(1),
+                buttonText: 'Morse Match'),
+            CustomMenuNavigationButton(
+                isDarkMode: widget.isDarkMode,
+                onPressed: () => changeScreen(2),
+                buttonText: 'Buzz Code'),
+            CustomMenuNavigationButton(
+                isDarkMode: widget.isDarkMode,
+                onPressed: () => changeScreen(3),
+                buttonText: 'Tap n\' Type'),
+            CustomMenuNavigationButton(
+                isDarkMode: widget.isDarkMode,
+                onPressed: () => changeScreen(4),
+                buttonText: 'Morse Timing Practice'),
           ],
         ),
       ),
