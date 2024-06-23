@@ -71,6 +71,8 @@ class _CustomMultipleChoiceButtonState
                     _buttonColor = Colors.green;
                   });
                   costumSnackBar.showSnackBar("Correct!", context);
+                  await Future.delayed(const Duration(seconds: 1));
+                  widget.reset();
                 } else {
                   // Handle incorrect answer
                   widget.streak(false);
@@ -78,10 +80,9 @@ class _CustomMultipleChoiceButtonState
                     _buttonColor = Colors.red;
                   });
                   costumSnackBar.showSnackBar("Incorrect!", context);
+                  await Future.delayed(const Duration(seconds: 1));
                 }
-                await Future.delayed(const Duration(seconds: 1));
                 _updateButtonColor();
-                widget.reset();
               }
             : null,
         child: Text(
