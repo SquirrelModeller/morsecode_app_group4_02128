@@ -22,8 +22,8 @@ class _CameraScreenState extends State<CameraScreen> {
   final nativeOpencv = McNativeOpencv();
   String languageID = "none";
   String textBoxText = 'Searching for morse signal...';
-    bool isCameraInitialized = false;
-  
+  bool isCameraInitialized = false;
+
   @override
   void initState() {
     super.initState();
@@ -35,11 +35,18 @@ class _CameraScreenState extends State<CameraScreen> {
     initializeCameraService();
   }
 
+  @override
+  void dispose() {
+    morseService.dispose();
+    super.dispose();
+  }
+
   Future<void> initializeCameraService() async {
     await morseService.initializeCamera();
     if (mounted) {
       setState(() {
-        isCameraInitialized = morseService.cameraController?.value.isInitialized ?? false;
+        isCameraInitialized =
+            morseService.cameraController?.value.isInitialized ?? false;
       });
     }
   }
@@ -50,7 +57,9 @@ class _CameraScreenState extends State<CameraScreen> {
       body: Center(
         child: Stack(
           children: [
-            isCameraInitialized ? CameraPreview(morseService.cameraController!) : const CircularProgressIndicator(),
+            isCameraInitialized
+                ? CameraPreview(morseService.cameraController!)
+                : const CircularProgressIndicator(),
             Column(
               children: [
                 const SizedBox(
