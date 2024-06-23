@@ -15,8 +15,9 @@ class _TextToTorchScreenState extends State<TextToTorchScreen> {
   final TextEditingController _controller = TextEditingController();
   final TextToTorchService _torchService = TextToTorchService();
   bool _isButtonEnabled = false;
-  double _currentSliderValue = 1;
+  double _currentValue = 1;
   int _currentIndex = -1;
+  bool _switchValue = false;
 
   @override
   void dispose() {
@@ -41,7 +42,7 @@ class _TextToTorchScreenState extends State<TextToTorchScreen> {
     textToSend = textToSend.replaceAll('\n', ' ');
 
     await _torchService.sendMorseCode(
-        textToSend, 300 - (_currentSliderValue.toInt()) * 100, _updateIndex);
+        textToSend, 300 - (_currentValue.toInt()) * 100, _updateIndex);
 
     setState(() {
       _isButtonEnabled = false;
@@ -108,23 +109,34 @@ class _TextToTorchScreenState extends State<TextToTorchScreen> {
                                 : SvgPicture.asset('icons/button.svg'),
                           ),
                         ),
-                        Slider(
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        const Text(
+                          'Fast Mode',
+                          style: TextStyle(
+                            color: Color.fromARGB(255, 118, 118, 118),
+                          ),
+                        ),
+                        Switch(
+                          value: _switchValue,
+                          onChanged: (value) {
+                            setState(() {
+                              _switchValue = value;
+                              _switchValue
+                                  ? _currentValue = 2
+                                  : _currentValue = 1;
+                            });
+                          },
                           activeColor: widget.isDarkMode
                               ? const Color.fromRGBO(5, 94, 132, 1)
                               : const Color.fromRGBO(0, 178, 255, 1),
-                          inactiveColor: widget.isDarkMode
+                          inactiveThumbColor: widget.isDarkMode
                               ? const Color.fromARGB(255, 118, 118, 118)
                               : const Color.fromARGB(255, 255, 255, 255),
-                          value: _currentSliderValue,
-                          min: 1,
-                          max: 2,
-                          divisions: 1,
-                          label: _currentSliderValue.round().toString(),
-                          onChanged: (double value) {
-                            setState(() {
-                              _currentSliderValue = value;
-                            });
-                          },
+                          inactiveTrackColor: widget.isDarkMode
+                              ? const Color.fromARGB(255, 150, 150, 150)
+                              : const Color.fromARGB(255, 200, 200, 200),
                         ),
                       ],
                     ),
