@@ -1,5 +1,4 @@
 import 'dart:developer' as dev;
-import 'dart:math';
 import 'dart:typed_data';
 import 'package:morsetorch/models/morse_signal.dart';
 import 'package:morsetorch/models/morse_state.dart';
@@ -97,7 +96,6 @@ class Morsetranslator {
   }
 
   timeframeToText(List<MorseSignal> morseCodeInput, int timeUnit) {
-    int timePadding = 50;
     String text = "";
     List<MorseState> character = [];
     for (int i = 0; i < morseCodeInput.length - 1; i++) {
@@ -138,7 +136,7 @@ class Morsetranslator {
         break;
       }
     }
-    
+
     dev.log(text);
     return text;
   }

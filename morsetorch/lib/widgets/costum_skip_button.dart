@@ -13,13 +13,13 @@ class CustomSkipButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return ElevatedButton(
       onPressed: onPressed,
-      child: Text('Skip'),
       style: ElevatedButton.styleFrom(
-        foregroundColor: Color.fromARGB(255, 255, 255, 255),
+        foregroundColor: const Color.fromARGB(255, 255, 255, 255),
         backgroundColor: isDarkMode
-          ? const Color.fromRGBO(5, 94, 132, 1)
-          : const Color.fromARGB(255, 0, 178, 255),
+            ? const Color.fromRGBO(5, 94, 132, 1)
+            : const Color.fromARGB(255, 0, 178, 255),
       ),
+      child: const Text('Skip'),
     );
   }
 }

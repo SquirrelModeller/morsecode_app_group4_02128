@@ -6,11 +6,11 @@ class CustomMenuNavigationButton extends StatelessWidget {
   final String buttonText;
 
   const CustomMenuNavigationButton({
-    Key? key,
+    super.key,
     required this.isDarkMode,
     required this.onPressed,
     required this.buttonText,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -23,15 +23,16 @@ class CustomMenuNavigationButton extends StatelessWidget {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(15.0),
           ),
-          backgroundColor: isDarkMode
-              ? const Color.fromARGB(255, 5, 20, 36)
-              : Colors.white,
+          backgroundColor:
+              isDarkMode ? const Color.fromARGB(255, 5, 20, 36) : Colors.white,
         ),
         child: Text(
           buttonText,
           style: TextStyle(
             fontSize: MediaQuery.of(context).size.width / 15,
-            color: isDarkMode ? Colors.white : const Color.fromARGB(255, 5, 20, 36),
+            color: isDarkMode
+                ? Colors.white
+                : const Color.fromARGB(255, 5, 20, 36),
           ),
         ),
       ),

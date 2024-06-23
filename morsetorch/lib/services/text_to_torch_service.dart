@@ -3,7 +3,7 @@ import 'package:torch_light/torch_light.dart';
 import 'package:morsetorch/models/morse_state.dart';
 import 'package:morsetorch/services/morse_translator.dart';
 
-class TorchService {
+class TextToTorchService {
   final Morsetranslator _translator = Morsetranslator();
   bool _isSendingMorse = false;
 
@@ -19,7 +19,6 @@ class TorchService {
 
     var morseCode = _translator.textToMorse(text);
     if (morseCode.isEmpty) {
-      print("No Morse code generated from the input.");
       _isSendingMorse = false;
       return;
     }
@@ -36,9 +35,11 @@ class TorchService {
           if (!_isSendingMorse) return;
           TorchLight.enableTorch();
           int startTime = stopwatch.elapsedMilliseconds;
-          await Future.delayed(Duration(
-              milliseconds:
-                  symbol == MorseState.Dot ? dotDuration : dashDuration));
+          await Future.delayed(
+            Duration(
+                milliseconds:
+                    symbol == MorseState.Dot ? dotDuration : dashDuration),
+          );
           int endTime = stopwatch.elapsedMilliseconds;
           TorchLight.disableTorch();
           log('Symbol ${symbol == MorseState.Dot ? '.' : '-'} started at $startTime ms and ended at $endTime ms, difference: ${endTime - startTime}');

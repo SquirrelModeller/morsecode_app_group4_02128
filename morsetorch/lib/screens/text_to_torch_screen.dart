@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:morsetorch/services/torch_service.dart';
-import 'package:morsetorch/widgets/text_field.dart';
+import 'package:morsetorch/services/text_to_torch_service.dart';
+import 'package:morsetorch/widgets/custom_text_field.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-class TextToTorch extends StatefulWidget {
-  TextToTorch({Key? key, required this.isDarkMode}) : super(key: key);
+class TextToTorchScreen extends StatefulWidget {
+  const TextToTorchScreen({super.key, required this.isDarkMode});
   final bool isDarkMode;
 
   @override
-  State<TextToTorch> createState() => _TextToTorchState();
+  State<TextToTorchScreen> createState() => _TextToTorchScreenState();
 }
 
-class _TextToTorchState extends State<TextToTorch> {
+class _TextToTorchScreenState extends State<TextToTorchScreen> {
   final TextEditingController _controller = TextEditingController();
-  final TorchService _torchService = TorchService();
+  final TextToTorchService _torchService = TextToTorchService();
   bool _isButtonEnabled = false;
   double _currentSliderValue = 1;
   int _currentIndex = -1;
@@ -71,7 +71,7 @@ class _TextToTorchState extends State<TextToTorch> {
                 children: [
                   const SizedBox(height: 40),
                   SafeArea(
-                    child: ExpandableTextField(
+                    child: CustomTextField(
                       controller: _controller,
                       maxHeight: MediaQuery.of(context).size.height / 2.3,
                       text: 'Enter text to convert to morse',

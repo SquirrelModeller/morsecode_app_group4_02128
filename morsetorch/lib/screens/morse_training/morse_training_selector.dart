@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:morsetorch/screens/morse_training/beginner_morse_training.dart';
-import 'package:morsetorch/screens/morse_training/intermediate_training.dart';
-import 'package:morsetorch/screens/morse_training/morse_practice_timing_screen.dart';
-import 'package:morsetorch/screens/morse_training/morse_training.dart';
+import 'package:morsetorch/screens/morse_training/morse_match_screen.dart';
+import 'package:morsetorch/screens/morse_training/buzz_code_screen.dart';
+import 'package:morsetorch/screens/morse_training/timing_mastery_screen.dart';
+import 'package:morsetorch/screens/morse_training/tap_n_type_screen.dart';
 
 import 'package:morsetorch/widgets/custom_menu_navigation_button.dart';
 
 class MorseTrainingSelectorPage extends StatefulWidget {
   final bool isDarkMode;
 
-  MorseTrainingSelectorPage({super.key, required this.isDarkMode});
+  const MorseTrainingSelectorPage({super.key, required this.isDarkMode});
 
   @override
   MorseTrainingSelectorPageState createState() =>
@@ -21,13 +21,13 @@ class MorseTrainingSelectorPageState extends State<MorseTrainingSelectorPage> {
 
   // Define a map of screen widgets
   Map<int, Widget Function()> get screenWidgets => {
-        1: () => BeginnerMorseTrainingPage(
+        1: () => MorseMatchScreen(
             setScreen: changeScreen, isDarkMode: widget.isDarkMode),
-        2: () => IntermediateTraining(
+        2: () => BuzzCodeScreen(
             setScreen: changeScreen, isDarkMode: widget.isDarkMode),
-        3: () => MorseTrainingPage(
+        3: () => TapNTypeScreen(
             setScreen: changeScreen, isDarkMode: widget.isDarkMode),
-        4: () => MorsePracticeTimingScreen(
+        4: () => TimingMasteryScreen(
             setScreen: changeScreen, isDarkMode: widget.isDarkMode),
       };
 
@@ -64,7 +64,7 @@ class MorseTrainingSelectorPageState extends State<MorseTrainingSelectorPage> {
             CustomMenuNavigationButton(
                 isDarkMode: widget.isDarkMode,
                 onPressed: () => changeScreen(4),
-                buttonText: 'Morse Timing Practice'),
+                buttonText: 'Timing Mastery'),
           ],
         ),
       ),

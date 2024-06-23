@@ -1,31 +1,31 @@
 import 'package:flutter/material.dart';
-import 'package:morsetorch/services/morsetraining_service.dart';
+import 'package:morsetorch/services/tap_n_type_service.dart';
 import 'package:morsetorch/widgets/costum_skip_button.dart';
 import 'package:morsetorch/widgets/costum_snack_bar.dart';
-import 'package:morsetorch/widgets/custom_floating_action_button.dart';
+import 'package:morsetorch/widgets/custom_back_button.dart';
 import 'package:morsetorch/services/function_morse_tools.dart';
 
-class MorseTrainingPage extends StatefulWidget {
+class TapNTypeScreen extends StatefulWidget {
   final Function setScreen;
   final bool isDarkMode;
 
-  MorseTrainingPage({
-    Key? key,
+  const TapNTypeScreen({
+    super.key,
     required this.setScreen,
     required this.isDarkMode,
-  }) : super(key: key);
+  });
 
   @override
-  _MorseTrainingPageState createState() => _MorseTrainingPageState();
+  _TapNTypeScreenState createState() => _TapNTypeScreenState();
 }
 
-class _MorseTrainingPageState extends State<MorseTrainingPage> {
-  final MorseTraining _morseTraining = MorseTraining();
+class _TapNTypeScreenState extends State<TapNTypeScreen> {
+  final TapNTypeService _morseTraining = TapNTypeService();
   final FunctionMorseTools tools = FunctionMorseTools();
   final CostumSnackBar costumSnackBar = CostumSnackBar();
 
-  Color colorLight = Color.fromARGB(255, 0, 178, 255);
-  Color colorDark =  Color.fromRGBO(5, 94, 132, 1);
+  Color colorLight = const Color.fromARGB(255, 0, 178, 255);
+  Color colorDark = const Color.fromRGBO(5, 94, 132, 1);
 
   @override
   void initState() {
@@ -44,13 +44,13 @@ class _MorseTrainingPageState extends State<MorseTrainingPage> {
       _morseTraining.startedPress();
       setState(() {
         colorLight = const Color.fromARGB(255, 112, 112, 112);
-        colorDark = Color.fromARGB(255, 76, 76, 76);
+        colorDark = const Color.fromARGB(255, 76, 76, 76);
       });
     } else {
       _morseTraining.release();
       setState(() {
-        colorLight = Color.fromARGB(255, 0, 178, 255);
-        colorDark =  Color.fromRGBO(5, 94, 132, 1);
+        colorLight = const Color.fromARGB(255, 0, 178, 255);
+        colorDark = const Color.fromRGBO(5, 94, 132, 1);
       });
     }
   }
@@ -59,7 +59,7 @@ class _MorseTrainingPageState extends State<MorseTrainingPage> {
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        CustomFloatingActionButton(
+        CustomBackButton(
             isDarkMode: widget.isDarkMode,
             onPressed: () => widget.setScreen(0)),
         Center(
@@ -104,7 +104,7 @@ class _MorseTrainingPageState extends State<MorseTrainingPage> {
                 child: ValueListenableBuilder<String>(
                   valueListenable: _morseTraining.characterTyped,
                   builder: (_, typed, __) => Text(
-                    '${_morseTraining.typedMorseCode.value}',
+                    _morseTraining.typedMorseCode.value,
                     style: TextStyle(
                       fontSize: 100,
                       color: widget.isDarkMode
@@ -123,9 +123,7 @@ class _MorseTrainingPageState extends State<MorseTrainingPage> {
                   height: 125,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    color: widget.isDarkMode
-                        ? colorDark
-                        : colorLight,
+                    color: widget.isDarkMode ? colorDark : colorLight,
                   ),
                   child: const Center(
                     child: Icon(Icons.radio_button_unchecked,

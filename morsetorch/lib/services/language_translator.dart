@@ -9,10 +9,8 @@ translateText(String text, String language) async {
   try {
     final translator = GoogleTranslator();
     var translation = translator.translate(text, to: language);
-    return translation;  
-  }
-  catch (e){
+    return translation;
+  } catch (e) {
     log("Can't Translate with no network");
   }
-
 }

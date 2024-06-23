@@ -1,25 +1,23 @@
 import 'package:flutter/material.dart';
-import 'package:morsetorch/models/morse_state.dart';
-import 'package:morsetorch/services/intermediate_training_service.dart';
+import 'package:morsetorch/services/buzz_code_service.dart';
 import 'package:morsetorch/widgets/costum_skip_button.dart';
-import 'package:morsetorch/widgets/custom_floating_action_button.dart';
-import 'package:morsetorch/widgets/multiple_choice.dart';
+import 'package:morsetorch/widgets/custom_back_button.dart';
+import 'package:morsetorch/widgets/custom_multiple_choice_button.dart';
 import 'package:vibration/vibration.dart';
 
-class IntermediateTraining extends StatefulWidget {
+class BuzzCodeScreen extends StatefulWidget {
   final Function(int) setScreen;
-  bool isDarkMode;
+  final bool isDarkMode;
 
-  IntermediateTraining(
+  const BuzzCodeScreen(
       {super.key, required this.setScreen, required this.isDarkMode});
 
   @override
-  State<IntermediateTraining> createState() => _IntermediateTrainingState();
+  State<BuzzCodeScreen> createState() => _BuzzCodeScreenState();
 }
 
-class _IntermediateTrainingState extends State<IntermediateTraining> {
-  IntermediateTrainingService intermediateTrainingService =
-      IntermediateTrainingService();
+class _BuzzCodeScreenState extends State<BuzzCodeScreen> {
+  BuzzCodeService intermediateTrainingService = BuzzCodeService();
 
   bool isButtonEnabled = true;
 
@@ -41,7 +39,7 @@ class _IntermediateTrainingState extends State<IntermediateTraining> {
     setState(() {
       isButtonEnabled = false;
     });
-    Future.delayed(Duration(seconds: 2), () {
+    Future.delayed(const Duration(seconds: 2), () {
       setState(() {
         isButtonEnabled = true;
       });
@@ -53,7 +51,9 @@ class _IntermediateTrainingState extends State<IntermediateTraining> {
     return Scaffold(
       body: Stack(
         children: [
-          CustomFloatingActionButton(isDarkMode: widget.isDarkMode, onPressed: () => widget.setScreen(0)),
+          CustomBackButton(
+              isDarkMode: widget.isDarkMode,
+              onPressed: () => widget.setScreen(0)),
           Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -142,7 +142,7 @@ class _IntermediateTrainingState extends State<IntermediateTraining> {
           valueListenable: intermediateTrainingService.choiceList,
           builder: (_, choiceList, __) => ValueListenableBuilder<List<bool>>(
             valueListenable: intermediateTrainingService.answerList,
-            builder: (_, answerList, __) => MultipleChoiceButton(
+            builder: (_, answerList, __) => CustomMultipleChoiceButton(
               text: choiceList[firstIndex],
               correctAnswer: answerList[firstIndex],
               reset: intermediateTrainingService.skip,
@@ -157,7 +157,7 @@ class _IntermediateTrainingState extends State<IntermediateTraining> {
           valueListenable: intermediateTrainingService.choiceList,
           builder: (_, choiceList, __) => ValueListenableBuilder<List<bool>>(
             valueListenable: intermediateTrainingService.answerList,
-            builder: (_, answerList, __) => MultipleChoiceButton(
+            builder: (_, answerList, __) => CustomMultipleChoiceButton(
               text: choiceList[secondIndex],
               correctAnswer: answerList[secondIndex],
               reset: intermediateTrainingService.skip,

@@ -1,4 +1,3 @@
-
 import 'dart:async';
 import 'dart:developer';
 import 'dart:isolate';
@@ -27,13 +26,12 @@ class MorseDetectionAsync {
     fromDetectorThread.listen(_handleMessage, onDone: () {
       arThreadReady = false;
     });
-    
+
     final initReq = ld.InitRequest(toMainThread: fromDetectorThread.sendPort);
     _detectorThread = await Isolate.spawn(ld.init, initReq);
   }
 
   Future<Int64List?> detect(CameraImage image, int timeStamp) {
-
     if (!arThreadReady) {
       return Future.value(null);
     }

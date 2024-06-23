@@ -4,16 +4,16 @@ import 'package:mc_native_opencv/mc_native_opencv.dart';
 import 'package:morsetorch/models/language_map.dart';
 import 'package:morsetorch/services/language_translator.dart';
 import 'package:morsetorch/services/morse_translation_service.dart';
-import 'package:morsetorch/widgets/text_field.dart';
+import 'package:morsetorch/widgets/custom_text_field.dart';
 
-class CameraScreen extends StatefulWidget {
-  const CameraScreen({super.key});
+class TorchToTextScreen extends StatefulWidget {
+  const TorchToTextScreen({super.key});
 
   @override
-  _CameraScreenState createState() => _CameraScreenState();
+  _TorchToTextScreenState createState() => _TorchToTextScreenState();
 }
 
-class _CameraScreenState extends State<CameraScreen> {
+class _TorchToTextScreenState extends State<TorchToTextScreen> {
   final TextEditingController _textController = TextEditingController();
   late MorseTranslationService morseService;
 
@@ -84,7 +84,7 @@ class _CameraScreenState extends State<CameraScreen> {
                 ),
                 Padding(
                   padding: const EdgeInsets.all(25),
-                  child: ExpandableTextField(
+                  child: CustomTextField(
                     controller: _textController,
                     color: const Color.fromARGB(150, 43, 42, 42),
                     text: textBoxText,

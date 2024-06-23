@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:morsetorch/screens/morse_training/morse_training_selector.dart';
-import 'package:morsetorch/screens/text_to_torch.dart';
-import 'package:morsetorch/screens/torch_to_text.dart';
+import 'package:morsetorch/screens/text_to_torch_screen.dart';
+import 'package:morsetorch/screens/torch_to_text_screen.dart';
 import 'package:morsetorch/theme/color_theme.dart';
 
 void main() {
@@ -45,7 +45,7 @@ class _MyAppState extends State<MyApp> {
 }
 
 class Navigation extends StatefulWidget {
-  Navigation(
+  const Navigation(
       {super.key,
       required this.title,
       required this.toggleTheme,
@@ -53,7 +53,7 @@ class Navigation extends StatefulWidget {
 
   final String title;
   final VoidCallback toggleTheme;
-  bool isDark;
+  final bool isDark;
 
   @override
   State<Navigation> createState() => _NavigationState();
@@ -66,10 +66,10 @@ class _NavigationState extends State<Navigation> {
       MorseTrainingSelectorPage(
         isDarkMode: widget.isDark,
       ), //Skift denne her
-      TextToTorch(
+      TextToTorchScreen(
         isDarkMode: widget.isDark,
       ),
-      const CameraScreen(),
+      const TorchToTextScreen(),
     ];
   }
 

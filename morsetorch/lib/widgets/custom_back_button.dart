@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
-class CustomFloatingActionButton extends StatelessWidget {
+class CustomBackButton extends StatelessWidget {
   final bool isDarkMode;
   final VoidCallback onPressed;
 
-  const CustomFloatingActionButton({
+  const CustomBackButton({
     super.key,
     required this.isDarkMode,
     required this.onPressed,
@@ -31,4 +31,3 @@ class CustomFloatingActionButton extends StatelessWidget {
     );
   }
 }
-

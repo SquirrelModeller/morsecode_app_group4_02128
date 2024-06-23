@@ -2,7 +2,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:morsetorch/models/morse_state.dart';
 
-class IntermediateTrainingService {
+class BuzzCodeService {
   List<MorseState> _correctMorseCode = [];
   Map<String, bool> _morseResult = {};
   List<String> getRandomCharacters() {
@@ -25,8 +25,8 @@ class IntermediateTrainingService {
 
   void setAnswers() {
     _morseResult.forEach((key, value) {
-        choiceList.value.add(key);
-        answerList.value.add(value);
+      choiceList.value.add(key);
+      answerList.value.add(value);
     });
   }
 
@@ -44,17 +44,15 @@ class IntermediateTrainingService {
   void skip() {
     reset();
     initFourRandomLetters();
-    print(morseResult);
-    print(streak);
     setAnswers();
   }
 
   void increaseStreak(bool correct) {
     if (correct) {
-        streak.value += 1;
-      } else {
-        streak.value = 0;
-      }
+      streak.value += 1;
+    } else {
+      streak.value = 0;
+    }
   }
 
   int getRandomNumber() {
@@ -92,6 +90,7 @@ class IntermediateTrainingService {
     }
     return vibration;
   }
+
   List<MorseState> get correctMorseCode => _correctMorseCode;
 
   Map<String, bool> get morseResult => _morseResult;

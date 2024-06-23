@@ -2,7 +2,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:morsetorch/models/morse_state.dart';
 
-class BeginnerTrainingService {
+class MorseMatchService {
   ValueNotifier<String> correctLetter = ValueNotifier("");
   ValueNotifier<List<String>> choiceList = ValueNotifier<List<String>>([]);
   ValueNotifier<List<bool>> answerList = ValueNotifier<List<bool>>([]);
@@ -26,10 +26,10 @@ class BeginnerTrainingService {
 
   void increaseStreak(bool correct) {
     if (correct) {
-        streak.value += 1;
-      } else {
-        streak.value = 0;
-      }
+      streak.value += 1;
+    } else {
+      streak.value = 0;
+    }
   }
 
   Map<String, bool> get4RandomMorseCodes() {

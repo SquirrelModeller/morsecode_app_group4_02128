@@ -1,30 +1,32 @@
 import 'package:flutter/material.dart';
 import 'package:morsetorch/widgets/costum_snack_bar.dart';
 
-class MultipleChoiceButton extends StatefulWidget {
+class CustomMultipleChoiceButton extends StatefulWidget {
   final String text;
   final bool correctAnswer;
-  var reset;
-  var isEnabled;
-  var streak;
-  var disableButton;
-  var isDarkMode;
+  final Function reset;
+  final bool isEnabled;
+  final Function streak;
+  final Function disableButton;
+  final bool isDarkMode;
 
-  MultipleChoiceButton(
+  const CustomMultipleChoiceButton(
       {super.key,
       required this.text,
       required this.correctAnswer,
-      this.reset,
-      this.disableButton,
+      required this.reset,
+      required this.disableButton,
       this.isEnabled = true,
-      this.streak,
+      required this.streak,
       required this.isDarkMode});
 
   @override
-  _MultipleChoiceButtonState createState() => _MultipleChoiceButtonState();
+  _CustomMultipleChoiceButtonState createState() =>
+      _CustomMultipleChoiceButtonState();
 }
 
-class _MultipleChoiceButtonState extends State<MultipleChoiceButton> {
+class _CustomMultipleChoiceButtonState
+    extends State<CustomMultipleChoiceButton> {
   final CostumSnackBar costumSnackBar = CostumSnackBar();
   late Color _buttonColor;
 
@@ -37,7 +39,7 @@ class _MultipleChoiceButtonState extends State<MultipleChoiceButton> {
   }
 
   @override
-  void didUpdateWidget(MultipleChoiceButton oldWidget) {
+  void didUpdateWidget(CustomMultipleChoiceButton oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.isDarkMode != widget.isDarkMode) {
       _updateButtonColor();

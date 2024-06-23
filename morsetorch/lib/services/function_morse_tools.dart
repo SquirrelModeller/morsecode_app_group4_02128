@@ -1,5 +1,4 @@
 import 'dart:math';
-import 'dart:developer' as dev;
 import 'package:english_words/english_words.dart';
 import 'package:morsetorch/models/morse_state.dart';
 
@@ -23,7 +22,7 @@ class FunctionMorseTools {
 
 class HandleInput {
   Stopwatch stopwatch = Stopwatch();
-  int timePressed = 0; 
+  int timePressed = 0;
 
   void startPress() {
     stopwatch.start();
@@ -35,4 +34,3 @@ class HandleInput {
     stopwatch.reset();
   }
 }
-

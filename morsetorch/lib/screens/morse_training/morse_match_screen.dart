@@ -1,23 +1,22 @@
 import 'package:flutter/material.dart';
-import 'package:morsetorch/services/beginner_training_service.dart';
+import 'package:morsetorch/services/morse_match_service.dart';
 import 'package:morsetorch/widgets/costum_skip_button.dart';
-import 'package:morsetorch/widgets/custom_floating_action_button.dart';
-import 'package:morsetorch/widgets/multiple_choice.dart';
+import 'package:morsetorch/widgets/custom_back_button.dart';
+import 'package:morsetorch/widgets/custom_multiple_choice_button.dart';
 
-class BeginnerMorseTrainingPage extends StatefulWidget {
+class MorseMatchScreen extends StatefulWidget {
   final Function(int) setScreen;
-  bool isDarkMode;
+  final bool isDarkMode;
 
-  BeginnerMorseTrainingPage(
+  const MorseMatchScreen(
       {super.key, required this.setScreen, required this.isDarkMode});
 
   @override
-  State<BeginnerMorseTrainingPage> createState() =>
-      _BeginnerMorseTrainingPageState();
+  State<MorseMatchScreen> createState() => _MorseMatchScreenState();
 }
 
-class _BeginnerMorseTrainingPageState extends State<BeginnerMorseTrainingPage> {
-  BeginnerTrainingService beginnerTrainingService = BeginnerTrainingService();
+class _MorseMatchScreenState extends State<MorseMatchScreen> {
+  MorseMatchService beginnerTrainingService = MorseMatchService();
   int streak = 0;
   bool isButtonEnabled = true;
 
@@ -35,7 +34,7 @@ class _BeginnerMorseTrainingPageState extends State<BeginnerMorseTrainingPage> {
     setState(() {
       isButtonEnabled = false;
     });
-    Future.delayed(Duration(seconds: 2), () {
+    Future.delayed(const Duration(seconds: 2), () {
       setState(() {
         isButtonEnabled = true;
       });
@@ -47,7 +46,7 @@ class _BeginnerMorseTrainingPageState extends State<BeginnerMorseTrainingPage> {
     return Scaffold(
       body: Stack(
         children: [
-          CustomFloatingActionButton(
+          CustomBackButton(
               isDarkMode: widget.isDarkMode,
               onPressed: () => widget.setScreen(0)),
           Center(
@@ -104,7 +103,7 @@ class _BeginnerMorseTrainingPageState extends State<BeginnerMorseTrainingPage> {
           valueListenable: beginnerTrainingService.choiceList,
           builder: (_, choiceList, __) => ValueListenableBuilder<List<bool>>(
             valueListenable: beginnerTrainingService.answerList,
-            builder: (_, answerList, __) => MultipleChoiceButton(
+            builder: (_, answerList, __) => CustomMultipleChoiceButton(
               text: choiceList[firstIndex],
               correctAnswer: answerList[firstIndex],
               reset: setUpGame,
@@ -119,7 +118,7 @@ class _BeginnerMorseTrainingPageState extends State<BeginnerMorseTrainingPage> {
           valueListenable: beginnerTrainingService.choiceList,
           builder: (_, choiceList, __) => ValueListenableBuilder<List<bool>>(
             valueListenable: beginnerTrainingService.answerList,
-            builder: (_, answerList, __) => MultipleChoiceButton(
+            builder: (_, answerList, __) => CustomMultipleChoiceButton(
               text: choiceList[secondIndex],
               correctAnswer: answerList[secondIndex],
               reset: setUpGame,

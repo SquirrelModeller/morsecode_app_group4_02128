@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-class ExpandableTextField extends StatefulWidget {
+class CustomTextField extends StatefulWidget {
   final TextEditingController controller;
   final Color color;
   final String text;
@@ -9,7 +9,7 @@ class ExpandableTextField extends StatefulWidget {
   final double maxHeight;
   final bool canWrite;
 
-  const ExpandableTextField(
+  const CustomTextField(
       {super.key,
       required this.controller,
       this.color = Colors.white,
@@ -19,10 +19,10 @@ class ExpandableTextField extends StatefulWidget {
       this.canWrite = true});
 
   @override
-  State<ExpandableTextField> createState() => _ExpandableTextFieldState();
+  State<CustomTextField> createState() => _CustomTextFieldState();
 }
 
-class _ExpandableTextFieldState extends State<ExpandableTextField> {
+class _CustomTextFieldState extends State<CustomTextField> {
   double textFieldHeight = 140;
 
   @override

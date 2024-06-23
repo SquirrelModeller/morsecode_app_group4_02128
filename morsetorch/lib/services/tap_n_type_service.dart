@@ -7,7 +7,7 @@ import 'package:morsetorch/services/function_morse_tools.dart';
 
 enum MorseChallengeResult { pass, inProgress }
 
-class MorseTraining {
+class TapNTypeService {
   ValueNotifier<MorseChallengeResult> result =
       ValueNotifier(MorseChallengeResult.inProgress);
 
@@ -30,7 +30,7 @@ class MorseTraining {
 
   Timer? _timer; // Declare a Timer variable
 
-  MorseTraining() {
+  TapNTypeService() {
     stopwatch.start();
     beginTraining();
   }

@@ -30,7 +30,6 @@ class Response {
 late _LightDetectorService _detector;
 late SendPort _toMainThread;
 
-
 void init(InitRequest initReq) {
   _detector = _LightDetectorService();
 
@@ -45,7 +44,7 @@ void init(InitRequest initReq) {
 void _handleMessage(data) {
   if (data is Request) {
     dynamic res;
-    switch  (data.method) {
+    switch (data.method) {
       case 'detect':
         var image = data.params['image'] as CameraImage;
         var timeStamp = data.params['Unix Time'] as int;
@@ -79,7 +78,6 @@ class _LightDetectorService {
       return null;
     }
 
-
     var planes = image.planes;
     var yBuffer = planes[0].bytes;
 
@@ -91,7 +89,8 @@ class _LightDetectorService {
       vBuffer = planes[2].bytes;
     }
 
-    var res = _nativeOpencv!.detect(image.width, image.height, timeStamp, yBuffer, uBuffer, vBuffer);
+    var res = _nativeOpencv!.detect(
+        image.width, image.height, timeStamp, yBuffer, uBuffer, vBuffer);
     return res;
   }
 

@@ -1,23 +1,22 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:morsetorch/services/morse_practice_timing.dart';
-import 'package:morsetorch/theme/color_theme.dart';
+import 'package:morsetorch/services/timing_mastery_service.dart';
 import 'package:morsetorch/widgets/costum_skip_button.dart';
-import 'package:morsetorch/widgets/custom_floating_action_button.dart';
+import 'package:morsetorch/widgets/custom_back_button.dart';
 
-class MorsePracticeTimingScreen extends StatefulWidget {
+class TimingMasteryScreen extends StatefulWidget {
   final bool isDarkMode;
   final Function(int) setScreen;
 
-  const MorsePracticeTimingScreen(
+  const TimingMasteryScreen(
       {super.key, required this.setScreen, required this.isDarkMode});
 
   @override
   _MorsePracticeTimingState createState() => _MorsePracticeTimingState();
 }
 
-class _MorsePracticeTimingState extends State<MorsePracticeTimingScreen> {
-  late MorsePracticeTiming morsePracticeTiming;
+class _MorsePracticeTimingState extends State<TimingMasteryScreen> {
+  late TimingMasteryService morsePracticeTiming;
   Color buttonColor = Colors.grey;
   Timer? colorUpdateTimer;
   int pressDuration = 0;
@@ -27,7 +26,7 @@ class _MorsePracticeTimingState extends State<MorsePracticeTimingScreen> {
   @override
   void initState() {
     super.initState();
-    morsePracticeTiming = MorsePracticeTiming(gameMode);
+    morsePracticeTiming = TimingMasteryService(gameMode);
   }
 
   @override
@@ -99,7 +98,7 @@ class _MorsePracticeTimingState extends State<MorsePracticeTimingScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Stack(children: [
-        CustomFloatingActionButton(
+        CustomBackButton(
             isDarkMode: widget.isDarkMode,
             onPressed: () => widget.setScreen(0)),
         Center(
@@ -115,7 +114,7 @@ class _MorsePracticeTimingState extends State<MorsePracticeTimingScreen> {
                       if (newValue != null) {
                         setState(() {
                           gameMode = newValue;
-                          morsePracticeTiming = MorsePracticeTiming(gameMode);
+                          morsePracticeTiming = TimingMasteryService(gameMode);
                         });
                       }
                     },
@@ -133,7 +132,7 @@ class _MorsePracticeTimingState extends State<MorsePracticeTimingScreen> {
                     }).toList(),
                   ),
                   IconButton(
-                    icon: Icon(Icons.help_outline),
+                    icon: const Icon(Icons.help_outline),
                     onPressed: showGameModeExplanation,
                   ),
                 ],

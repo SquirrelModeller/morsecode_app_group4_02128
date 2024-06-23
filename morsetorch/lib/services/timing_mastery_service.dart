@@ -1,5 +1,3 @@
-import 'dart:async';
-import 'dart:math';
 import 'dart:developer' as dev;
 
 import 'package:flutter/material.dart';
@@ -11,7 +9,7 @@ enum MorseChallengeResult { pass, tooLate, tooSoon, inProgress, won }
 
 enum GameDifficulty { easy, normal, hard }
 
-class MorsePracticeTiming {
+class TimingMasteryService {
   ValueNotifier<MorseChallengeResult> result =
       ValueNotifier(MorseChallengeResult.inProgress);
   ValueNotifier<String> currentCharacter = ValueNotifier('');
@@ -32,7 +30,7 @@ class MorsePracticeTiming {
 
   int threshHold = 0;
 
-  MorsePracticeTiming(GameDifficulty mode) {
+  TimingMasteryService(GameDifficulty mode) {
     switch (mode) {
       case GameDifficulty.easy:
         threshHold = 160;

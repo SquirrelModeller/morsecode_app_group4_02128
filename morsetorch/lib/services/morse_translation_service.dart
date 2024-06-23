@@ -1,13 +1,11 @@
 import 'dart:developer';
 import 'dart:io';
 import 'package:camera/camera.dart';
-import 'package:flutter/material.dart';
 import 'package:morsetorch/services/morse_detection_async.dart';
 import 'package:morsetorch/services/morse_translator.dart';
 
 // Written by ValYouW https://github.com/ValYouW/flutter-opencv-stream-processing
 // Edited by William Pii Jæger, modified to be a service excluding UI, to support our needs for our data streaming/processing
-
 
 class MorseTranslationService {
   CameraController? cameraController;
@@ -21,7 +19,8 @@ class MorseTranslationService {
 
   Future<void> initializeCamera() async {
     final cameras = await availableCameras();
-    int idx = cameras.indexWhere((c) => c.lensDirection == CameraLensDirection.back);
+    int idx =
+        cameras.indexWhere((c) => c.lensDirection == CameraLensDirection.back);
     if (idx == -1) {
       log("No back camera found");
       return;
@@ -32,19 +31,23 @@ class MorseTranslationService {
       cameraDescription,
       ResolutionPreset.high,
       enableAudio: false,
-      imageFormatGroup: Platform.isAndroid ? ImageFormatGroup.yuv420 : ImageFormatGroup.bgra8888,
+      imageFormatGroup: Platform.isAndroid
+          ? ImageFormatGroup.yuv420
+          : ImageFormatGroup.bgra8888,
     );
 
     try {
       await cameraController!.initialize();
-      cameraController!.startImageStream((image) => processCameraImage(image, DateTime.now().millisecondsSinceEpoch));
+      cameraController!.startImageStream((image) =>
+          processCameraImage(image, DateTime.now().millisecondsSinceEpoch));
     } catch (e) {
       log("Error initializing camera: ${e.toString()}");
     }
   }
 
   void processCameraImage(CameraImage image, int time) async {
-    if (detectionInProgress || DateTime.now().millisecondsSinceEpoch - lastRun < 5) {
+    if (detectionInProgress ||
+        DateTime.now().millisecondsSinceEpoch - lastRun < 5) {
       return;
     }
     detectionInProgress = true;
