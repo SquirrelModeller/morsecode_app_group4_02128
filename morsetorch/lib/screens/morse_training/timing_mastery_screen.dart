@@ -12,10 +12,10 @@ class TimingMasteryScreen extends StatefulWidget {
       {super.key, required this.setScreen, required this.isDarkMode});
 
   @override
-  _MorsePracticeTimingState createState() => _MorsePracticeTimingState();
+  _TimingMasteryScreenState createState() => _TimingMasteryScreenState();
 }
 
-class _MorsePracticeTimingState extends State<TimingMasteryScreen> {
+class _TimingMasteryScreenState extends State<TimingMasteryScreen> {
   late TimingMasteryService timingMasteryService;
   Color buttonColor = Colors.grey;
   Timer? colorUpdateTimer;
