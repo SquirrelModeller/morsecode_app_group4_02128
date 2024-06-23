@@ -20,11 +20,12 @@ class _MorsePracticeTimingState extends State<MorsePracticeTimingScreen> {
   Timer? colorUpdateTimer;
   int pressDuration = 0;
   ValueNotifier<int> buttonDuration = ValueNotifier(300);
+  GameDifficulty gameMode = GameDifficulty.normal;
 
   @override
   void initState() {
     super.initState();
-    morsePracticeTiming = MorsePracticeTiming(GameMode.normal);
+    morsePracticeTiming = MorsePracticeTiming(gameMode);
   }
 
   @override
@@ -71,16 +72,70 @@ class _MorsePracticeTimingState extends State<MorsePracticeTimingScreen> {
     });
   }
 
+  void showGameModeExplanation() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Game Mode Explanation'),
+          content: const Text(
+              'Selecting the difficulty lowers the accaptable threshold wherein an input is considered correct. Tap and hold the button just before it goes red.'),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('OK'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: widget.isDarkMode ? Colors.black : Colors.white,
       body: Stack(children: [
-        CustomFloatingActionButton(isDarkMode: widget.isDarkMode, onPressed: () => widget.setScreen(0)),
+        CustomFloatingActionButton(
+            isDarkMode: widget.isDarkMode,
+            onPressed: () => widget.setScreen(0)),
         Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  DropdownButton<GameDifficulty>(
+                    value: gameMode,
+                    onChanged: (GameDifficulty? newValue) {
+                      if (newValue != null) {
+                        setState(() {
+                          gameMode = newValue;
+                          morsePracticeTiming = MorsePracticeTiming(gameMode);
+                        });
+                      }
+                    },
+                    style: TextStyle(
+                      color: widget.isDarkMode ? Colors.white : Colors.black,
+                    ),
+                    dropdownColor: widget.isDarkMode
+                        ? const Color.fromARGB(255, 5, 20, 36)
+                        : Colors.white,
+                    items: GameDifficulty.values.map((GameDifficulty mode) {
+                      return DropdownMenuItem<GameDifficulty>(
+                        value: mode,
+                        child: Text(mode.toString().split('.').last),
+                      );
+                    }).toList(),
+                  ),
+                  IconButton(
+                    icon: Icon(Icons.help_outline),
+                    onPressed: showGameModeExplanation,
+                  ),
+                ],
+              ),
               ValueListenableBuilder<String>(
                 valueListenable: morsePracticeTiming.currentCharacter,
                 builder: (_, char, __) => Text(
@@ -95,7 +150,9 @@ class _MorsePracticeTimingState extends State<MorsePracticeTimingScreen> {
                 builder: (_, morse, __) {
                   final typedLength =
                       morsePracticeTiming.typedMorseCode.value.length;
-                  final untypedMorse = morse.substring(typedLength);
+                  final untypedMorse = morse.length > typedLength
+                      ? morse.substring(typedLength)
+                      : '';
                   return RichText(
                     text: TextSpan(
                       children: [
@@ -170,6 +227,18 @@ class _MorsePracticeTimingState extends State<MorsePracticeTimingScreen> {
                     ),
                   );
                 },
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  morsePracticeTiming.skipCharacter();
+                },
+                child: Text('Skip'),
+                style: ElevatedButton.styleFrom(
+                  foregroundColor: Colors.white,
+                  backgroundColor: widget.isDarkMode
+                      ? const Color.fromARGB(255, 5, 20, 36)
+                      : Colors.blue,
+                ),
               ),
             ],
           ),
