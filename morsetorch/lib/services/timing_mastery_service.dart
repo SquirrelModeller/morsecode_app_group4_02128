@@ -11,7 +11,7 @@ enum GameDifficulty { easy, normal, hard }
 
 class TimingMasteryService {
   ValueNotifier<MorseChallengeResult> result =
-      ValueNotifier(MorseChallengeResult.inProgress);
+  ValueNotifier(MorseChallengeResult.inProgress);
   ValueNotifier<String> currentCharacter = ValueNotifier('');
   ValueNotifier<String> morseCode = ValueNotifier('');
   ValueNotifier<String> typedMorseCode = ValueNotifier('');
