@@ -16,9 +16,6 @@ class TimingMasteryService {
   ValueNotifier<String> morseCode = ValueNotifier('');
   ValueNotifier<String> typedMorseCode = ValueNotifier('');
   ValueNotifier<int> pressSpeed = ValueNotifier(300);
-  ValueNotifier<int> timePressed = ValueNotifier(0);
-
-  ValueNotifier<int> lives = ValueNotifier(3);
 
   Map<String, int> completedCharacters = {};
 
@@ -68,6 +65,7 @@ class TimingMasteryService {
     if ((completedCharacters[currentCharacter.value] ?? 0) > 5) {
       morseCode.value = '';
     }
+    updatePressedSpeed();
     resetRound();
   }
 
@@ -98,20 +96,8 @@ class TimingMasteryService {
     nextCharacter();
   }
 
-  void decrementLives() {
-    if (lives.value > 0) {
-      lives.value--;
-      result.value = MorseChallengeResult.tooLate;
-      resetRound();
-      if (lives.value == 0) {
-        // Implement game over logic or disable further input
-      }
-    }
-  }
-
   void evaluateInput() {
     int duration = inputHandler.timePressed;
-    timePressed.value = duration;
     updatePressedSpeed();
     MorseState inputMorse;
 

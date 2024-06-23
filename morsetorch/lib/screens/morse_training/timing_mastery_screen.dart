@@ -42,11 +42,8 @@ class _TimingMasteryScreenState extends State<TimingMasteryScreen> {
       buttonColor = Colors.green;
     });
 
-    timingMasteryService.result.addListener(() {
-      if (timingMasteryService.result.value == MorseChallengeResult.tooSoon ||
-          timingMasteryService.result.value == MorseChallengeResult.tooLate) {
-        buttonDuration.value = 0;
-      }
+    timingMasteryService.pressSpeed.addListener(() {
+      buttonDuration.value = timingMasteryService.pressSpeed.value;
     });
 
     colorUpdateTimer =
