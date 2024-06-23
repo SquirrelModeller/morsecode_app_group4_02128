@@ -37,7 +37,6 @@ MorseCodeLightTracker::detectLightSources(cv::Mat &image) {
 
   for (const auto &contour : contours) {
     double area = cv::contourArea(contour);
-    // LOGI("COUNTOUR FOUND");
     if (area < 40)
       continue;
     cv::Rect boundingBox = cv::boundingRect(contour);
@@ -58,10 +57,12 @@ std::vector<LightSource> MorseCodeLightTracker::extractLightSources(
 
   int cropWidth = downscaled.cols / cropColWidth;
   int cropHeight = downscaled.rows / cropRowHeight;
-  cv::Rect centerROI((downscaled.cols - cropWidth) / 2,
-                     (downscaled.rows - cropHeight) / 2, cropWidth, cropHeight);
+  cv::Rect topHalfROI((downscaled.cols - cropWidth) / 2,
+                      0,
+                      cropWidth,
+                      cropHeight / 1.8);
 
-  cv::Mat cropped = downscaled(centerROI);
+  cv::Mat cropped = downscaled(topHalfROI);
 
   std::vector<LightSource> lightSources = detectLightSources(cropped);
 
@@ -105,7 +106,6 @@ MorseCodeLightTracker::processFrame(std::vector<LightSource> &detectedLights,
 
   // Process overlaps and assign IDs
   for (auto &newSrc : detectedLights) {
-    // std::cout << "hi";
     bool foundOverlap = false;
 
     for (auto &oldSrc : history.back()) {
@@ -123,10 +123,6 @@ MorseCodeLightTracker::processFrame(std::vector<LightSource> &detectedLights,
             if (trackedLightID == -1) { // Lock onto light
               trackedLightID = newSrc.id;
             }
-            // Just exceeded the threshold, send all history as MorseSignals
-            // for (bool state : newSrc.toggleHistory) {
-            //   signalsToSend.push_back({state, timestamps.back()});
-            // }
             for (size_t i = 0; i < newSrc.toggleHistory.size(); ++i) {
                 signalsToSend.push_back({newSrc.toggleHistory[i], timestamps[i]});
             }
@@ -162,9 +158,6 @@ MorseCodeLightTracker::processFrame(std::vector<LightSource> &detectedLights,
           if (trackedLightID == -1) { // Lock onto light
             trackedLightID = oldSrc.id;
           }
-        //   for (bool state : oldSrc.toggleHistory) {
-        //     signalsToSend.push_back({state, timestamps.back()});
-        //   }
           for (size_t i = 0; i < oldSrc.toggleHistory.size(); ++i) {
             signalsToSend.push_back({oldSrc.toggleHistory[i], timestamps[i]});
           }
@@ -198,7 +191,7 @@ MorseCodeLightTracker::updateLights(cv::Mat &image, int width, int height,
                                     long long timestamp) {
 
   std::vector<LightSource> detectedLights =
-      extractLightSources(image, 0.4, 4, 6);
+      extractLightSources(image, 0.3, 1, 1);
 
   std::vector<MorseSignal> signalsToSend =
       processFrame(detectedLights, timestamp);
