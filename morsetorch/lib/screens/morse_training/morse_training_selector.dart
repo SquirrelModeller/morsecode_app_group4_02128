@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:morsetorch/screens/beginner_morse_training.dart';
-import 'package:morsetorch/screens/intermediate_training.dart';
-import 'package:morsetorch/screens/morse_practice_timing_screen.dart';
-import 'package:morsetorch/screens/morse_training.dart';
+import 'package:morsetorch/screens/morse_training/beginner_morse_training.dart';
+import 'package:morsetorch/screens/morse_training/intermediate_training.dart';
+import 'package:morsetorch/screens/morse_training/morse_practice_timing_screen.dart';
+import 'package:morsetorch/screens/morse_training/morse_training.dart';
+
 import 'package:morsetorch/widgets/custom_menu_navigation_button.dart';
 
 class MorseTrainingSelectorPage extends StatefulWidget {
