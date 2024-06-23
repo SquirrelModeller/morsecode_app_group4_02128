@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:morsetorch/widgets/costum_snack_bar.dart';
 
 class MultipleChoiceButton extends StatefulWidget {
   final String text;
@@ -24,6 +25,7 @@ class MultipleChoiceButton extends StatefulWidget {
 }
 
 class _MultipleChoiceButtonState extends State<MultipleChoiceButton> {
+  final CostumSnackBar costumSnackBar = CostumSnackBar();
   late Color _buttonColor;
 
   @override
@@ -66,24 +68,14 @@ class _MultipleChoiceButtonState extends State<MultipleChoiceButton> {
                   setState(() {
                     _buttonColor = Colors.green;
                   });
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('Correct!'),
-                      duration: Duration(seconds: 1),
-                    ),
-                  );
+                  costumSnackBar.showSnackBar("Correct!", context);
                 } else {
                   // Handle incorrect answer
                   widget.streak(false);
                   setState(() {
                     _buttonColor = Colors.red;
                   });
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('Incorrect!'),
-                      duration: Duration(seconds: 1),
-                    ),
-                  );
+                  costumSnackBar.showSnackBar("Incorrect!", context);
                 }
                 await Future.delayed(const Duration(seconds: 2));
                 _updateButtonColor();

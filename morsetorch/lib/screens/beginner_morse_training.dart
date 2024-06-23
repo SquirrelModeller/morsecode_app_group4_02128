@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:morsetorch/services/beginner_training_service.dart';
+import 'package:morsetorch/widgets/costum_skip_button.dart';
 import 'package:morsetorch/widgets/custom_floating_action_button.dart';
 import 'package:morsetorch/widgets/multiple_choice.dart';
 
@@ -46,7 +47,9 @@ class _BeginnerMorseTrainingPageState extends State<BeginnerMorseTrainingPage> {
     return Scaffold(
       body: Stack(
         children: [
-          CustomFloatingActionButton(isDarkMode: widget.isDarkMode, onPressed: () => widget.setScreen(0)),
+          CustomFloatingActionButton(
+              isDarkMode: widget.isDarkMode,
+              onPressed: () => widget.setScreen(0)),
           Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -67,19 +70,12 @@ class _BeginnerMorseTrainingPageState extends State<BeginnerMorseTrainingPage> {
                 const SizedBox(height: 30),
                 buildChoiceButtons(2, 3),
                 const SizedBox(height: 30),
-                FloatingActionButton(
+                CustomSkipButton(
                   onPressed: () {
-                    print("Hello");
                     beginnerTrainingService.increaseStreak(false);
                     setUpGame();
                   },
-                  backgroundColor: widget.isDarkMode
-                      ? const Color.fromARGB(255, 5, 20, 36)
-                      : Colors.white,
-                  child: const Icon(
-                    Icons.skip_next,
-                    color: Color.fromARGB(255, 118, 118, 118),
-                  ),
+                  isDarkMode: widget.isDarkMode,
                 ),
                 const SizedBox(height: 20),
                 ValueListenableBuilder<int>(

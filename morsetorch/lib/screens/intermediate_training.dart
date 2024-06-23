@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:morsetorch/models/morse_state.dart';
 import 'package:morsetorch/services/intermediate_training_service.dart';
+import 'package:morsetorch/widgets/costum_skip_button.dart';
 import 'package:morsetorch/widgets/custom_floating_action_button.dart';
 import 'package:morsetorch/widgets/multiple_choice.dart';
 import 'package:vibration/vibration.dart';
@@ -105,18 +106,12 @@ class _IntermediateTrainingState extends State<IntermediateTraining> {
                 const SizedBox(
                   height: 20,
                 ),
-                FloatingActionButton(
+                CustomSkipButton(
                   onPressed: () {
                     intermediateTrainingService.increaseStreak(false);
                     intermediateTrainingService.skip();
                   },
-                  backgroundColor: widget.isDarkMode
-                      ? const Color.fromARGB(255, 5, 20, 36)
-                      : Colors.white,
-                  child: const Icon(
-                    Icons.skip_next,
-                    color: Color.fromARGB(255, 118, 118, 118),
-                  ),
+                  isDarkMode: widget.isDarkMode,
                 ),
                 const SizedBox(
                   height: 20,

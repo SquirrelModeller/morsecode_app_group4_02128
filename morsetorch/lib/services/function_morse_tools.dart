@@ -5,7 +5,7 @@ import 'package:morsetorch/models/morse_state.dart';
 
 class FunctionMorseTools {
   String convertMorseEnumToString(List<MorseState> morseCode) {
-    return morseCode.map((m) => m == MorseState.Dot ? "." : "-").join();
+    return morseCode.map((m) => m == MorseState.Dot ? "·" : "−").join();
   }
 
   String randomABCGen() {
@@ -35,3 +35,4 @@ class HandleInput {
     stopwatch.reset();
   }
 }
+

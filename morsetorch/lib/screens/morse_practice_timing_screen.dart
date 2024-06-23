@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:morsetorch/services/morse_practice_timing.dart';
+import 'package:morsetorch/theme/color_theme.dart';
+import 'package:morsetorch/widgets/costum_skip_button.dart';
 import 'package:morsetorch/widgets/custom_floating_action_button.dart';
 
 class MorsePracticeTimingScreen extends StatefulWidget {
@@ -228,17 +230,9 @@ class _MorsePracticeTimingState extends State<MorsePracticeTimingScreen> {
                   );
                 },
               ),
-              ElevatedButton(
-                onPressed: () {
-                  morsePracticeTiming.skipCharacter();
-                },
-                child: Text('Skip'),
-                style: ElevatedButton.styleFrom(
-                  foregroundColor: Colors.white,
-                  backgroundColor: widget.isDarkMode
-                      ? const Color.fromARGB(255, 5, 20, 36)
-                      : Colors.blue,
-                ),
+              CustomSkipButton(
+                onPressed: morsePracticeTiming.skipCharacter,
+                isDarkMode: widget.isDarkMode,
               ),
             ],
           ),

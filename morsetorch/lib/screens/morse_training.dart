@@ -1,14 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:morsetorch/services/morsetraining_service.dart';
+import 'package:morsetorch/widgets/costum_skip_button.dart';
+import 'package:morsetorch/widgets/costum_snack_bar.dart';
 import 'package:morsetorch/widgets/custom_floating_action_button.dart';
+import 'package:morsetorch/services/function_morse_tools.dart';
 
 class MorseTrainingPage extends StatefulWidget {
-  var setScreen;
+  final Function setScreen;
+  final bool isDarkMode;
 
-  bool isDarkMode;
-
-  MorseTrainingPage(
-      {super.key, required this.setScreen, required this.isDarkMode});
+  MorseTrainingPage({
+    Key? key,
+    required this.setScreen,
+    required this.isDarkMode,
+  }) : super(key: key);
 
   @override
   _MorseTrainingPageState createState() => _MorseTrainingPageState();
@@ -16,8 +21,11 @@ class MorseTrainingPage extends StatefulWidget {
 
 class _MorseTrainingPageState extends State<MorseTrainingPage> {
   final MorseTraining _morseTraining = MorseTraining();
+  final FunctionMorseTools tools = FunctionMorseTools();
+  final CostumSnackBar costumSnackBar = CostumSnackBar();
 
-  Color color1 = Color.fromARGB(255, 0, 178, 255);
+  Color colorLight = Color.fromARGB(255, 0, 178, 255);
+  Color colorDark =  Color.fromRGBO(5, 94, 132, 1);
 
   @override
   void initState() {
@@ -35,12 +43,14 @@ class _MorseTrainingPageState extends State<MorseTrainingPage> {
     if (isPressed) {
       _morseTraining.startedPress();
       setState(() {
-        color1 = Colors.black;
+        colorLight = const Color.fromARGB(255, 112, 112, 112);
+        colorDark = Color.fromARGB(255, 76, 76, 76);
       });
     } else {
       _morseTraining.release();
       setState(() {
-        color1 = Color.fromARGB(255, 0, 178, 255);
+        colorLight = Color.fromARGB(255, 0, 178, 255);
+        colorDark =  Color.fromRGBO(5, 94, 132, 1);
       });
     }
   }
@@ -49,7 +59,9 @@ class _MorseTrainingPageState extends State<MorseTrainingPage> {
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        CustomFloatingActionButton(isDarkMode: widget.isDarkMode, onPressed: () => widget.setScreen(0)),
+        CustomFloatingActionButton(
+            isDarkMode: widget.isDarkMode,
+            onPressed: () => widget.setScreen(0)),
         Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -92,7 +104,7 @@ class _MorseTrainingPageState extends State<MorseTrainingPage> {
                 child: ValueListenableBuilder<String>(
                   valueListenable: _morseTraining.characterTyped,
                   builder: (_, typed, __) => Text(
-                    '${_morseTraining.convertMorseStateEnumToString()}',
+                    '${_morseTraining.typedMorseCode.value}',
                     style: TextStyle(
                       fontSize: 100,
                       color: widget.isDarkMode
@@ -112,28 +124,35 @@ class _MorseTrainingPageState extends State<MorseTrainingPage> {
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     color: widget.isDarkMode
-                        ? const Color.fromRGBO(5, 94, 132, 1)
-                        : const Color.fromRGBO(0, 178, 255, 1),
+                        ? colorDark
+                        : colorLight,
                   ),
                   child: const Center(
-                    child: Text(
-                      'Tap Here',
-                      style: TextStyle(color: Colors.white, fontSize: 20),
-                    ),
+                    child: Icon(Icons.radio_button_unchecked,
+                        size: 100, color: Colors.white),
                   ),
                 ),
               ),
               const SizedBox(height: 20),
-              FloatingActionButton(
-                onPressed: () {
-                  _morseTraining.beginTraining();
+              CustomSkipButton(
+                onPressed: _morseTraining.beginTraining,
+                isDarkMode: widget.isDarkMode,
+              ),
+              ValueListenableBuilder<MorseChallengeResult>(
+                valueListenable: _morseTraining.result,
+                builder: (_, result, __) {
+                  String resultStr = "";
+                  switch (result) {
+                    case MorseChallengeResult.pass:
+                      resultStr = "Good job!";
+                      costumSnackBar.showSnackBar(resultStr, context);
+                      break;
+                    case MorseChallengeResult.inProgress:
+                      resultStr = "";
+                      break;
+                  }
+                  return Container(); // Return an empty container instead of text
                 },
-                tooltip: 'Reset',
-                backgroundColor: widget.isDarkMode
-                    ? const Color.fromARGB(255, 5, 20, 36)
-                    : Colors.white,
-                child: const Icon(Icons.skip_next_rounded,
-                    color: Color.fromARGB(255, 118, 118, 118)),
               ),
             ],
           ),

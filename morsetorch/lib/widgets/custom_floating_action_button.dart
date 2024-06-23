@@ -19,9 +19,8 @@ class CustomFloatingActionButton extends StatelessWidget {
         width: 50,
         height: 50,
         child: FloatingActionButton(
-          backgroundColor: isDarkMode
-              ? const Color.fromARGB(255, 5, 20, 36)
-              : Colors.white,
+          backgroundColor:
+              isDarkMode ? const Color.fromARGB(255, 5, 20, 36) : Colors.white,
           onPressed: onPressed,
           child: const Icon(
             Icons.arrow_back,
@@ -32,3 +31,4 @@ class CustomFloatingActionButton extends StatelessWidget {
     );
   }
 }
+

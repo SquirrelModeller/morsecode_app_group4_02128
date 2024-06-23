@@ -1,11 +1,19 @@
 import 'dart:async';
 import 'dart:developer';
-import 'package:english_words/english_words.dart';
 import 'package:morsetorch/models/morse_state.dart';
 import 'package:morsetorch/services/morse_translator.dart';
 import 'package:flutter/material.dart';
+import 'package:morsetorch/services/function_morse_tools.dart';
+
+enum MorseChallengeResult { pass, inProgress }
 
 class MorseTraining {
+  ValueNotifier<MorseChallengeResult> result =
+      ValueNotifier(MorseChallengeResult.inProgress);
+
+  FunctionMorseTools tools = FunctionMorseTools();
+  HandleInput inputHandler = HandleInput();
+
   Stopwatch stopwatch = Stopwatch();
   Timer? inputTimeout;
   Morsetranslator translator = Morsetranslator();
@@ -13,6 +21,7 @@ class MorseTraining {
   ValueNotifier<String> characterTyped = ValueNotifier("");
   ValueNotifier<String> wordToType = ValueNotifier("");
   ValueNotifier<String> builder = ValueNotifier("");
+  ValueNotifier<String> typedMorseCode = ValueNotifier('');
 
   List<MorseState> builderMorseState = [];
 
@@ -27,18 +36,21 @@ class MorseTraining {
   }
 
   void beginTraining() {
-    wordToType.value = randomWordGen();
+    wordToType.value = tools.randomWordGen();
     resetBuilder();
   }
 
   void resetBuilder() {
+    result.value = MorseChallengeResult.inProgress;
     builder.value = "";
+    typedMorseCode.value = '';
     builderMorseState.clear();
     resetInputTimeout();
   }
 
   void clearBuilder() {
     characterTyped.value = "";
+    typedMorseCode.value = '';
     builderMorseState.clear();
   }
 
@@ -51,27 +63,10 @@ class MorseTraining {
     });
   }
 
-  String randomWordGen() {
-    return WordPair.random().toString().toUpperCase();
-  }
-
-  String convertMorseStateEnumToString() {
-    String tempReturn = "";
-    for (var signal in builderMorseState) {
-      tempReturn += signal == MorseState.Dot ? "·" : "−";
-    }
-    return tempReturn;
-  }
-
-  MorseState handleMorseState(int duration) {
-    return duration <= 125 ? MorseState.Dot : MorseState.Dash;
-  }
-
-  void checkInput() {
-    int duration = stopwatch.elapsedMilliseconds - timePressed;
-    log(timePressed.toString());
+  void checkInput(duration) {
+    log(inputHandler.timePressed.toString());
     log(duration.toString());
-    builderMorseState.add(handleMorseState(duration));
+    builderMorseState.add(tools.calcMorseType(duration, 125));
     resetInputTimeout();
     if (builderMorseState.isNotEmpty) {
       log(builderMorseState.last.toString());
@@ -80,6 +75,10 @@ class MorseTraining {
 
   bool isCorrect(String sentenceToCheck) {
     return wordToType.value.startsWith(sentenceToCheck);
+  }
+
+  bool won() {
+    return builder.value == wordToType.value;
   }
 
   String getText() {
@@ -94,34 +93,35 @@ class MorseTraining {
   }
 
   void startedPress() {
-    timePressed = stopwatch.elapsedMilliseconds;
-    stopwatch.start();
+    inputHandler.startPress();
   }
 
   void release() {
     log("Released");
     isPressed = false;
-    checkInput();
+    inputHandler.stopPress();
+
+    checkInput(inputHandler.timePressed);
     String localAttempt = getText();
     _timer?.cancel();
     characterTyped.value = localAttempt;
-    _timer = Timer(Duration(seconds: 1), () {
+    typedMorseCode.value = tools.convertMorseEnumToString(builderMorseState);
+
+    _timer = Timer(const Duration(seconds: 1), () {
       if (isCorrect(builder.value + localAttempt)) {
         builder.value += localAttempt;
         log("Current builder state: ${builder.value}");
         clearBuilder();
         if (won()) {
-          // Win condition
-          clearBuilder();
-          resetBuilder();
-          wordToType.value = randomWordGen();
+          result.value = MorseChallengeResult.pass;
+          _timer = Timer(const Duration(seconds: 1), () {
+            clearBuilder();
+            resetBuilder();
+            wordToType.value = tools.randomWordGen();
+          });
         }
       }
     });
-  }
-
-  bool won() {
-    return builder.value == wordToType.value;
   }
 
   void dispose() {
