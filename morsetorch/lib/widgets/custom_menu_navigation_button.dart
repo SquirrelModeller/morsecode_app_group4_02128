@@ -16,7 +16,7 @@ class CustomMenuNavigationButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       width: MediaQuery.of(context).size.width - 20,
-      height: MediaQuery.of(context).size.width / 2.5,
+      height: MediaQuery.of(context).size.width / 3,
       child: ElevatedButton(
         onPressed: onPressed,
         style: ElevatedButton.styleFrom(

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:morsetorch/screens/morse_code_dictionary_screen.dart';
 import 'package:morsetorch/screens/morse_training/morse_match_screen.dart';
 import 'package:morsetorch/screens/morse_training/buzz_code_screen.dart';
 import 'package:morsetorch/screens/morse_training/timing_mastery_screen.dart';
@@ -29,6 +30,8 @@ class MorseTrainingSelectorPageState extends State<MorseTrainingSelectorPage> {
             setScreen: changeScreen, isDarkMode: widget.isDarkMode),
         4: () => TimingMasteryScreen(
             setScreen: changeScreen, isDarkMode: widget.isDarkMode),
+        5: () => MorseCodeDictionaryScreen(
+            setScreen: changeScreen, isDarkMode: widget.isDarkMode)
       };
 
   void changeScreen(int newScreen) {
@@ -65,6 +68,10 @@ class MorseTrainingSelectorPageState extends State<MorseTrainingSelectorPage> {
                 isDarkMode: widget.isDarkMode,
                 onPressed: () => changeScreen(4),
                 buttonText: 'Timing Mastery'),
+            CustomMenuNavigationButton(
+                isDarkMode: widget.isDarkMode,
+                onPressed: () => changeScreen(5),
+                buttonText: 'Morse Code Dictionary')
           ],
         ),
       ),
