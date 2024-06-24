@@ -39,17 +39,26 @@ MorseCodeLightTracker::detectLightSources(cv::Mat &image) {
   std::vector<LightSource> lightSources;
   lightSources.reserve(MAX_LIGHT_SOURCES);
 
-  for (const auto &contour : contours) {
+for (const auto &contour : contours) {
     double area = cv::contourArea(contour);
-    if (area < 40 || area > 300)
-      continue;
+    if (area < 40 || area > 800)
+        continue;
+
     cv::Rect boundingBox = cv::boundingRect(contour);
-    boundingBox.height += boundingBox.height / 4;
-    boundingBox.width += boundingBox.width / 4;
+    
+    double scaleFactor = 1.0 + (1.0 - (area - 40) / (800 - 40)) * 0.5;
+    int widthIncrease = static_cast<int>(boundingBox.width * (scaleFactor - 1));
+    int heightIncrease = static_cast<int>(boundingBox.height * (scaleFactor - 1));
+    
+    boundingBox.x -= widthIncrease / 2;
+    boundingBox.y -= heightIncrease / 2;
+    boundingBox.width += widthIncrease;
+    boundingBox.height += heightIncrease;
+
     lightSources.emplace_back(true, boundingBox);
     if (lightSources.size() == MAX_LIGHT_SOURCES)
-      break;
-  }
+        break;
+}
   return lightSources;
 }
 
@@ -104,7 +113,7 @@ MorseCodeLightTracker::processFrame(std::vector<LightSource> &detectedLights,
   std::vector<LightSource> currentSources;
   std::vector<MorseSignal> signalsToSend;
   std::unordered_map<int, bool> updated;
-  const int toggleThreshold = 5;
+  const int toggleThreshold = 10;
 
   // Process overlaps and assign IDs
   for (auto &newSrc : detectedLights) {
@@ -193,7 +202,7 @@ MorseCodeLightTracker::updateLights(cv::Mat &image, int width, int height,
                                     long long timestamp) {
 
   std::vector<LightSource> detectedLights =
-      extractLightSources(image, 0.5, 4, 6);
+      extractLightSources(image, 0.6, 4, 6);
 
   std::vector<MorseSignal> signalsToSend =
       processFrame(detectedLights, timestamp);

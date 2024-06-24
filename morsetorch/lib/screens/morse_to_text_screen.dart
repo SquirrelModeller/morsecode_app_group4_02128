@@ -58,30 +58,41 @@ class _MorseToTextScreenState extends State<MorseToTextScreen> {
       body: Center(
         child: Stack(
           children: [
+            Stack(
+              alignment: Alignment.center,
+              children: [
             isCameraInitialized
                 ? CameraPreview(morseService.cameraController!)
                 : const CircularProgressIndicator(),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Text(
+                      'KEEP LIGHT WITHIN',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    Container(
+                      width: 50,
+                      height: 50,
+                      margin: const EdgeInsets.fromLTRB(0, 0, 10, 0),
+                      decoration: BoxDecoration(
+                        color: Colors.transparent,
+                        border: Border.all(width: 4, color: Colors.white),
+                        borderRadius: BorderRadius.circular(90.0),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+            
             Column(
               children: [
                 SizedBox(
-                  height: MediaQuery.of(context).size.height * 8/ 20,
-                ),
-                const Text(
-                  'KEEP LIGHT WITHIN',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                Container(
-                  width: 50,
-                  height: 50,
-                  margin: const EdgeInsets.fromLTRB(0, 0, 10, 0),
-                  decoration: BoxDecoration(
-                    color: Colors.transparent,
-                    border: Border.all(width: 4, color: Colors.white),
-                    borderRadius: BorderRadius.circular(90.0),
-                  ),
+                  height: MediaQuery.of(context).size.height * 9.5/ 20,
                 ),
                 Padding(
                   padding: const EdgeInsets.all(25),

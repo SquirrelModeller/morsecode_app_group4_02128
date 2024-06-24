@@ -47,7 +47,7 @@ class MorseTranslationService {
   var previousTime = 0;
   void processCameraImage(CameraImage image, int time) async {
     if (detectionInProgress ||
-        DateTime.now().millisecondsSinceEpoch - lastRun < 5) {
+        DateTime.now().millisecondsSinceEpoch - lastRun < 2) {
       return;
     }
     detectionInProgress = true;
@@ -56,11 +56,11 @@ class MorseTranslationService {
     lastRun = DateTime.now().millisecondsSinceEpoch;
 
     if (result != null && result.isNotEmpty) {
-      log("Package:");
-      for (int i = 0; i < result.length; i += 2) {
-       log("${result[i] == 1}, ${result[i + 1]}, timeDiff: ${result[i+1]-previousTime}");
-       previousTime = result[i+1];
-      }
+      // log("Package:");
+      // for (int i = 0; i < result.length; i += 2) {
+      //  log("${result[i] == 1}, ${result[i + 1]}, timeDiff: ${result[i+1]-previousTime}");
+      //  previousTime = result[i+1];
+      // }
       translator.addPackageToList(result);
       onTranslationUpdated(translator.returnText());
     }
