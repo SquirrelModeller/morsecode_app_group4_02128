@@ -11,11 +11,12 @@ enum GameDifficulty { easy, normal, hard }
 
 class TimingMasteryService {
   ValueNotifier<MorseChallengeResult> result =
-  ValueNotifier(MorseChallengeResult.inProgress);
+      ValueNotifier(MorseChallengeResult.inProgress);
   ValueNotifier<String> currentCharacter = ValueNotifier('');
   ValueNotifier<String> morseCode = ValueNotifier('');
   ValueNotifier<String> typedMorseCode = ValueNotifier('');
   ValueNotifier<int> pressSpeed = ValueNotifier(300);
+  ValueNotifier<int> timePressed = ValueNotifier(0);
 
   Map<String, int> completedCharacters = {};
 
@@ -65,7 +66,6 @@ class TimingMasteryService {
     if ((completedCharacters[currentCharacter.value] ?? 0) > 5) {
       morseCode.value = '';
     }
-    updatePressedSpeed();
     resetRound();
   }
 
@@ -98,6 +98,7 @@ class TimingMasteryService {
 
   void evaluateInput() {
     int duration = inputHandler.timePressed;
+    timePressed.value = duration;
     updatePressedSpeed();
     MorseState inputMorse;
 
