@@ -57,11 +57,11 @@ std::vector<LightSource> MorseCodeLightTracker::extractLightSources(
 
   int cropWidth = downscaled.cols / cropColWidth;
   int cropHeight = downscaled.rows / cropRowHeight;
-  cv::Rect topHalfROI((downscaled.cols - cropWidth) / 2,
-                     (downscaled.rows - cropHeight) / 4, cropWidth, cropHeight);
 
-  cv::Mat cropped = downscaled(topHalfROI);
+  cv::Rect centerROI((downscaled.cols - cropWidth) / 2,
+                     (downscaled.rows - cropHeight) / 2, cropWidth, cropHeight);
 
+  cv::Mat cropped = downscaled(centerROI);
 
   std::vector<LightSource> lightSources = detectLightSources(cropped);
 
@@ -190,7 +190,7 @@ MorseCodeLightTracker::updateLights(cv::Mat &image, int width, int height,
                                     long long timestamp) {
 
   std::vector<LightSource> detectedLights =
-      extractLightSources(image, 0.35, 4, 6);
+  extractLightSources(image, 0.4, 4, 6);
 
   std::vector<MorseSignal> signalsToSend =
       processFrame(detectedLights, timestamp);
