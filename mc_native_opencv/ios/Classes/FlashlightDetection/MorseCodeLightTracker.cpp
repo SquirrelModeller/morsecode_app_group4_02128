@@ -5,7 +5,11 @@
 #include <vector>
 
 bool doRectsOverlap(const cv::Rect &rect1, const cv::Rect &rect2) {
-  return (rect1 & rect2).area() > 0;
+    if (rect1.x + rect1.width <= rect2.x || rect2.x + rect2.width <= rect1.x)
+        return false;
+    if (rect1.y + rect1.height <= rect2.y || rect2.y + rect2.height <= rect1.y)
+        return false;
+    return true;
 }
 
 bool lastSignal = false;
@@ -37,7 +41,7 @@ MorseCodeLightTracker::detectLightSources(cv::Mat &image) {
 
   for (const auto &contour : contours) {
     double area = cv::contourArea(contour);
-    if (area < 40)
+    if (area < 80)
       continue;
     cv::Rect boundingBox = cv::boundingRect(contour);
     boundingBox.height += boundingBox.height / 4;
@@ -189,7 +193,7 @@ MorseCodeLightTracker::updateLights(cv::Mat &image, int width, int height,
                                     long long timestamp) {
 
   std::vector<LightSource> detectedLights =
-      extractLightSources(image, 0.4, 4, 6);
+      extractLightSources(image, 0.5, 4, 6);
 
   std::vector<MorseSignal> signalsToSend =
       processFrame(detectedLights, timestamp);
