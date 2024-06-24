@@ -41,7 +41,7 @@ MorseCodeLightTracker::detectLightSources(cv::Mat &image) {
 
   for (const auto &contour : contours) {
     double area = cv::contourArea(contour);
-    if (area < 80)
+    if (area < 40 || area > 300)
       continue;
     cv::Rect boundingBox = cv::boundingRect(contour);
     boundingBox.height += boundingBox.height / 4;
