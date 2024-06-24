@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:morsetorch/screens/morse_training/morse_training_selector.dart';
 import 'package:morsetorch/screens/text_to_torch_screen.dart';
-import 'package:morsetorch/screens/torch_to_text_screen.dart';
+import 'package:morsetorch/screens/morse_to_text_screen.dart';
 import 'package:morsetorch/theme/color_theme.dart';
 
 void main() {
@@ -69,7 +69,7 @@ class _NavigationState extends State<Navigation> {
       TextToTorchScreen(
         isDarkMode: widget.isDark,
       ),
-      const TorchToTextScreen(),
+      const MorseToTextScreen(),
     ];
   }
 

@@ -6,14 +6,14 @@ import 'package:morsetorch/services/language_translator.dart';
 import 'package:morsetorch/services/morse_translation_service.dart';
 import 'package:morsetorch/widgets/custom_text_field.dart';
 
-class TorchToTextScreen extends StatefulWidget {
-  const TorchToTextScreen({super.key});
+class MorseToTextScreen extends StatefulWidget {
+  const MorseToTextScreen({super.key});
 
   @override
-  _TorchToTextScreenState createState() => _TorchToTextScreenState();
+  _MorseToTextScreenState createState() => _MorseToTextScreenState();
 }
 
-class _TorchToTextScreenState extends State<TorchToTextScreen> {
+class _MorseToTextScreenState extends State<MorseToTextScreen> {
   final TextEditingController _textController = TextEditingController();
   late MorseTranslationService morseService;
 
@@ -43,6 +43,7 @@ class _TorchToTextScreenState extends State<TorchToTextScreen> {
 
   Future<void> initializeCameraService() async {
     await morseService.initializeCamera();
+    morseService.cameraController!.setZoomLevel(2.0);
     if (mounted) {
       setState(() {
         isCameraInitialized =
@@ -62,8 +63,8 @@ class _TorchToTextScreenState extends State<TorchToTextScreen> {
                 : const CircularProgressIndicator(),
             Column(
               children: [
-                const SizedBox(
-                  height: 120,
+                SizedBox(
+                  height: MediaQuery.of(context).size.height * 8/ 20,
                 ),
                 const Text(
                   'KEEP LIGHT WITHIN',
@@ -73,13 +74,13 @@ class _TorchToTextScreenState extends State<TorchToTextScreen> {
                   ),
                 ),
                 Container(
-                  width: MediaQuery.of(context).size.width / 2.4,
-                  height: MediaQuery.of(context).size.height / 4,
-                  margin: const EdgeInsets.fromLTRB(25, 20, 25, 0),
+                  width: 50,
+                  height: 50,
+                  margin: const EdgeInsets.fromLTRB(0, 0, 10, 0),
                   decoration: BoxDecoration(
                     color: Colors.transparent,
                     border: Border.all(width: 4, color: Colors.white),
-                    borderRadius: BorderRadius.circular(10.0),
+                    borderRadius: BorderRadius.circular(90.0),
                   ),
                 ),
                 Padding(
