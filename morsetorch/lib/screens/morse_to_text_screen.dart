@@ -90,7 +90,7 @@ class _MorseToTextScreenState extends State<MorseToTextScreen> {
                     color: const Color.fromARGB(150, 43, 42, 42),
                     text: textBoxText,
                     textColor: Colors.white,
-                    maxHeight: MediaQuery.of(context).size.height / 5,
+                    maxHeight: MediaQuery.of(context).size.height / 7,
                     canWrite: false,
                   ),
                 ),

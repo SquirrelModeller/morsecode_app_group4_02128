@@ -47,32 +47,35 @@ class MorseTrainingSelectorPageState extends State<MorseTrainingSelectorPage> {
 
   Widget buildHomeScreen() {
     return Scaffold(
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            const SizedBox(height: 15),
-            CustomMenuNavigationButton(
-                isDarkMode: widget.isDarkMode,
-                onPressed: () => changeScreen(1),
-                buttonText: 'Morse Match'),
-            CustomMenuNavigationButton(
-                isDarkMode: widget.isDarkMode,
-                onPressed: () => changeScreen(2),
-                buttonText: 'Buzz Code'),
-            CustomMenuNavigationButton(
-                isDarkMode: widget.isDarkMode,
-                onPressed: () => changeScreen(3),
-                buttonText: 'Tap n\' Type'),
-            CustomMenuNavigationButton(
-                isDarkMode: widget.isDarkMode,
-                onPressed: () => changeScreen(4),
-                buttonText: 'Timing Mastery'),
-            CustomMenuNavigationButton(
-                isDarkMode: widget.isDarkMode,
-                onPressed: () => changeScreen(5),
-                buttonText: 'Morse Code Dictionary')
-          ],
+      resizeToAvoidBottomInset: true,
+      body: SingleChildScrollView(
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              const SizedBox(height: 15),
+              CustomMenuNavigationButton(
+                  isDarkMode: widget.isDarkMode,
+                  onPressed: () => changeScreen(1),
+                  buttonText: 'Morse Match'),
+              CustomMenuNavigationButton(
+                  isDarkMode: widget.isDarkMode,
+                  onPressed: () => changeScreen(2),
+                  buttonText: 'Buzz Code'),
+              CustomMenuNavigationButton(
+                  isDarkMode: widget.isDarkMode,
+                  onPressed: () => changeScreen(3),
+                  buttonText: 'Tap n\' Type'),
+              CustomMenuNavigationButton(
+                  isDarkMode: widget.isDarkMode,
+                  onPressed: () => changeScreen(4),
+                  buttonText: 'Timing Mastery'),
+              CustomMenuNavigationButton(
+                  isDarkMode: widget.isDarkMode,
+                  onPressed: () => changeScreen(5),
+                  buttonText: 'Morse Code Dictionary')
+            ],
+          ),
         ),
       ),
     );

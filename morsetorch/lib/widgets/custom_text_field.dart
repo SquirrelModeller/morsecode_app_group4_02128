@@ -23,7 +23,7 @@ class CustomTextField extends StatefulWidget {
 }
 
 class _CustomTextFieldState extends State<CustomTextField> {
-  double textFieldHeight = 140;
+  double textFieldHeight = 100;
 
   @override
   Widget build(BuildContext context) {
