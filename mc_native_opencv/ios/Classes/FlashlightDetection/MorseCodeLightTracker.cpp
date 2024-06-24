@@ -24,7 +24,7 @@ MorseCodeLightTracker::MorseCodeLightTracker(size_t maxSize)
 
 std::vector<LightSource>
 MorseCodeLightTracker::detectLightSources(cv::Mat &image) {
-  cv::UMat gray, thresh;
+  cv::Mat gray, thresh;
   cv::cvtColor(image, gray, cv::COLOR_BGR2GRAY);
   cv::threshold(gray, thresh, 240, 255, cv::THRESH_BINARY);
 
@@ -37,7 +37,7 @@ MorseCodeLightTracker::detectLightSources(cv::Mat &image) {
 
   for (const auto &contour : contours) {
     double area = cv::contourArea(contour);
-    if (area < 20)
+    if (area < 40)
       continue;
     cv::Rect boundingBox = cv::boundingRect(contour);
     boundingBox.height += boundingBox.height / 4;
@@ -57,7 +57,6 @@ std::vector<LightSource> MorseCodeLightTracker::extractLightSources(
 
   int cropWidth = downscaled.cols / cropColWidth;
   int cropHeight = downscaled.rows / cropRowHeight;
-
   cv::Rect centerROI((downscaled.cols - cropWidth) / 2,
                      (downscaled.rows - cropHeight) / 2, cropWidth, cropHeight);
 
@@ -190,7 +189,7 @@ MorseCodeLightTracker::updateLights(cv::Mat &image, int width, int height,
                                     long long timestamp) {
 
   std::vector<LightSource> detectedLights =
-  extractLightSources(image, 0.4, 4, 6);
+      extractLightSources(image, 0.4, 4, 6);
 
   std::vector<MorseSignal> signalsToSend =
       processFrame(detectedLights, timestamp);
