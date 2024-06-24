@@ -65,7 +65,7 @@ class _NavigationState extends State<Navigation> {
     return [
       MorseTrainingSelectorPage(
         isDarkMode: widget.isDark,
-      ), //Skift denne her
+      ), 
       TextToTorchScreen(
         isDarkMode: widget.isDark,
       ),
@@ -116,7 +116,7 @@ class _NavigationState extends State<Navigation> {
                       : const Color.fromARGB(130, 118, 118, 118),
                 ),
               ),
-              label: 'Practice morse',
+              label: 'Practice Morse',
             ),
             BottomNavigationBarItem(
               icon: SizedBox(
