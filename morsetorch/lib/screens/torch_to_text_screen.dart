@@ -63,7 +63,7 @@ class _TorchToTextScreenState extends State<TorchToTextScreen> {
             Column(
               children: [
                 const SizedBox(
-                  height: 50,
+                  height: 120,
                 ),
                 const Text(
                   'KEEP LIGHT WITHIN',
@@ -73,8 +73,8 @@ class _TorchToTextScreenState extends State<TorchToTextScreen> {
                   ),
                 ),
                 Container(
-                  width: double.infinity,
-                  height: MediaQuery.of(context).size.height / 3,
+                  width: MediaQuery.of(context).size.width / 2.4,
+                  height: MediaQuery.of(context).size.height / 4,
                   margin: const EdgeInsets.fromLTRB(25, 20, 25, 0),
                   decoration: BoxDecoration(
                     color: Colors.transparent,
