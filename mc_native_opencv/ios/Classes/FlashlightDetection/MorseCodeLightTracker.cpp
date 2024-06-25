@@ -80,18 +80,6 @@ std::vector<LightSource> MorseCodeLightTracker::extractLightSources(
   return lightSources;
 }
 
-std::deque<bool> MorseCodeLightTracker::sendLightBuffer(LightSource &light) {
-  return light.toggleHistory;
-}
-bool sendLight(LightSource &light) { return light.toggleHistory.back(); }
-
-void MorseCodeLightTracker::addFrame(std::vector<LightSource> &&newSources) {
-  if (history.size() >= maxSize) {
-    history.pop_front();
-  }
-  history.emplace_back(std::move(newSources));
-}
-
 int MorseCodeLightTracker::nextID = 0;
 
 int MorseCodeLightTracker::getNextID() { return nextID++; }

@@ -9,13 +9,13 @@ constexpr int MAX_LIGHT_SOURCES = 100;
 constexpr int MAX_AGE = 150;
 
 struct LightSource {
+    bool hasExceededThreshold = false;
     bool isOn = false;
-    cv::Rect boundingBox; 
-    // cv::Rect boundingBox = {0, 0, 0, 0}; 
     int toggleCount = 0;
     int age = 0;
     int id;
-    bool hasExceededThreshold = false;
+
+    cv::Rect boundingBox; 
     std::deque<bool> toggleHistory;
 
     LightSource() = default;

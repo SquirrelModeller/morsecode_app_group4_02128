@@ -61,9 +61,9 @@ class _MorseToTextScreenState extends State<MorseToTextScreen> {
             Stack(
               alignment: Alignment.center,
               children: [
-            isCameraInitialized
-                ? CameraPreview(morseService.cameraController!)
-                : const CircularProgressIndicator(),
+                isCameraInitialized
+                    ? CameraPreview(morseService.cameraController!)
+                    : const CircularProgressIndicator(),
                 Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -88,11 +88,10 @@ class _MorseToTextScreenState extends State<MorseToTextScreen> {
                 ),
               ],
             ),
-            
             Column(
               children: [
                 SizedBox(
-                  height: MediaQuery.of(context).size.height * 9.5/ 20,
+                  height: MediaQuery.of(context).size.height * 9.5 / 20,
                 ),
                 Padding(
                   padding: const EdgeInsets.all(25),
